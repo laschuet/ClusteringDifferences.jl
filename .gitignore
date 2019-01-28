@@ -1,0 +1,7 @@
+docs/build
+.vscode
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+*.log
+*.swp
