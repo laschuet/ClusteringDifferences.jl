@@ -18,6 +18,9 @@ branches:
     - master
     - /release-.*/
 
+codecov: true
+coveralls: true
+
 jobs:
   include:
     - stage: "Documentation"
@@ -29,7 +32,3 @@ jobs:
                                     Pkg.instantiate();'
         - julia --project=docs/ docs/make.jl
       after_success: skip
-
-codecov: true
-
-coveralls: true
