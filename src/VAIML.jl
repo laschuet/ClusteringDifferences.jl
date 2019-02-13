@@ -1,5 +1,5 @@
 module VAIML
 
-greet() = print("Hello World!")
+include("clustering.jl")
 
 end # module
