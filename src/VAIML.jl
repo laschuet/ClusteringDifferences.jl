@@ -2,4 +2,4 @@ module VAIML
 
 include("clustering.jl")
 
-end # module
+end # module VAIML
