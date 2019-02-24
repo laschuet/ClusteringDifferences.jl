@@ -1,3 +1,6 @@
 using VAIML
+using Test
 
-println("Testing...")
+@testset "VAIML" begin
+    include("clustering.jl")
+end

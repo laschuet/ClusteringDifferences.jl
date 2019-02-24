@@ -1,2 +1,8 @@
 name = "VAIML"
 uuid = "aba4aece-22d6-11e9-288b-2db0d0e0b4c1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
