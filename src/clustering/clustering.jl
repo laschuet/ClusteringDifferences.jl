@@ -9,7 +9,7 @@ struct PartitionalClustering <: Clustering
     C::Array{Int, 2}
     W::Array{Float64, 2}
     Y::Array{Int, 1}
-    μ::Array{Int, 1}
+    μ::Array{Any, 1}
 end
 
 assignments(c::PartitionalClustering) = c.Y
