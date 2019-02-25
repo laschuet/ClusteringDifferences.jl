@@ -1,4 +1,3 @@
-using VAIML
 using Test
 
 @testset "VAIML" begin
