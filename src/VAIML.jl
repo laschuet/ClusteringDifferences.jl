@@ -1,6 +1,8 @@
 module VAIML
 
 export
+    PartitionalClustering,
+    HierarchicalClustering,
     assignments,
     data,
     centers,
