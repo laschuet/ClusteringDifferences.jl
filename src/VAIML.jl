@@ -13,7 +13,7 @@ export
     # difference.jl
     PartitionalClusteringDifference
 
-include("clustering/clustering.jl")
-include("difference/difference.jl")
+include("clustering.jl")
+include("difference.jl")
 
 end # module VAIML
