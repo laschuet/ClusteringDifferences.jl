@@ -4,6 +4,11 @@ data(c::Clustering) = c.X
 constraints(c::Clustering) = c.C
 weights(c::Clustering) = c.W
 
+"""
+    PartitionalClustering
+
+Partitional clustering model.
+"""
 struct PartitionalClustering <: Clustering
     X::Array{Any, 2}
     C::Array{Int, 2}
@@ -16,6 +21,11 @@ assignments(c::PartitionalClustering) = c.Y
 centers(c::PartitionalClustering) = c.μ
 θ(c::PartitionalClustering) = (c.μ)
 
+"""
+    HierarchicalClustering
+
+Hierarchical clustering model.
+"""
 struct HierarchicalClustering <: Clustering
     X::Array{Any, 2}
     C::Array{Int, 3}
