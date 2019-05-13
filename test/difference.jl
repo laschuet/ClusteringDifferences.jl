@@ -1,4 +1,4 @@
-@testset "Difference" begin
+@testset "difference" begin
     a = PartitionalClustering([1 1; 0 1], [0 1; 1 0], [0 1.0; 1.0 0], [1, 1],
             [0.5, 1])
     b = PartitionalClustering([2 2; 2 2], [0 -1; -1 0], [0 1.0; 1.0 0], [0, 1],
@@ -7,7 +7,7 @@
     @testset "constructors" begin
     end
 
-    @testset "difference" begin
+    @testset "operator" begin
     end
 
     @testset "show" begin
