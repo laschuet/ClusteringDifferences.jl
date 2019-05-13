@@ -1,6 +1,3 @@
-using VAIML
-using Test
-
 @testset "Clustering" begin
     c = PartitionalClustering([1 1; 0 1], [0 1; 1 0], [0 1.0; 1.0 0], [1, 1],
             [0.5, 1])
