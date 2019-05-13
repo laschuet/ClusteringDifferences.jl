@@ -1,6 +1,7 @@
 module VAIML
 
 export
+    # clustering.jl
     PartitionalClustering,
     HierarchicalClustering,
     assignments,
@@ -8,8 +9,11 @@ export
     centers,
     constraints,
     θ,
-    weights
+    weights,
+    # difference.jl
+    PartitionalClusteringDifference
 
 include("clustering/clustering.jl")
+include("difference/difference.jl")
 
 end # module VAIML
