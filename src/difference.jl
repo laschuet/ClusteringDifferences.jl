@@ -51,8 +51,3 @@ function backward(clusterings::Vector{PartitionalClustering}, i::Integer)
     return clusterings[i] - clusterings[i - 1]
 end
 const ∇ = backward
-
-# Custom pretty-printing
-function Base.show(io::IO, pcd::PartitionalClusteringDifference)
-    print(io, "")
-end
