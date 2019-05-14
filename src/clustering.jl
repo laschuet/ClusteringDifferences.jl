@@ -10,11 +10,11 @@ weights(c::Clustering) = c.W
 Partitional clustering model.
 """
 struct PartitionalClustering <: Clustering
-    X::Array{Any, 2}
-    C::Array{Int, 2}
-    W::Array{Float64, 2}
-    Y::Array{Int, 1}
-    μ::Array{Any, 1}
+    X::Matrix{Any}
+    C::Vector{Int}
+    W::Matrix{Float64}
+    Y::Vector{Int}
+    μ::Vector{Any}
 end
 
 assignments(c::PartitionalClustering) = c.Y
@@ -27,7 +27,7 @@ centers(c::PartitionalClustering) = c.μ
 Hierarchical clustering model.
 """
 struct HierarchicalClustering <: Clustering
-    X::Array{Any, 2}
+    X::Matrix{Any}
     C::Array{Int, 3}
-    W::Array{Float64, 2}
+    W::Matrix{Float64}
 end
