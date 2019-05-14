@@ -11,7 +11,9 @@ export
     θ,
     weights,
     # difference.jl
-    PartitionalClusteringDifference
+    PartitionalClusteringDifference,
+    forward, Δ,
+    backward, ∇
 
 include("clustering.jl")
 include("difference.jl")

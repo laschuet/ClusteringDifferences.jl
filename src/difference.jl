@@ -25,6 +25,28 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     return PartitionalClusteringDifference(sz, X, Y, μ)
 end
 
+"""
+    forward(clusterings, i)
+
+Compute the forward difference of the clustering model at the given `i`.
+"""
+function forward(clusterings::Array{PartitionalClustering, 1}, i::Integer)
+    i == length(clusterings) && return nothing
+    return clusterings[i + 1] - clusterings[i]
+end
+Δ(clusterings::Array{PartitionalClustering, 1}, i) = forward(clusterings, i)
+
+"""
+    backward(clusterings, i)
+
+Compute the backward difference of the clustering model at the given `i`.
+"""
+function backward(clusterings::Array{PartitionalClustering, 1}, i::Integer)
+    i == 1 && return clusterings[1]
+    return clusterings[i] - clusterings[i - 1]
+end
+∇(clusterings::Array{PartitionalClustering, 1}, i) = backward(clusterings, i)
+
 function Base.show(io::IO, pcd::PartitionalClusteringDifference)
     print(io, "")
 end

@@ -10,6 +10,16 @@
     @testset "operator" begin
     end
 
+    @testset "forward difference" begin
+        @test forward([a, b], 2) == nothing
+        @test forward([a, b], 1) == b - a
+    end
+
+    @testset "backward difference" begin
+        @test backward([a, b], 1) == a
+        @test backward([a, b], 2) == b - a
+    end
+
     @testset "show" begin
         @test sprint(show, a - a) == ""
     end
