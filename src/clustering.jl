@@ -11,7 +11,7 @@ Partitional clustering model.
 """
 struct PartitionalClustering <: Clustering
     X::Matrix{Any}
-    C::Vector{Int}
+    C::Matrix{Int}
     W::Matrix{Float64}
     Y::Vector{Int}
     μ::Vector{Any}
