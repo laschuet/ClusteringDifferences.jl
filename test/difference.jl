@@ -19,8 +19,4 @@
         @test backward([a, b], 1) == a
         @test backward([a, b], 2) == b - a
     end
-
-    @testset "show" begin
-        @test sprint(show, a - a) == ""
-    end
 end
