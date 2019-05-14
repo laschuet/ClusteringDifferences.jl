@@ -27,25 +27,29 @@ end
 
 """
     forward(clusterings, i)
+    Δ(clusterings, i)
 
-Compute the forward difference of the clustering model at the given `i`.
+Compute the forward difference of the clustering model at the given `i` of the
+sequence `clusterings`.
 """
 function forward(clusterings::Vector{PartitionalClustering}, i::Integer)
     i == length(clusterings) && return nothing
     return clusterings[i + 1] - clusterings[i]
 end
-Δ(clusterings::Vector{PartitionalClustering}, i) = forward(clusterings, i)
+const Δ = forward
 
 """
     backward(clusterings, i)
+    ∇(clusterings, i)
 
-Compute the backward difference of the clustering model at the given `i`.
+Compute the backward difference of the clustering model at the given `i` of the
+sequence `clusterings`.
 """
 function backward(clusterings::Vector{PartitionalClustering}, i::Integer)
     i == 1 && return clusterings[1]
     return clusterings[i] - clusterings[i - 1]
 end
-∇(clusterings::Vector{PartitionalClustering}, i) = backward(clusterings, i)
+const ∇ = backward
 
 function Base.show(io::IO, pcd::PartitionalClusteringDifference)
     print(io, "")
