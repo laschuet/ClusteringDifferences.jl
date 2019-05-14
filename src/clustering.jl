@@ -1,6 +1,30 @@
 abstract type Clustering end
 
 """
+    PartitionalClustering
+
+Partitional clustering model.
+"""
+struct PartitionalClustering <: Clustering
+    X::Matrix{Any}
+    C::Matrix{Int}
+    W::Matrix{Float64}
+    Y::Vector{Int}
+    μ::Vector{Any}
+end
+
+"""
+    HierarchicalClustering
+
+Hierarchical clustering model.
+"""
+struct HierarchicalClustering <: Clustering
+    X::Matrix{Any}
+    C::Array{Int, 3}
+    W::Matrix{Float64}
+end
+
+"""
     data(c::Clustering)
 
 Access the data.
@@ -20,19 +44,6 @@ constraints(c::Clustering) = c.C
 Access the weights.
 """
 weights(c::Clustering) = c.W
-
-"""
-    PartitionalClustering
-
-Partitional clustering model.
-"""
-struct PartitionalClustering <: Clustering
-    X::Matrix{Any}
-    C::Matrix{Int}
-    W::Matrix{Float64}
-    Y::Vector{Int}
-    μ::Vector{Any}
-end
 
 """
     assignments(c::PartitionalClustering)
@@ -55,14 +66,3 @@ centers(c::PartitionalClustering) = c.μ
 Access the parameters.
 """
 θ(c::PartitionalClustering) = (c.μ)
-
-"""
-    HierarchicalClustering
-
-Hierarchical clustering model.
-"""
-struct HierarchicalClustering <: Clustering
-    X::Matrix{Any}
-    C::Array{Int, 3}
-    W::Matrix{Float64}
-end
