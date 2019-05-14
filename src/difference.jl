@@ -30,8 +30,7 @@ end
     forward(clusterings, i)
     Δ(clusterings, i)
 
-Compute the forward difference of the clustering model at the given `i` of the
-sequence `clusterings`.
+Compute the forward difference of the clustering model at the given `i`.
 """
 function forward(clusterings::Vector{PartitionalClustering}, i::Integer)
     i == length(clusterings) && return nothing
@@ -43,8 +42,7 @@ const Δ = forward
     backward(clusterings, i)
     ∇(clusterings, i)
 
-Compute the backward difference of the clustering model at the given `i` of the
-sequence `clusterings`.
+Compute the backward difference of the clustering model at the given `i`.
 """
 function backward(clusterings::Vector{PartitionalClustering}, i::Integer)
     i == 1 && return clusterings[1]

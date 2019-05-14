@@ -1,7 +1,24 @@
 abstract type Clustering end
 
+"""
+    data(c::Clustering)
+
+Access the data.
+"""
 data(c::Clustering) = c.X
+
+"""
+    constraints(c::Clustering)
+
+Access the contraints.
+"""
 constraints(c::Clustering) = c.C
+
+"""
+    weights(c::Clustering)
+
+Access the weights.
+"""
 weights(c::Clustering) = c.W
 
 """
@@ -17,8 +34,26 @@ struct PartitionalClustering <: Clustering
     μ::Vector{Any}
 end
 
+"""
+    assignments(c::PartitionalClustering)
+
+Access the assignments of the data instances to the clusters.
+"""
 assignments(c::PartitionalClustering) = c.Y
+
+"""
+    centers(c::PartitionalClustering)
+
+Access the centers.
+.
+"""
 centers(c::PartitionalClustering) = c.μ
+
+"""
+    θ(c::PartitionalClustering)
+
+Access the parameters.
+"""
 θ(c::PartitionalClustering) = (c.μ)
 
 """
