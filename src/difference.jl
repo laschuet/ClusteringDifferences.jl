@@ -14,6 +14,7 @@ struct PartitionalClusteringDifference <: ClusteringDifference
     μ::Vector{Any}
 end
 
+# Partitional clustering model subtraction
 function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     # TODO: Avoid assumption that sizes are equal
     sz = size(a.X) .- size(b.X)
@@ -51,6 +52,7 @@ function backward(clusterings::Vector{PartitionalClustering}, i::Integer)
 end
 const ∇ = backward
 
+# Custom pretty-printing
 function Base.show(io::IO, pcd::PartitionalClusteringDifference)
     print(io, "")
 end
