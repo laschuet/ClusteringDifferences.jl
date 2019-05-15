@@ -22,17 +22,18 @@
     end
 
     @testset "hierarchical clustering" begin
-        hc = HierarchicalClustering([1 2; 0 2], [0 1; 1 0], [0 1.0; 1.0 0])
+        C = rand([0, 1], 2, 2, 2)
+        hc = HierarchicalClustering([1 2; 0 2], C, [0 1.0; 1.0 0])
 
         @testset "constructors" begin
             @test hc.X == [1 2; 0 2]
-            @test hc.C == [0 1; 1 0]
+            @test hc.C == C
             @test hc.W == [0 1.0; 1.0 0]
         end
 
         @testset "accessors" begin
             @test data(hc) == [1 2; 0 2]
-            @test constraints(hc) == [0 1; 1 0]
+            @test constraints(hc) == C
             @test weights(hc) == [0 1.0; 1.0 0]
         end
     end
