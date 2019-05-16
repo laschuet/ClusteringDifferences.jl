@@ -1,17 +1,30 @@
 abstract type Clustering end
 
 """
-    PartitionalClustering
+    PartitionalClustering{Tx<:Real,Tw<:Real,Tm<:Real} <: Clustering
 
 Partitional clustering model.
 """
-struct PartitionalClustering <: Clustering
-    X::Matrix{Any}
+struct PartitionalClustering{Tx<:Real,Tw<:Real,Tm<:Real} <: Clustering
+    X::Matrix{Tx}
     C::Matrix{Int}
-    W::Matrix{Float64}
+    W::Matrix{Tw}
     Y::Vector{Int}
-    μ::Vector{Any}
+    μ::Vector{Tm}
+
+    function PartitionalClustering{Tx,Tw,Tm}(X::Matrix{Tx}, C::Matrix{Int},
+                                            W::Matrix{Tw}, Y::Vector{Int},
+                                            μ::Vector{Tm}) where {Tx<:Real,Tw<:Real,Tm<:Real}
+        size(X, 1) == length(Y) ||
+            throw(DimensionMismatch("number of data instances and number of assignments must match"))
+        size(C) == size(W) ||
+            throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
+        return new(X, C, W, Y, μ)
+    end
 end
+PartitionalClustering(X::Matrix{Tx}, C::Matrix{Int}, W::Matrix{Tw},
+                    Y::Vector{Int}, μ::Vector{Tm}) where {Tx,Tw,Tm} =
+    PartitionalClustering{Tx,Tw,Tm}(X, C, W, Y, μ)
 
 """
     HierarchicalClustering
