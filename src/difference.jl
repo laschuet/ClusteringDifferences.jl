@@ -1,7 +1,7 @@
 abstract type ClusteringDifference end
 
 """
-    PartitionalClusteringDifference
+    PartitionalClusteringDifference <: ClusteringDifference
 
 Difference between two partitional clustering models.
 """
@@ -27,8 +27,8 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forward(clusterings, i)
-    Δ(clusterings, i)
+    forward(clusterings::Vector{PartitionalClustering}, i::Integer)
+    Δ(clusterings::Vector{PartitionalClustering}, i::Integer)
 
 Compute the forward difference of the clustering model at the given `i`.
 """
@@ -39,8 +39,8 @@ end
 const Δ = forward
 
 """
-    backward(clusterings, i)
-    ∇(clusterings, i)
+    backward(clusterings::Vector{PartitionalClustering}, i::Integer)
+    ∇(clusterings::Vector{PartitionalClustering}, i::Integer)
 
 Compute the backward difference of the clustering model at the given `i`.
 """
