@@ -27,15 +27,24 @@ PartitionalClustering(X::Matrix{Tx}, C::Matrix{Int}, W::Matrix{Tw},
     PartitionalClustering{Tx,Tw,Tm}(X, C, W, Y, μ)
 
 """
-    HierarchicalClustering
+    HierarchicalClustering{Tx<:Real,Tw<:Real} <: Clustering
 
 Hierarchical clustering model.
 """
-struct HierarchicalClustering <: Clustering
-    X::Matrix{Any}
+struct HierarchicalClustering{Tx<:Real,Tw<:Real} <: Clustering
+    X::Matrix{Tx}
     C::Array{Int, 3}
-    W::Matrix{Float64}
+    W::Array{Tw, 3}
+
+    function HierarchicalClustering{Tx,Tw}(X::Matrix{Tx}, C::Array{Int, 3},
+                                        W::Array{Tw, 3}) where {Tx<:Real,Tw<:Real}
+        size(C) == size(W) ||
+            throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
+        return new(X, C, W)
+    end
 end
+HierarchicalClustering(X::Matrix{Tx}, C::Array{Int, 3}, W::Array{Tw, 3}) where {Tx,Tw} =
+    HierarchicalClustering{Tx,Tw}(X, C, W)
 
 """
     data(c::Clustering)
