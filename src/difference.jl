@@ -6,7 +6,7 @@ abstract type ClusteringDifference end
 Difference between two partitional clustering models.
 """
 struct PartitionalClusteringDifference <: ClusteringDifference
-    size::Tuple{Int64, Int64}
+    size::Tuple{Int, Int}
     X::Matrix{Any}
     #C::Matrix{Int}
     #W::Matrix{Float64}
