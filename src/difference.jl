@@ -11,7 +11,7 @@ struct PartitionalClusteringDifference <: ClusteringDifference
     #C::Matrix{Int}
     #W::Matrix{Float64}
     Y::Vector{Int}
-    μ::Vector{Any}
+    M::Matrix{Any}
 end
 
 # Partitional clustering model subtraction
@@ -22,8 +22,8 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     #C = a.C - b.C
     #W = a.W - b.W
     Y = a.Y - b.Y
-    μ = a.μ - b.μ
-    return PartitionalClusteringDifference(sz, X, Y, μ)
+    M = a.M - b.M
+    return PartitionalClusteringDifference(sz, X, Y, M)
 end
 
 """
