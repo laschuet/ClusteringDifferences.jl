@@ -10,21 +10,21 @@ struct PartitionalClustering{Tx<:Real,Tw<:Real,Tm<:Real} <: Clustering
     C::Matrix{Int}
     W::Matrix{Tw}
     Y::Vector{Int}
-    μ::Vector{Tm}
+    M::Matrix{Tm}
 
     function PartitionalClustering{Tx,Tw,Tm}(X::Matrix{Tx}, C::Matrix{Int},
                                             W::Matrix{Tw}, Y::Vector{Int},
-                                            μ::Vector{Tm}) where {Tx<:Real,Tw<:Real,Tm<:Real}
+                                            M::Matrix{Tm}) where {Tx<:Real,Tw<:Real,Tm<:Real}
         size(X, 1) == length(Y) ||
             throw(DimensionMismatch("number of data instances and number of assignments must match"))
         size(C) == size(W) ||
             throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
-        return new(X, C, W, Y, μ)
+        return new(X, C, W, Y, M)
     end
 end
 PartitionalClustering(X::Matrix{Tx}, C::Matrix{Int}, W::Matrix{Tw},
-                    Y::Vector{Int}, μ::Vector{Tm}) where {Tx,Tw,Tm} =
-    PartitionalClustering{Tx,Tw,Tm}(X, C, W, Y, μ)
+                    Y::Vector{Int}, M::Matrix{Tm}) where {Tx,Tw,Tm} =
+    PartitionalClustering{Tx,Tw,Tm}(X, C, W, Y, M)
 
 """
     HierarchicalClustering{Tx<:Real,Tw<:Real} <: Clustering
@@ -80,11 +80,11 @@ assignments(c::PartitionalClustering) = c.Y
 Access the centers.
 .
 """
-centers(c::PartitionalClustering) = c.μ
+centers(c::PartitionalClustering) = c.M
 
 """
     θ(c::PartitionalClustering)
 
 Access the parameters.
 """
-θ(c::PartitionalClustering) = (c.μ)
+θ(c::PartitionalClustering) = (c.M)
