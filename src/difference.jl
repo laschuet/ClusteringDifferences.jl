@@ -32,7 +32,7 @@ end
 
 Compute the forward difference of the clustering model at the given `i`.
 """
-function forward(clusterings::Vector{PartitionalClustering}, i::Integer)
+function forward(clusterings::Vector{<:PartitionalClustering}, i::Integer)
     i == length(clusterings) && return nothing
     return clusterings[i + 1] - clusterings[i]
 end
@@ -44,7 +44,7 @@ const Δ = forward
 
 Compute the backward difference of the clustering model at the given `i`.
 """
-function backward(clusterings::Vector{PartitionalClustering}, i::Integer)
+function backward(clusterings::Vector{<:PartitionalClustering}, i::Integer)
     i == 1 && return clusterings[1]
     return clusterings[i] - clusterings[i - 1]
 end
