@@ -1,29 +1,27 @@
 abstract type ClusteringDifference end
 
 """
-    PartitionalClusteringDifference <: ClusteringDifference
+    PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Tm<:Real} <: ClusteringDifference
 
 Difference between two partitional clustering models.
 """
-struct PartitionalClusteringDifference <: ClusteringDifference
-    size::Tuple{Int, Int}
-    X::Matrix{Any}
-    #C::Matrix{Int}
-    #W::Matrix{Float64}
+struct PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Tm<:Real} <: ClusteringDifference
+    X::Matrix{Tx}
+    C::Matrix{Int}
+    W::Matrix{Tw}
     Y::Vector{Int}
-    M::Matrix{Any}
+    M::Matrix{Tm}
 end
 
 # Partitional clustering model subtraction
 function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     # TODO: Avoid assumption that sizes are equal
-    sz = size(a.X) .- size(b.X)
     X = a.X - b.X
-    #C = a.C - b.C
-    #W = a.W - b.W
+    C = a.C - b.C
+    W = a.W - b.W
     Y = a.Y - b.Y
     M = a.M - b.M
-    return PartitionalClusteringDifference(sz, X, Y, M)
+    return PartitionalClusteringDifference(X, C, W, Y, M)
 end
 
 """
