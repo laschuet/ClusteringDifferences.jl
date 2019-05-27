@@ -5,11 +5,11 @@ abstract type ClusteringDifference end
 
 Difference between two partitional clustering models.
 """
-struct PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Tm<:Real} <: ClusteringDifference
+struct PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: ClusteringDifference
     X::Matrix{Tx}
     C::Matrix{Int}
     W::Matrix{Tw}
-    Y::Vector{Int}
+    Y::Matrix{Ty}
     M::Matrix{Tm}
 end
 

@@ -1,30 +1,30 @@
 abstract type Clustering end
 
 """
-    PartitionalClustering{Tx<:Real,Tw<:Real,Tm<:Real} <: Clustering
+    PartitionalClustering{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
 
 Partitional clustering model.
 """
-struct PartitionalClustering{Tx<:Real,Tw<:Real,Tm<:Real} <: Clustering
+struct PartitionalClustering{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
     X::Matrix{Tx}
     C::Matrix{Int}
     W::Matrix{Tw}
-    Y::Vector{Int}
+    Y::Matrix{Ty}
     M::Matrix{Tm}
 
-    function PartitionalClustering{Tx,Tw,Tm}(X::Matrix{Tx}, C::Matrix{Int},
-                                            W::Matrix{Tw}, Y::Vector{Int},
-                                            M::Matrix{Tm}) where {Tx<:Real,Tw<:Real,Tm<:Real}
-        size(X, 1) == length(Y) ||
-            throw(DimensionMismatch("number of data instances and number of assignments must match"))
+    function PartitionalClustering{Tx,Tw,Ty,Tm}(X::Matrix{Tx}, C::Matrix{Int},
+                                            W::Matrix{Tw}, Y::Matrix{Ty},
+                                            M::Matrix{Tm}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
+        size(X, 1) == size(Y, 1) ||
+            throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
         size(C) == size(W) ||
             throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
         return new(X, C, W, Y, M)
     end
 end
 PartitionalClustering(X::Matrix{Tx}, C::Matrix{Int}, W::Matrix{Tw},
-                    Y::Vector{Int}, M::Matrix{Tm}) where {Tx,Tw,Tm} =
-    PartitionalClustering{Tx,Tw,Tm}(X, C, W, Y, M)
+                    Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tw,Ty,Tm} =
+    PartitionalClustering{Tx,Tw,Ty,Tm}(X, C, W, Y, M)
 
 """
     HierarchicalClustering{Tx<:Real,Tw<:Real} <: Clustering

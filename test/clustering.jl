@@ -1,13 +1,13 @@
 @testset "clustering" begin
     @testset "partitional clustering" begin
         pc = PartitionalClustering([1 1; 0 1], [-1 1; 1 0], [0 1.0; 1.0 0],
-            [1, 1], [0.5 1])
+            [1.0 0.0; 0.3 0.7], [0.5 1])
 
         @testset "constructors" begin
             @test(pc.X == [1 1; 0 1]
                 && pc.C == [-1 1; 1 0]
                 && pc.W == [0 1.0; 1.0 0]
-                && pc.Y == [1, 1]
+                && pc.Y == [1.0 0.0; 0.3 0.7]
                 && pc.M == [0.5 1])
         end
 
@@ -15,7 +15,7 @@
             @test data(pc) == [1 1; 0 1]
             @test constraints(pc) == [-1 1; 1 0]
             @test weights(pc) == [0 1.0; 1.0 0]
-            @test assignments(pc) == [1, 1]
+            @test assignments(pc) == [1.0 0.0; 0.3 0.7]
             @test centers(pc) == [0.5 1]
             @test θ(pc) == ([0.5 1])
         end
