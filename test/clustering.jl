@@ -1,7 +1,7 @@
 @testset "clustering" begin
     @testset "partitional clustering" begin
         pc = PartitionalClustering([1 1; 0 1], [-1 1; 1 0], [0 1.0; 1.0 0],
-            [1.0 0.0; 0.3 0.7], [0.5 1])
+                [1.0 0.0; 0.3 0.7], [0.5 1])
 
         @testset "constructors" begin
             @test(pc.X == [1 1; 0 1]
