@@ -11,6 +11,23 @@
                 && pc.M == [0.5 1])
         end
 
+        @testset "==" begin
+            @test pc == pc
+            pc2 = PartitionalClustering([1 1; 0 1], [-1 1; 1 0],
+                    [0 1.0; 1.0 0], [1.0 0.0; 0.3 0.7], [0.5 1])
+            @test pc == pc2 && pc2 == pc
+            pc3 = PartitionalClustering([1 1; 0 1], [-1 1; 1 0],
+                    [0 1.0; 1.0 0], [1.0 0.0; 0.3 0.7], [0.5 1])
+            @test pc == pc2 && pc2 == pc3 && pc == pc3
+        end
+
+        @testset "hash" begin
+            @test hash(pc) == hash(pc)
+            pc2 = PartitionalClustering([1 1; 0 1], [-1 1; 1 0],
+                    [0 1.0; 1.0 0], [1.0 0.0; 0.3 0.7], [0.5 1])
+            @test pc == pc2 && hash(pc) == hash(pc2)
+        end
+
         @testset "accessors" begin
             @test data(pc) == [1 1; 0 1]
             @test constraints(pc) == [-1 1; 1 0]
