@@ -13,8 +13,8 @@ struct PartitionalClustering{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
     M::Matrix{Tm}
 
     function PartitionalClustering{Tx,Tw,Ty,Tm}(X::Matrix{Tx}, C::Matrix{Int},
-                                            W::Matrix{Tw}, Y::Matrix{Ty},
-                                            M::Matrix{Tm}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
+                                                W::Matrix{Tw}, Y::Matrix{Ty},
+                                                M::Matrix{Tm}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
         size(X, 1) == size(Y, 1) ||
             throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
         size(C) == size(W) ||
