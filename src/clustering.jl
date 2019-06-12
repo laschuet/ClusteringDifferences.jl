@@ -27,14 +27,12 @@ PartitionalClustering(X::Matrix{Tx}, C::Matrix{Int}, W::Matrix{Tw},
     PartitionalClustering{Tx,Tw,Ty,Tm}(X, C, W, Y, M)
 
 # Partitional clustering equality operator
-function Base.:(==)(a::PartitionalClustering, b::PartitionalClustering)
-    return a.X == b.X && a.C == b.C && a.W == b.W && a.Y == b.Y && a.M == b.M
-end
+Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
+    a.X == b.X && a.C == b.C && a.W == b.W && a.Y == b.Y && a.M == b.M
 
 # Compute hash code
-function Base.hash(a::PartitionalClustering, h::UInt)
-    return hash(a.X, hash(a.C, hash(a.W, hash(a.Y, hash(a.M, hash(:PartitionalClustering, h))))))
-end
+Base.hash(a::PartitionalClustering, h::UInt) =
+    hash(a.X, hash(a.C, hash(a.W, hash(a.Y, hash(a.M, hash(:PartitionalClustering, h))))))
 
 """
     HierarchicalClustering{Tx<:Real,Tw<:Real} <: Clustering
