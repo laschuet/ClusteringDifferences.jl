@@ -1,4 +1,15 @@
 """
+    sub(a::Union{<:Real, Nothing}, b::Union{<:Real, Nothing})
+
+Subtract real numbers allowing `nothing` values.
+"""
+function sub(a::Union{<:Real, Nothing}, b::Union{<:Real, Nothing})
+    isnothing(a) && return b
+    isnothing(b) && return a
+    return a - b
+end
+
+"""
     sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real, Tb<:Real}
     ⊟(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real, Tb<:Real}
 
@@ -16,10 +27,3 @@ function sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real, Tb<:Real}
     return map(sub, A2, B2)
 end
 const ⊟ = sub
-
-#
-function sub(a::Union{<:Real, Nothing}, b::Union{<:Real, Nothing})
-    isnothing(a) && return b
-    isnothing(b) && return a
-    return a - b
-end
