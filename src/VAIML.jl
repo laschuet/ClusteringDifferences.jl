@@ -17,5 +17,6 @@ export
 
 include("clustering.jl")
 include("difference.jl")
+include("utils.jl")
 
 end # module VAIML
