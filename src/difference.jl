@@ -50,7 +50,6 @@ Types and code:
     | deletion of previous value |   -1 |
     | value difference           |    2 |
 """
-#function mask(ΔM::Matrix{Union{<:Real, Nothing}}, Δdims::NTuple{2, Int})
 function mask(ΔM::Matrix, Δdims::NTuple{2, Int})
     return map(m -> begin
         idx, val = m
