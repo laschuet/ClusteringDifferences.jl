@@ -9,6 +9,15 @@
     end
 
     @testset "subtraction operator" begin
+        pcd = pc - pc
+        @test (pcd.X == [0 0; 0 0; 0 0]
+                && pcd.C == [0 0 0; 0 0 0; 0 0 0]
+                && pcd.W == [0 0 0; 0 0 0; 0 0 0]
+                && pcd.Y == [0.0 0.0; 0.0 0.0; 0.0 0.0]
+                && pcd.M == [0 0; 0 0]
+                && pcd.k == 0
+                && pcd.Y_MASK == [0 0; 0 0; 0 0]
+                && pcd.M_MASK == [0 0; 0 0])
         pcd = pc - pc2
         @test (pcd.X == [0 0; 0 0; 0 0]
                 && pcd.C == [0 0 1; 0 0 1; 1 1 0]
