@@ -43,7 +43,7 @@ Mask the various types of differences.
 Types and code:
 
     | Type                       | Code |
-    | -------------------------- | ---- |
+    | :------------------------- | ---- |
     | no information             |    3 |
     | no difference              |    0 |
     | addition of new value      |    1 |
