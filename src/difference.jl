@@ -27,6 +27,12 @@ struct PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: C
             throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
         size(C) == size(W) ||
             throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
+        size(Y, 2) == size(M, 1) ||
+            throw(DimensionMismatch("number of clusters must match"))
+        size(Y) == size(Y_MASK) ||
+            throw(DimensionMismatch("dimensions of assignments and mask must match"))
+        size(M) == size(M_MASK) ||
+            throw(DimensionMismatch("dimensions of centers and mask must match"))
         return new(X, C, W, Y, M, k, Y_MASK, M_MASK)
     end
 end
