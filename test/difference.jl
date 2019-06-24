@@ -60,7 +60,7 @@
                 && pcd.k == 1
                 && pcd.Y_MASK == [0 0 1; 0 0 1; 2 2 1]
                 && pcd.M_MASK == [0 0; 0 0; 1 1])
-        @test forward([pc, pc2], 2) == nothing
+        @test isnothing(forward([pc, pc2], 2))
     end
 
     @testset "backward difference" begin
