@@ -26,7 +26,7 @@ function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
         objcosts = 0
         for j = 1:n
             cost, assignment = findmin(view(DIST, j, :))
-            Y[j, assignment] = 1
+            @inbounds Y[j, assignment] = 1
             objcosts += cost
         end
 
