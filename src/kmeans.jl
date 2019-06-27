@@ -5,8 +5,8 @@ Cluster the data instances `X` with the ``k``-means algorithm.
 """
 function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
                 maxiter::Int=256, dist::SemiMetric=SqEuclidean(), ϵ=1.0e-6)
-    m, n = size(X)
-    m2, k = size(M)
+    n, m = size(X)
+    k, m2 = size(M)
 
     m == m2 || throw(DimensionMismatch("number of data features must match"))
     k > 1 || throw(ArgumentError("number of clusters must at least be 2"))
@@ -16,7 +16,7 @@ function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
     W = Matrix{Real}(undef, 0, 0)
     Y = zeros(Real, n, k)
 
-    DIST = pairwise(dist, X, M; dims=2)
+    DIST = pairwise(dist, X, M; dims=1)
 
     clusterings = Vector{PartitionalClustering}(undef, 0)
     pre_objcosts = 0
@@ -32,7 +32,7 @@ function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
 
         # TODO update cluster centers
 
-        c = PartitionalClustering(permutedims(X), C, W, Y, permutedims(M))
+        c = PartitionalClustering(X, C, W, Y, M)
         push!(clusterings, c)
 
         # Check for convergence
