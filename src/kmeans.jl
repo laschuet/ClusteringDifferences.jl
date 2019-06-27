@@ -15,6 +15,7 @@ function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
     C = Matrix{Int}(undef, 0, 0)
     W = Matrix{Real}(undef, 0, 0)
     Y = zeros(Real, n, k)
+    M = convert(Matrix{AbstractFloat}, M)
 
     DIST = pairwise(dist, X, M; dims=1)
 
@@ -22,15 +23,22 @@ function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
     pre_objcosts = 0
     i = 1
     while i <= maxiter
-        # Update cluster assignments and objective function costs
+        # Update cluster assignments, objective function costs, and center
+        # coordinates per cluster
         objcosts = 0
-        for j = 1:n
+        fill!(M, zero(eltype(M)))
+        @inbounds for j = 1:n
             cost, assignment = findmin(view(DIST, j, :))
-            @inbounds Y[j, assignment] = 1
+            Y[j, assignment] = 1
             objcosts += cost
+            M[assignment, :] += X[j, :]
         end
 
-        # TODO update cluster centers
+        # Update cluster centers
+        for j = 1:k
+            count = sum(Y[:, j])
+            M[j, :] /= count
+        end
 
         c = PartitionalClustering(X, C, W, Y, M)
         push!(clusterings, c)
