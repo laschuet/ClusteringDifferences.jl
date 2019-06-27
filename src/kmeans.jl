@@ -35,7 +35,7 @@ function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
         end
 
         # Update cluster centers
-        for j = 1:k
+        @inbounds for j = 1:k
             count = sum(Y[:, j])
             M[j, :] /= count
         end
