@@ -45,6 +45,8 @@ function kmeans(X::Matrix{<:Real}, M::Matrix{<:Real};
             M[j, :] /= sum(Y[:, j])
         end
 
+        pairwise!(DIST, dist, X, M; dims=1)
+
         c = PartitionalClustering(X, C, W, Y, M)
         push!(clusterings, c)
 
