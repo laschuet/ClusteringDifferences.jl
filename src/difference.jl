@@ -42,7 +42,7 @@ PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Int}, W::Matrix{Tw},
     PartitionalClusteringDifference{Tx,Tw,Ty,Tm}(X, C, W, Y, M, k, Y_MASK, M_MASK)
 
 """
-    mask(ΔM::Matrix, Δdims::NTuple{2, Int})
+    mask(ΔM::Matrix{<:Real}, Δdims::NTuple{2, Int})
 
 Mask the various types of differences.
 
@@ -56,7 +56,7 @@ Types and code:
     | deletion of previous value |   -1 |
     | value difference           |    2 |
 """
-function mask(ΔM::Matrix, Δdims::NTuple{2, Int})
+function mask(ΔM::Matrix{<:Real}, Δdims::NTuple{2, Int})
     return map(m -> begin
         idx, val = m
 
