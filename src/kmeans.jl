@@ -1,5 +1,5 @@
 """
-    kmeans(X::Matrix{<:Real}, M::Matrix{<:Real}; <keyword arguments>)
+    kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real}; <keyword arguments>)
 
 Cluster the data instances `X` with the ``k``-means algorithm.
 
@@ -8,7 +8,7 @@ Cluster the data instances `X` with the ``k``-means algorithm.
 - `dist::SemiMetric=SqEuclidean()`: the distance function.
 - `ϵ::AbstractFloat=1.0e-6`: the absolute tolerance for convergence.
 """
-function kmeans(X::Matrix{<:Real}, M::Matrix{<:Real};
+function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
                 maxiter::Int=256, dist::SemiMetric=SqEuclidean(),
                 ϵ::AbstractFloat=1.0e-6)
     n, m = size(X)
