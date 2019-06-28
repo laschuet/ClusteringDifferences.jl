@@ -22,7 +22,6 @@ export
 include("clustering.jl")
 include("difference.jl")
 include("kmeans.jl")
-include("measures.jl");
 include("utils.jl")
 
 end # module VAIML
