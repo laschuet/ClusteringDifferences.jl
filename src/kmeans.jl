@@ -1,7 +1,12 @@
 """
-    kmeans(X::Matrix, k::Int[, niter::Int=1000])
+    kmeans(X::Matrix{<:Real}, M::Matrix{<:Real}; <keyword arguments>)
 
 Cluster the data instances `X` with the ``k``-means algorithm.
+
+# Keyword arguments
+- `maxiter::Int=256`: the number of maximum iterations.
+- `dist::SemiMetric=SqEuclidean()`: the distance function.
+- `ϵ=1.0e-6`: the absolute tolerance for convergence.
 """
 function kmeans(X::Matrix{<:Real}, M::Matrix{<:Real};
                 maxiter::Int=256, dist::SemiMetric=SqEuclidean(), ϵ=1.0e-6)
