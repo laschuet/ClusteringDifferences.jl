@@ -6,15 +6,17 @@ abstract type Clustering end
 Partitional clustering model.
 """
 struct PartitionalClustering{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
-    X::Matrix{Tx}
-    C::Matrix{Int}
-    W::Matrix{Tw}
-    Y::Matrix{Ty}
-    M::Matrix{Tm}
+    X::AbstractMatrix{Tx}
+    C::AbstractMatrix{Int}
+    W::AbstractMatrix{Tw}
+    Y::AbstractMatrix{Ty}
+    M::AbstractMatrix{Tm}
 
-    function PartitionalClustering{Tx,Tw,Ty,Tm}(X::Matrix{Tx}, C::Matrix{Int},
-                                                W::Matrix{Tw}, Y::Matrix{Ty},
-                                                M::Matrix{Tm}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
+    function PartitionalClustering{Tx,Tw,Ty,Tm}(X::AbstractMatrix{Tx},
+                                                C::AbstractMatrix{Int},
+                                                W::AbstractMatrix{Tw},
+                                                Y::AbstractMatrix{Ty},
+                                                M::AbstractMatrix{Tm}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
         size(X, 1) == size(Y, 1) ||
             throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
         size(C) == size(W) ||
@@ -24,8 +26,9 @@ struct PartitionalClustering{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
         return new(X, C, W, Y, M)
     end
 end
-PartitionalClustering(X::Matrix{Tx}, C::Matrix{Int}, W::Matrix{Tw},
-                    Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tw,Ty,Tm} =
+PartitionalClustering(X::AbstractMatrix{Tx}, C::AbstractMatrix{Int},
+                    W::AbstractMatrix{Tw}, Y::AbstractMatrix{Ty},
+                    M::AbstractMatrix{Tm}) where {Tx,Tw,Ty,Tm} =
     PartitionalClustering{Tx,Tw,Ty,Tm}(X, C, W, Y, M)
 
 # Partitional clustering equality operator
@@ -42,18 +45,20 @@ Base.hash(a::PartitionalClustering, h::UInt) =
 Hierarchical clustering model.
 """
 struct HierarchicalClustering{Tx<:Real,Tw<:Real} <: Clustering
-    X::Matrix{Tx}
-    C::Array{Int, 3}
-    W::Array{Tw, 3}
+    X::AbstractMatrix{Tx}
+    C::AbstractArray{Int, 3}
+    W::AbstractArray{Tw, 3}
 
-    function HierarchicalClustering{Tx,Tw}(X::Matrix{Tx}, C::Array{Int, 3},
-                                        W::Array{Tw, 3}) where {Tx<:Real,Tw<:Real}
+    function HierarchicalClustering{Tx,Tw}(X::AbstractMatrix{Tx},
+                                        C::AbstractArray{Int, 3},
+                                        W::AbstractArray{Tw, 3}) where {Tx<:Real,Tw<:Real}
         size(C) == size(W) ||
             throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
         return new(X, C, W)
     end
 end
-HierarchicalClustering(X::Matrix{Tx}, C::Array{Int, 3}, W::Array{Tw, 3}) where {Tx,Tw} =
+HierarchicalClustering(X::AbstractMatrix{Tx}, C::AbstractArray{Int, 3},
+                    W::AbstractArray{Tw, 3}) where {Tx,Tw} =
     HierarchicalClustering{Tx,Tw}(X, C, W)
 
 """

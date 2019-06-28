@@ -6,23 +6,23 @@ abstract type ClusteringDifference end
 Difference between two partitional clustering models.
 """
 struct PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: ClusteringDifference
-    X::Matrix{Tx}
-    C::Matrix{Int}
-    W::Matrix{Tw}
-    Y::Matrix{Ty}
-    M::Matrix{Tm}
+    X::AbstractMatrix{Tx}
+    C::AbstractMatrix{Int}
+    W::AbstractMatrix{Tw}
+    Y::AbstractMatrix{Ty}
+    M::AbstractMatrix{Tm}
     k::Int
-    Y_MASK::Matrix{Int}
-    M_MASK::Matrix{Int}
+    Y_MASK::AbstractMatrix{Int}
+    M_MASK::AbstractMatrix{Int}
 
-    function PartitionalClusteringDifference{Tx,Tw,Ty,Tm}(X::Matrix{Tx},
-                                                        C::Matrix{Int},
-                                                        W::Matrix{Tw},
-                                                        Y::Matrix{Ty},
-                                                        M::Matrix{Tm},
+    function PartitionalClusteringDifference{Tx,Tw,Ty,Tm}(X::AbstractMatrix{Tx},
+                                                        C::AbstractMatrix{Int},
+                                                        W::AbstractMatrix{Tw},
+                                                        Y::AbstractMatrix{Ty},
+                                                        M::AbstractMatrix{Tm},
                                                         k::Int,
-                                                        Y_MASK::Matrix{Int},
-                                                        M_MASK::Matrix{Int}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
+                                                        Y_MASK::AbstractMatrix{Int},
+                                                        M_MASK::AbstractMatrix{Int}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
         size(X, 1) == size(Y, 1) ||
             throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
         size(C) == size(W) ||
@@ -36,13 +36,15 @@ struct PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: C
         return new(X, C, W, Y, M, k, Y_MASK, M_MASK)
     end
 end
-PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Int}, W::Matrix{Tw},
-                                Y::Matrix{Ty}, M::Matrix{Tm}, k::Int,
-                                Y_MASK::Matrix{Int}, M_MASK::Matrix{Int}) where {Tx,Tw,Ty,Tm} =
+PartitionalClusteringDifference(X::AbstractMatrix{Tx}, C::AbstractMatrix{Int},
+                                W::AbstractMatrix{Tw}, Y::AbstractMatrix{Ty},
+                                M::AbstractMatrix{Tm}, k::Int,
+                                Y_MASK::AbstractMatrix{Int},
+                                M_MASK::AbstractMatrix{Int}) where {Tx,Tw,Ty,Tm} =
     PartitionalClusteringDifference{Tx,Tw,Ty,Tm}(X, C, W, Y, M, k, Y_MASK, M_MASK)
 
 """
-    mask(ΔM::Matrix{<:Real}, Δdims::NTuple{2, Int})
+    mask(ΔM::AbstractMatrix{<:Real}, Δdims::NTuple{2, Int})
 
 Mask the various types of differences.
 
@@ -56,7 +58,7 @@ Types and code:
     | deletion of previous value |   -1 |
     | value difference           |    2 |
 """
-function mask(ΔM::Matrix{<:Real}, Δdims::NTuple{2, Int})
+function mask(ΔM::AbstractMatrix{<:Real}, Δdims::NTuple{2, Int})
     return map(m -> begin
         idx, val = m
 
@@ -95,24 +97,24 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forward(clusterings::Vector{PartitionalClustering}, i::Integer)
-    Δ(clusterings::Vector{PartitionalClustering}, i::Integer)
+    forward(clusterings::AbstractVector{PartitionalClustering}, i::Int)
+    Δ(clusterings::AbstractVector{PartitionalClustering}, i::Int)
 
 Compute the forward difference of the clustering model at the given `i`.
 """
-function forward(clusterings::Vector{<:PartitionalClustering}, i::Integer)
+function forward(clusterings::AbstractVector{<:PartitionalClustering}, i::Int)
     i == length(clusterings) && return nothing
     return clusterings[i + 1] - clusterings[i]
 end
 const Δ = forward
 
 """
-    backward(clusterings::Vector{PartitionalClustering}, i::Integer)
-    ∇(clusterings::Vector{PartitionalClustering}, i::Integer)
+    backward(clusterings::AbstractVector{PartitionalClustering}, i::Int)
+    ∇(clusterings::AbstractVector{PartitionalClustering}, i::Int)
 
 Compute the backward difference of the clustering model at the given `i`.
 """
-function backward(clusterings::Vector{<:PartitionalClustering}, i::Integer)
+function backward(clusterings::AbstractVector{<:PartitionalClustering}, i::Int)
     if i == 1
         pc = clusterings[1]
         k = size(pc.M, 1)
