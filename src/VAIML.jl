@@ -17,7 +17,7 @@ export
     backward, ∇,
     forward, Δ,
     # kmeans.jl
-    kmeans!
+    kmeans
 
 include("clustering.jl")
 include("difference.jl")

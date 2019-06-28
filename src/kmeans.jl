@@ -1,9 +1,9 @@
 """
-    kmeans!(X::Matrix, k::Int[, niter::Int=1000])
+    kmeans(X::Matrix, k::Int[, niter::Int=1000])
 
 Cluster the data instances `X` with the ``k``-means algorithm.
 """
-function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
+function kmeans(X::Matrix{<:Real}, M::Matrix{<:Real};
                 maxiter::Int=256, dist::SemiMetric=SqEuclidean(), ϵ=1.0e-6)
     n, m = size(X)
     k, m2 = size(M)
