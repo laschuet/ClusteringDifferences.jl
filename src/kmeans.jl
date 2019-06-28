@@ -28,10 +28,10 @@ function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
         objcosts = 0
         fill!(M, zero(eltype(M)))
         @inbounds for j = 1:n
-            cost, assignment = findmin(view(DIST, j, :))
-            Y[j, assignment] = 1
+            cost, y = findmin(view(DIST, j, :))
+            Y[j, y] = 1
             objcosts += cost
-            M[assignment, :] += X[j, :]
+            M[y, :] += X[j, :]
         end
 
         # Update cluster centers
