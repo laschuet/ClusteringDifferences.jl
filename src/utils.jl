@@ -1,10 +1,10 @@
 """
-    sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real, Tb<:Real}
-    ⊟(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real, Tb<:Real}
+    sub(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real, Tb<:Real}
+    ⊟(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real, Tb<:Real}
 
 Subtract matrices of different dimensions.
 """
-function sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real, Tb<:Real}
+function sub(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real, Tb<:Real}
     sza = size(A)
     szb = size(B)
     szmax = max.(sza, szb)
