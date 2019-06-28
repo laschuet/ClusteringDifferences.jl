@@ -36,8 +36,7 @@ function kmeans!(X::Matrix{<:Real}, M::Matrix{<:Real};
 
         # Update cluster centers
         @inbounds for j = 1:k
-            count = sum(Y[:, j])
-            M[j, :] /= count
+            M[j, :] /= sum(Y[:, j])
         end
 
         c = PartitionalClustering(X, C, W, Y, M)
