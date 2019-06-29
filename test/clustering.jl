@@ -42,9 +42,7 @@
         hc = HierarchicalClustering(X, C, W)
 
         @testset "constructors" begin
-            @test hc.X == X
-            @test hc.C == C
-            @test hc.W == W
+            @test (hc.X == X && hc.C == C && hc.W == W)
         end
 
         @testset "accessors" begin
