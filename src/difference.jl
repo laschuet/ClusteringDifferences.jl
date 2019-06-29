@@ -97,33 +97,33 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forward(clusterings::AbstractVector{PartitionalClustering}, i::Int)
-    Δ(clusterings::AbstractVector{PartitionalClustering}, i::Int)
+    forward(cs::AbstractVector{PartitionalClustering}, i::Int)
+    Δ(cs::AbstractVector{PartitionalClustering}, i::Int)
 
 Compute the forward difference of the clustering model at the given `i`.
 """
-function forward(clusterings::AbstractVector{<:PartitionalClustering}, i::Int)
-    i == length(clusterings) && return nothing
-    return clusterings[i + 1] - clusterings[i]
+function forward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
+    i == length(cs) && return nothing
+    return cs[i + 1] - cs[i]
 end
 const Δ = forward
 
 """
-    backward(clusterings::AbstractVector{PartitionalClustering}, i::Int)
-    ∇(clusterings::AbstractVector{PartitionalClustering}, i::Int)
+    backward(cs::AbstractVector{PartitionalClustering}, i::Int)
+    ∇(cs::AbstractVector{PartitionalClustering}, i::Int)
 
 Compute the backward difference of the clustering model at the given `i`.
 """
-function backward(clusterings::AbstractVector{<:PartitionalClustering}, i::Int)
+function backward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
     if i == 1
-        pc = clusterings[1]
-        k = size(pc.M, 2)
-        Y_MASK = fill(1, size(pc.Y))
-        M_MASK = fill(1, size(pc.M))
-        pcd = PartitionalClusteringDifference(pc.X, pc.C, pc.W, pc.Y, pc.M, k,
-                Y_MASK, M_MASK)
-        i == 1 && return pcd
+        c = cs[1]
+        k = size(c.M, 2)
+        Y_MASK = fill(1, size(c.Y))
+        M_MASK = fill(1, size(c.M))
+        cd = PartitionalClusteringDifference(c.X, c.C, c.W, c.Y, c.M, k, Y_MASK,
+                M_MASK)
+        i == 1 && return cd
     end
-    return clusterings[i] - clusterings[i - 1]
+    return cs[i] - cs[i - 1]
 end
 const ∇ = backward

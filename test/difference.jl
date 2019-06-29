@@ -1,7 +1,7 @@
 @testset "difference" begin
-    a = PartitionalClustering([0 1; 1 0; 1 1]', [0 0 0; 0 0 0; 0 0 0]',
+    c = PartitionalClustering([0 1; 1 0; 1 1]', [0 0 0; 0 0 0; 0 0 0]',
             [0 0 0; 0 0 0; 0 0 0]', [1.0 0.0; 0.0 1.0; 0.5 0.5]', [0 1; 1 0]')
-    b = PartitionalClustering([0 1; 1 0; 1 1]', [0 0 -1; 0 0 -1; -1 -1 0]',
+    c2 = PartitionalClustering([0 1; 1 0; 1 1]', [0 0 -1; 0 0 -1; -1 -1 0]',
             [0 0 1.0; 0 0 1.0; 1.0 1.0 0]',
             [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]', [0 1; 1 0; 1 1]')
     # a - b
@@ -24,46 +24,44 @@
     M_MASK2 = [0 0; 0 0; 1 1]'
 
     @testset "constructors" begin
-        pcd = PartitionalClusteringDifference(X, C, W, Y, M, k, Y_MASK, M_MASK)
-        @test (pcd.X == X && pcd.C == C && pcd.W == W && pcd.Y == Y
-                && pcd.M == M && pcd.k == k && pcd.Y_MASK == Y_MASK
-                && pcd.M_MASK == M_MASK)
+        cd = PartitionalClusteringDifference(X, C, W, Y, M, k, Y_MASK, M_MASK)
+        @test (cd.X == X && cd.C == C && cd.W == W && cd.Y == Y && cd.M == M
+                && cd.k == k && cd.Y_MASK == Y_MASK && cd.M_MASK == M_MASK)
     end
 
     @testset "subtraction operator" begin
-        pcd = a - a
-        @test (pcd.X == [0 0; 0 0; 0 0]' && pcd.C == [0 0 0; 0 0 0; 0 0 0]'
-                && pcd.W == [0 0 0; 0 0 0; 0 0 0]'
-                && pcd.Y == [0.0 0.0; 0.0 0.0; 0.0 0.0]' && pcd.M == [0 0; 0 0]'
-                && pcd.k == 0 && pcd.Y_MASK == [0 0; 0 0; 0 0]'
-                && pcd.M_MASK == [0 0; 0 0]')
-        pcd = a - b
-        @test (pcd.X == X && pcd.C == C && pcd.W == W && pcd.Y == Y
-                && pcd.M == M && pcd.k == k && pcd.Y_MASK == Y_MASK
-                && pcd.M_MASK == M_MASK)
-        pcd = b - a
-        @test (pcd.X == X2 && pcd.C == C2 && pcd.W == W2 && pcd.Y == Y2
-                && pcd.M == M2 && pcd.k == k2 && pcd.Y_MASK == Y_MASK2
-                && pcd.M_MASK == M_MASK2)
+        cd = c - c
+        @test (cd.X == [0 0; 0 0; 0 0]' && cd.C == [0 0 0; 0 0 0; 0 0 0]'
+                && cd.W == [0 0 0; 0 0 0; 0 0 0]'
+                && cd.Y == [0.0 0.0; 0.0 0.0; 0.0 0.0]' && cd.M == [0 0; 0 0]'
+                && cd.k == 0 && cd.Y_MASK == [0 0; 0 0; 0 0]'
+                && cd.M_MASK == [0 0; 0 0]')
+        cd = c - c2
+        @test (cd.X == X && cd.C == C && cd.W == W && cd.Y == Y && cd.M == M
+                && cd.k == k && cd.Y_MASK == Y_MASK && cd.M_MASK == M_MASK)
+        cd = c2 - c
+        @test (cd.X == X2 && cd.C == C2 && cd.W == W2 && cd.Y == Y2
+                && cd.M == M2 && cd.k == k2 && cd.Y_MASK == Y_MASK2
+                && cd.M_MASK == M_MASK2)
     end
 
     @testset "forward difference" begin
-        pcd = forward([a, b], 1)
-        @test (pcd.X == X2 && pcd.C == C2 && pcd.W == W2 && pcd.Y == Y2
-                && pcd.M == M2 && pcd.k == k2 && pcd.Y_MASK == Y_MASK2
-                && pcd.M_MASK == M_MASK2)
-        @test isnothing(forward([a, b], 2))
+        cd = forward([c, c2], 1)
+        @test (cd.X == X2 && cd.C == C2 && cd.W == W2 && cd.Y == Y2
+                && cd.M == M2 && cd.k == k2 && cd.Y_MASK == Y_MASK2
+                && cd.M_MASK == M_MASK2)
+        @test isnothing(forward([c, c2], 2))
     end
 
     @testset "backward difference" begin
-        pcd = backward([a, b], 1)
-        @test (pcd.X == a.X && pcd.C == a.C && pcd.W == a.W && pcd.Y == a.Y
-                && pcd.M == a.M && pcd.k == size(a.M, 2)
-                && pcd.Y_MASK == ones(Int, size(a.Y))
-                && pcd.M_MASK == ones(Int, size(a.M)))
-        pcd = backward([a, b], 2)
-        @test (pcd.X == X2 && pcd.C == C2 && pcd.W == W2 && pcd.Y == Y2
-                && pcd.M == M2 && pcd.k == k2 && pcd.Y_MASK == Y_MASK2
-                && pcd.M_MASK == M_MASK2)
+        cd = backward([c, c2], 1)
+        @test (cd.X == c.X && cd.C == c.C && cd.W == c.W && cd.Y == c.Y
+                && cd.M == c.M && cd.k == size(c.M, 2)
+                && cd.Y_MASK == ones(Int, size(c.Y))
+                && cd.M_MASK == ones(Int, size(c.M)))
+        cd = backward([c, c2], 2)
+        @test (cd.X == X2 && cd.C == C2 && cd.W == W2 && cd.Y == Y2
+                && cd.M == M2 && cd.k == k2 && cd.Y_MASK == Y_MASK2
+                && cd.M_MASK == M_MASK2)
     end
 end
