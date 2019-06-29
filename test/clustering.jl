@@ -1,10 +1,10 @@
 @testset "clustering" begin
     @testset "partitional clustering" begin
-        X = [0 1; 1 0; 1 1]
-        C = [0 0 0; 0 0 0; 0 0 0]
-        W = [0 0 0; 0 0 0; 0 0 0]
-        Y = [1.0 0.0; 0.0 1.0; 0.5 0.5]
-        M = [0 1; 1 0]
+        X = [0 1; 1 0; 1 1]'
+        C = [0 0 0; 0 0 0; 0 0 0]'
+        W = [0 0 0; 0 0 0; 0 0 0]'
+        Y = [1.0 0.0; 0.0 1.0; 0.5 0.5]'
+        M = [0 1; 1 0]'
         pc = PartitionalClustering(X, C, W, Y, M)
 
         @testset "constructors" begin
@@ -36,7 +36,7 @@
     end
 
     @testset "hierarchical clustering" begin
-        X = [1 2; 0 2; 0 3]
+        X = [1 2; 0 2; 0 3]'
         C = rand([-1, 0, 1], 3, 3, 3)
         W = rand(3, 3, 3) .+ 1
         hc = HierarchicalClustering(X, C, W)

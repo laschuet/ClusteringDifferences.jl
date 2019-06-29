@@ -17,11 +17,11 @@ struct PartitionalClustering{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
                                                 W::AbstractMatrix{Tw},
                                                 Y::AbstractMatrix{Ty},
                                                 M::AbstractMatrix{Tm}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
-        size(X, 1) == size(Y, 1) ||
+        size(X, 2) == size(Y, 2) ||
             throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
         size(C) == size(W) ||
             throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
-        size(Y, 2) == size(M, 1) ||
+        size(Y, 1) == size(M, 2) ||
             throw(DimensionMismatch("number of clusters must match"))
         return new(X, C, W, Y, M)
     end

@@ -23,11 +23,11 @@ struct PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: C
                                                         k::Int,
                                                         Y_MASK::AbstractMatrix{Int},
                                                         M_MASK::AbstractMatrix{Int}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
-        size(X, 1) == size(Y, 1) ||
+        size(X, 2) == size(Y, 2) ||
             throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
         size(C) == size(W) ||
             throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
-        size(Y, 2) == size(M, 1) ||
+        size(Y, 1) == size(M, 2) ||
             throw(DimensionMismatch("number of clusters must match"))
         size(Y) == size(Y_MASK) ||
             throw(DimensionMismatch("dimensions of assignments and mask must match"))
@@ -83,7 +83,7 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     X = a.X - b.X
     C = a.C - b.C
     W = a.W - b.W
-    k = size(a.M, 1) - size(b.M, 1)
+    k = size(a.M, 2) - size(b.M, 2)
     if k == 0
         Y = a.Y - b.Y
         M = a.M - b.M
@@ -91,8 +91,8 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
         Y = a.Y ⊟ b.Y
         M = a.M ⊟ b.M
     end
-    Y_MASK = mask(Y, (0, k))
-    M_MASK = mask(M, (k, 0))
+    Y_MASK = mask(Y, (k, 0))
+    M_MASK = mask(M, (0, k))
     return PartitionalClusteringDifference(X, C, W, Y, M, k, Y_MASK, M_MASK)
 end
 
@@ -117,7 +117,7 @@ Compute the backward difference of the clustering model at the given `i`.
 function backward(clusterings::AbstractVector{<:PartitionalClustering}, i::Int)
     if i == 1
         pc = clusterings[1]
-        k = size(pc.M, 1)
+        k = size(pc.M, 2)
         Y_MASK = fill(1, size(pc.Y))
         M_MASK = fill(1, size(pc.M))
         pcd = PartitionalClusteringDifference(pc.X, pc.C, pc.W, pc.Y, pc.M, k,
