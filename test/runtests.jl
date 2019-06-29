@@ -5,5 +5,6 @@ using Test
     include("clustering.jl")
     include("difference.jl")
     include("kmeans.jl")
+    include("pckmeans.jl")
     include("utils.jl")
 end

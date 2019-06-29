@@ -17,11 +17,14 @@ export
     backward, ∇,
     forward, Δ,
     # kmeans.jl
-    kmeans
+    kmeans,
+    # pckmeans.jl
+    pckmeans
 
 include("clustering.jl")
 include("difference.jl")
 include("kmeans.jl")
+include("pckmeans.jl")
 include("utils.jl")
 
 end # module VAIML
