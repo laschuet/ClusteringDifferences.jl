@@ -1,7 +1,15 @@
-docs/build
-.vscode
+deps/deps.jl
+deps/build.log
+deps/downloads/
+deps/usr/
+deps/src/
+docs/build/
+docs/site/
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
+Manifest.toml
+
+.vscode/
 *.log
 *.swp
