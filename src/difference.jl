@@ -109,6 +109,23 @@ end
 const Δ = forward
 
 """
+    forwards(cs::AbstractVector{<:PartitionalClustering})
+
+Compute the forward differences.
+"""
+function forwards(cs::AbstractVector{<:PartitionalClustering})
+    n = length(cs)
+
+    n > 1 || throw(ArgumentError("number of clusterings must at least be 2"))
+
+    cds = Vector{PartitionalClusteringDifference}(undef, n - 1)
+    @inbounds for i = 1:(n - 1)
+        cds[i] = cs[i + 1] - cs[i]
+    end
+    return cds
+end
+
+"""
     backward(cs::AbstractVector{PartitionalClustering}, i::Int)
     ∇(cs::AbstractVector{PartitionalClustering}, i::Int)
 
@@ -127,3 +144,21 @@ function backward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
     return cs[i] - cs[i - 1]
 end
 const ∇ = backward
+
+
+"""
+    backwards(cs::AbstractVector{<:PartitionalClustering})
+
+Compute the backward differences.
+"""
+function backwards(cs::AbstractVector{<:PartitionalClustering})
+    n = length(cs)
+
+    n > 1 || throw(ArgumentError("number of clusterings must at least be 2"))
+
+    cds = Vector{PartitionalClusteringDifference}(undef, n - 1)
+    @inbounds for i = 2:n
+        cds[i - 1] = cs[i] - cs[i - 1]
+    end
+    return cds
+end

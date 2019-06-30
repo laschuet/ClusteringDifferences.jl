@@ -14,8 +14,8 @@ export
     weights,
     # difference.jl
     PartitionalClusteringDifference,
-    backward, ∇,
-    forward, Δ,
+    backward, ∇, backwards,
+    forward, Δ, forwards,
     # kmeans.jl
     kmeans,
     # pckmeans.jl
