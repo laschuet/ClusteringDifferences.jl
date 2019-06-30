@@ -57,22 +57,6 @@
         @test isnothing(forward([c, c2], 2))
     end
 
-    @testset "forward differences" begin
-        cds = forwards([c, c2, c])
-        @test isa(cds, Vector{PartitionalClusteringDifference})
-        @test length(cds) == 2
-        cd = cds[1]
-        cd2 = c2 - c
-        @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
-                && cd.M == cd2.M && cd.k == cd2.k && cd.Y_MASK == cd2.Y_MASK
-                && cd.M_MASK == cd2.M_MASK)
-        cd = cds[2]
-        cd2 = c - c2
-        @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
-                && cd.M == cd2.M && cd.k == cd2.k && cd.Y_MASK == cd2.Y_MASK
-                && cd.M_MASK == cd2.M_MASK)
-    end
-
     @testset "backward difference" begin
         cd = backward([c, c2], 1)
         @test isa(cd, PartitionalClusteringDifference)
@@ -87,8 +71,8 @@
                 && cd.M_MASK == M_MASK2)
     end
 
-    @testset "backward differences" begin
-        cds = backwards([c, c2, c])
+    @testset "differences" begin
+        cds = differences([c, c2, c])
         @test isa(cds, Vector{PartitionalClusteringDifference})
         @test length(cds) == 2
         cd = cds[1]
@@ -98,6 +82,20 @@
                 && cd.M_MASK == cd2.M_MASK)
         cd = cds[2]
         cd2 = c - c2
+        @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
+                && cd.M == cd2.M && cd.k == cd2.k && cd.Y_MASK == cd2.Y_MASK
+                && cd.M_MASK == cd2.M_MASK)
+
+        cds = differences([c, c2, c]; asc=false)
+        @test isa(cds, Vector{PartitionalClusteringDifference})
+        @test length(cds) == 2
+        cd = cds[1]
+        cd2 = c - c2
+        @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
+                && cd.M == cd2.M && cd.k == cd2.k && cd.Y_MASK == cd2.Y_MASK
+                && cd.M_MASK == cd2.M_MASK)
+        cd = cds[2]
+        cd2 = c2 - c
         @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
                 && cd.M == cd2.M && cd.k == cd2.k && cd.Y_MASK == cd2.Y_MASK
                 && cd.M_MASK == cd2.M_MASK)
