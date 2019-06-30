@@ -5,13 +5,13 @@
 Subtract matrices of different dimensions.
 """
 function sub(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real, Tb<:Real}
-    sza = size(A)
-    szb = size(B)
-    szmax = max.(sza, szb)
-    A2 = Matrix{Union{Ta, Nothing}}(nothing, szmax[1], szmax[2])
-    B2 = Matrix{Union{Tb, Nothing}}(nothing, szmax[1], szmax[2])
-    A2[1:sza[1], 1:sza[2]] = A
-    B2[1:szb[1], 1:szb[2]] = B
+    ax, ay = size(A)
+    bx, by = size(B)
+    x, y = max.(sza, szb)
+    A2 = Matrix{Union{Ta, Nothing}}(nothing, x, y)
+    B2 = Matrix{Union{Tb, Nothing}}(nothing, x, y)
+    A2[1:ax, 1:ay] = A
+    B2[1:bx, 1:by] = B
 
     return map((a, b) -> begin
         isnothing(a) && return b
