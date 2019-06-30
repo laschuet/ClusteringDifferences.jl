@@ -145,7 +145,6 @@ function backward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
 end
 const ∇ = backward
 
-
 """
     backwards(cs::AbstractVector{<:PartitionalClustering})
 
