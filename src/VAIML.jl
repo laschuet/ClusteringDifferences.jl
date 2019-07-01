@@ -22,13 +22,13 @@ export
     # kmeans.jl
     kmeans,
     # pckmeans.jl
-    pckmeans
+    #pckmeans
 
 include("clustering.jl")
 include("difference.jl")
 include("encoding.jl")
 include("kmeans.jl")
-include("pckmeans.jl")
+#include("pckmeans.jl")
 include("utils.jl")
 
 end # module VAIML

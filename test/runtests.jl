@@ -6,6 +6,6 @@ using Test
     include("difference.jl")
     include("encoding.jl")
     include("kmeans.jl")
-    include("pckmeans.jl")
+    #include("pckmeans.jl")
     include("utils.jl")
 end
