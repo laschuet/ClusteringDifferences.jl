@@ -1,35 +1,42 @@
 abstract type Clustering end
 
 """
-    PartitionalClustering{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
+    PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
 
 Partitional clustering model.
 """
-struct PartitionalClustering{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
-    X::AbstractMatrix{Tx}
-    C::AbstractMatrix{Int}
-    W::AbstractMatrix{Tw}
-    Y::AbstractMatrix{Ty}
-    M::AbstractMatrix{Tm}
+struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
+    X::Matrix{Tx}
+    C::Matrix{Tc}
+    W::Matrix{Tw}
+    Y::Matrix{Ty}
+    M::Matrix{Tm}
 
-    function PartitionalClustering{Tx,Tw,Ty,Tm}(X::AbstractMatrix{Tx},
-                                                C::AbstractMatrix{Int},
-                                                W::AbstractMatrix{Tw},
-                                                Y::AbstractMatrix{Ty},
-                                                M::AbstractMatrix{Tm}) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
-        size(X, 2) == size(Y, 2) ||
-            throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
-        size(C) == size(W) ||
-            throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
-        size(Y, 1) == size(M, 2) ||
-            throw(DimensionMismatch("number of clusters must match"))
+    function PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X::Matrix{Tx}, C::Matrix{Tc},
+                                                W::Matrix{Tw}, Y::Matrix{Ty},
+                                                M::Matrix{Tm}) where {Tx<:Real, Tc<:Integer, Tw<:Real, Ty<:Real, Tm<:Real}
+        mx, nx = size(X)
+        nc = size(C, 2)
+        nw = size(W, 2)
+        ky, ny = size(Y)
+        mm, km = size(M)
+        if nx > 0
+            nx == ny || throw(DimensionMismatch("number of data instances must match"))
+        end
+        if mx > 0
+            mx == mm || throw(DimensionMismatch("number of data features must match"))
+        end
+        nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
+        if nc > 0 && nx > 0
+            nc == nx || throw(DimensionMismatch("number of data instances and maximum number of constraints must match"))
+        end
+        ky == km || throw(DimensionMismatch("number of clusters must match"))
         return new(X, C, W, Y, M)
     end
 end
-PartitionalClustering(X::AbstractMatrix{Tx}, C::AbstractMatrix{Int},
-                    W::AbstractMatrix{Tw}, Y::AbstractMatrix{Ty},
-                    M::AbstractMatrix{Tm}) where {Tx,Tw,Ty,Tm} =
-    PartitionalClustering{Tx,Tw,Ty,Tm}(X, C, W, Y, M)
+PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
+                    Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm} =
+    PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, C, W, Y, M)
 
 # Partitional clustering equality operator
 Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
@@ -40,26 +47,29 @@ Base.hash(a::PartitionalClustering, h::UInt) =
     hash(a.X, hash(a.C, hash(a.W, hash(a.Y, hash(a.M, hash(:PartitionalClustering, h))))))
 
 """
-    HierarchicalClustering{Tx<:Real,Tw<:Real} <: Clustering
+    HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: Clustering
 
 Hierarchical clustering model.
 """
-struct HierarchicalClustering{Tx<:Real,Tw<:Real} <: Clustering
-    X::AbstractMatrix{Tx}
-    C::AbstractArray{Int, 3}
-    W::AbstractArray{Tw, 3}
+struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: Clustering
+    X::Matrix{Tx}
+    C::Array{Tc,3}
+    W::Array{Tw,3}
 
-    function HierarchicalClustering{Tx,Tw}(X::AbstractMatrix{Tx},
-                                        C::AbstractArray{Int, 3},
-                                        W::AbstractArray{Tw, 3}) where {Tx<:Real,Tw<:Real}
-        size(C) == size(W) ||
-            throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
+    function HierarchicalClustering{Tx,Tc,Tw}(X::Matrix{Tx}, C::Array{Tc,3},
+                                        W::Array{Tw,3}) where {Tx<:Real,Tc<:Integer,Tw<:Real}
+        mx, nx = size(X)
+        nc = size(C, 2)
+        nw = size(W, 2)
+        nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
+        if nc > 0 && nx > 0
+            nc == nx || throw(DimensionMismatch("number of data instances and maximum number of constraints must match"))
+        end
         return new(X, C, W)
     end
 end
-HierarchicalClustering(X::AbstractMatrix{Tx}, C::AbstractArray{Int, 3},
-                    W::AbstractArray{Tw, 3}) where {Tx,Tw} =
-    HierarchicalClustering{Tx,Tw}(X, C, W)
+HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Tc,Tw} =
+    HierarchicalClustering{Tx,Tc,Tw}(X, C, W)
 
 """
     data(c::Clustering)

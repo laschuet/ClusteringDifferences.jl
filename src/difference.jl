@@ -1,54 +1,54 @@
 abstract type ClusteringDifference end
 
 """
-    PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Tm<:Real} <: ClusteringDifference
+    PartitionalClusteringDifference{Tx<:Real,Tc<:Integer,Tw<:Real,Tm<:Real} <: ClusteringDifference
 
 Difference between two partitional clustering models.
 """
-struct PartitionalClusteringDifference{Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real} <: ClusteringDifference
-    X::AbstractMatrix{Tx}
-    C::AbstractMatrix{Int}
-    W::AbstractMatrix{Tw}
-    Y::AbstractMatrix{Ty}
-    M::AbstractMatrix{Tm}
+struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
+                                    Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: ClusteringDifference
+    X::Matrix{Tx}
+    C::Matrix{Tc}
+    W::Matrix{Tw}
+    Y::Matrix{Ty}
+    M::Matrix{Tm}
+    m::Int
+    n::Int
     k::Int
 
-    function PartitionalClusteringDifference{Tx,Tw,Ty,Tm}(X::AbstractMatrix{Tx},
-                                                        C::AbstractMatrix{Int},
-                                                        W::AbstractMatrix{Tw},
-                                                        Y::AbstractMatrix{Ty},
-                                                        M::AbstractMatrix{Tm},
-                                                        k::Int) where {Tx<:Real,Tw<:Real,Ty<:Real,Tm<:Real}
-        size(X, 2) == size(Y, 2) ||
-            throw(DimensionMismatch("number of data instances and number of data instances assigned must match"))
-        size(C) == size(W) ||
-            throw(DimensionMismatch("dimensions of constraints and weights matrices must match"))
-        size(Y, 1) == size(M, 2) ||
-            throw(DimensionMismatch("number of clusters must match"))
-        return new(X, C, W, Y, M, k)
+    function PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X::Matrix{Tx},
+                                                            C::Matrix{Tc},
+                                                            W::Matrix{Tw},
+                                                            Y::Matrix{Ty},
+                                                            M::Matrix{Tm},
+                                                            m::Integer,
+                                                            n::Integer,
+                                                            k::Integer) where {Tx<:Union{Nothing,Real},
+                                                                            Tc<:Union{Nothing,Integer},
+                                                                            Tw<:Union{Nothing,Real},
+                                                                            Ty<:Union{Nothing,Real},
+                                                                            Tm<:Union{Nothing,Real}}
+        nc = size(C, 2)
+        nw = size(W, 2)
+        nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
+        return new(X, C, W, Y, M, m, n, k)
     end
 end
-PartitionalClusteringDifference(X::AbstractMatrix{Tx}, C::AbstractMatrix{Int},
-                                W::AbstractMatrix{Tw}, Y::AbstractMatrix{Ty},
-                                M::AbstractMatrix{Tm}, k::Int) where {Tx,Tw,Ty,Tm} =
-    PartitionalClusteringDifference{Tx,Tw,Ty,Tm}(X, C, W, Y, M, k)
+PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
+                                Y::Matrix{Ty}, M::Matrix{Tm}, m::Integer,
+                                n::Integer, k::Integer) where {Tx,Tc,Tw,Ty,Tm} =
+    PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, C, W, Y, M, m, n, k)
 
 # Partitional clustering model subtraction
-# Assume that data will not change (at least number of instances and features)
-# Assume that number of clusters might change
 function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
-    X = a.X - b.X
-    C = a.C - b.C
-    W = a.W - b.W
+    X = a.X ⊟ b.X
+    C = a.C ⊟ b.C
+    W = a.W ⊟ b.W
+    Y = a.Y ⊟ b.Y
+    M = a.M ⊟ b.M
+    m, n = size(a.X) .- size(b.X)
     k = size(a.M, 2) - size(b.M, 2)
-    if k == 0
-        Y = a.Y - b.Y
-        M = a.M - b.M
-    else
-        Y = a.Y ⊟ b.Y
-        M = a.M ⊟ b.M
-    end
-    return PartitionalClusteringDifference(X, C, W, Y, M, k)
+    return PartitionalClusteringDifference(X, C, W, Y, M, m, n, k)
 end
 
 """
@@ -72,8 +72,9 @@ Compute the backward difference of the clustering model at the given `i`.
 function backward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
     if i == 1
         c = cs[1]
+        m, n = size(c.X)
         k = size(c.M, 2)
-        cd = PartitionalClusteringDifference(c.X, c.C, c.W, c.Y, c.M, k)
+        cd = PartitionalClusteringDifference(c.X, c.C, c.W, c.Y, c.M, m, n, k)
         return cd
     end
     return cs[i] - cs[i - 1]
@@ -91,9 +92,7 @@ Compute the differences between adjacent clusterings.
 function differences(cs::AbstractVector{<:PartitionalClustering};
                     asc::Bool=true)
     n = length(cs)
-
     n > 1 || throw(ArgumentError("number of clusterings must at least be 2"))
-
     cds = Vector{PartitionalClusteringDifference}(undef, n - 1)
     @inbounds for i = 1:(n - 1)
         cds[i] = asc ? cs[i + 1] - cs[i] : cs[i] - cs[i + 1]

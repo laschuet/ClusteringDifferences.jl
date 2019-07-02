@@ -1,23 +1,25 @@
 """
-    sub(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real, Tb<:Real}
-    ⊟(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real, Tb<:Real}
+    sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
+    ⊟(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
 
-Subtract matrices of different dimensions.
+Subtract matrices of possibly different dimensions.
 """
-function sub(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real, Tb<:Real}
+function sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
     sza = size(A)
     szb = size(B)
+    sza == szb && return A - B
     x, y = max.(sza, szb)
-
-    A2 = Matrix{Union{Ta, Nothing}}(nothing, x, y)
-    B2 = Matrix{Union{Tb, Nothing}}(nothing, x, y)
+    A2 = Matrix{Union{Nothing,Ta}}(nothing, x, y)
+    B2 = Matrix{Union{Nothing,Tb}}(nothing, x, y)
     A2[1:sza[1], 1:sza[2]] = A
     B2[1:szb[1], 1:szb[2]] = B
-
-    return map((a, b) -> begin
+    T = promote_type(eltype(Ta), eltype(Tb))
+    S = Matrix{Union{Nothing,T}}(undef, x, y)
+    map!((a, b) -> begin
         isnothing(a) && return b
         isnothing(b) && return a
         return a - b
-    end, A2, B2)
+    end, S, A2, B2)
+    return S
 end
 const ⊟ = sub

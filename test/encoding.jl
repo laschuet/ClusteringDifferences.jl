@@ -4,8 +4,10 @@
     W = [0 0 0; 0 0 0; 0 0 0]
     Y = [0.0 0.0 -0.5; 0.0 0.0 -0.5; 0.0 0.0 1.0]
     M = [0 0 1; 0 0 1]
+    m = 0
+    n = 0
     k = 1
-    cd = PartitionalClusteringDifference(X, C, W, Y, M, k)
+    cd = PartitionalClusteringDifference(X, C, W, Y, M, m, n, k)
     XM = [0 0 0; 0 0 0]
     CM = [0 0 2; 0 0 2; 2 2 0]
     WM = [0 0 0; 0 0 0; 0 0 0]
