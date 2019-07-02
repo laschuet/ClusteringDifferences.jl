@@ -8,6 +8,7 @@ Cluster the data `X` with the pairwise constrained ``k``-means algorithm.
 - `dist::SemiMetric=SqEuclidean()`: the distance function.
 - `ϵ::AbstractFloat=1.0e-6`: the absolute tolerance for convergence.
 """
+#=
 function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
                 W::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
                 maxiter::Int=256, dist::SemiMetric=SqEuclidean(),
@@ -63,3 +64,4 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
 
     return cs
 end
+=#
