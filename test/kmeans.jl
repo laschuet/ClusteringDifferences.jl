@@ -1,6 +1,6 @@
 @testset "kmeans" begin
-    X = [1 0; 0 1; -1 0; 0 -1]'
-    M = [1 1; -1 -1]'
+    X = [1 0 -1 0; 0 1 0 -1]
+    M = [1 -1; 1 -1]
     m, n = size(X)
     m2, k = size(M)
 

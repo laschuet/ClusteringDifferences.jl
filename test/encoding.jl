@@ -1,16 +1,16 @@
 @testset "encoding" begin
-    X = [0 0; 0 0; 0 0]'
-    C = [0 0 -1; 0 0 -1; -1 -1 0]'
-    W = [0 0 0; 0 0 0; 0 0 0]'
-    Y = [0.0 0.0 0.0; 0.0 0.0 0.0; -0.5 -0.5 1.0]'
-    M = [0 0; 0 0; 1 1]'
+    X = [0 0 0; 0 0 0]
+    C = [0 0 -1; 0 0 -1; -1 -1 0]
+    W = [0 0 0; 0 0 0; 0 0 0]
+    Y = [0.0 0.0 -0.5; 0.0 0.0 -0.5; 0.0 0.0 1.0]
+    M = [0 0 1; 0 0 1]
     k = 1
     cd = PartitionalClusteringDifference(X, C, W, Y, M, k)
-    XM = [0 0; 0 0; 0 0]'
-    CM = [0 0 2; 0 0 2; 2 2 0]'
-    WM = [0 0 0; 0 0 0; 0 0 0]'
-    YM = [0 0 1; 0 0 1; 2 2 1]'
-    MM = [0 0; 0 0; 1 1]'
+    XM = [0 0 0; 0 0 0]
+    CM = [0 0 2; 0 0 2; 2 2 0]
+    WM = [0 0 0; 0 0 0; 0 0 0]
+    YM = [0 0 2; 0 0 2; 1 1 1]
+    MM = [0 0 1; 0 0 1]
     cde = PartitionalClusteringDifferenceEncoding(XM, CM, WM, YM, MM)
 
     @testset "constructors" begin
