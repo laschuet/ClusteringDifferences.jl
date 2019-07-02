@@ -20,7 +20,7 @@ export
     # encoding.jl
     PartitionalClusteringDifferenceEncoding,
     # kmeans.jl
-    kmeans,
+    kmeans
     # pckmeans.jl
     #pckmeans
 
