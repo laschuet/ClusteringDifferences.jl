@@ -20,8 +20,8 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
 
     C = Matrix{Int}(undef, 0, 0)
     W = Matrix{Float64}(undef, 0, 0)
-    Y = zeros(Real, k, n)
-    M = convert(Matrix{AbstractFloat}, M)
+    Y = zeros(Float64, k, n)
+    M = convert(Matrix{Float64}, M)
 
     cs = Vector{PartitionalClustering}(undef, 0)
     c = PartitionalClustering(X, C, W, Y, M)
