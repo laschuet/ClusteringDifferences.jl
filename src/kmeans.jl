@@ -23,9 +23,11 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
     Y = zeros(Real, k, n)
     M = convert(Matrix{AbstractFloat}, M)
 
-    DIST = pairwise(dist, M, X; dims=2)
-
     cs = Vector{PartitionalClustering}(undef, 0)
+    c = PartitionalClustering(X, C, W, Y, M)
+    push!(cs, c)
+
+    DIST = pairwise(dist, M, X; dims=2)
     pre_objcosts = 0
     i = 1
     while i <= maxiter
