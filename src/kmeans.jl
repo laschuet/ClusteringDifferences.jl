@@ -24,7 +24,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
     M = convert(Matrix{Float64}, M)
 
     cs = Vector{PartitionalClustering}(undef, 0)
-    c = PartitionalClustering(X, C, W, Y, M)
+    c = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
     push!(cs, c)
 
     DIST = pairwise(dist, M, X; dims=2)
@@ -49,7 +49,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
 
         pairwise!(DIST, dist, M, X; dims=2)
 
-        c = PartitionalClustering(X, C, W, Y, M)
+        c = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
         push!(cs, c)
 
         # Check for convergence
