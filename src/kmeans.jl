@@ -19,7 +19,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
     k < n || throw(ArgumentError("more clusters than data instances are not allowed"))
 
     C = Matrix{Int}(undef, 0, 0)
-    W = Matrix{Real}(undef, 0, 0)
+    W = Matrix{Float64}(undef, 0, 0)
     Y = zeros(Real, k, n)
     M = convert(Matrix{AbstractFloat}, M)
 
