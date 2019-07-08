@@ -19,7 +19,6 @@ export
     forward, Δ,
     # encoding.jl
     PartitionalClusteringDifferenceEncoding,
-    masks,
     # kmeans.jl
     kmeans
     # pckmeans.jl
