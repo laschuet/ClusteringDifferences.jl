@@ -54,12 +54,11 @@ Create mask that encodes the various types of differences.
 | value difference           |    2 |
 """
 function mask(ΔM::AbstractMatrix{Union{Nothing,T}}, Δdims::NTuple{2,Int}) where T<:Real
-    szx, szy = ΔM
+    szx, szy = size(ΔM)
+    Δdimx, Δdimy = Δdims
     return map(m -> begin
         idx, val = m
         isnothing(val) && return 3
-        szx, szy = size(ΔM)
-        Δdimx, Δdimy = Δdims
         y, x = divrem(idx - 1, szx) .+ 1
         x > szx - abs(Δdimx) && return sign(Δdimx)
         y > szy - abs(Δdimy) && return sign(Δdimy)
