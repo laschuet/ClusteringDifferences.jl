@@ -40,7 +40,7 @@ end
 
 """
     mask(ΔM::AbstractMatrix{Union{Nothing,T}}, Δdims::NTuple{2,Int}) where T<:Real
-    mask(ΔM::AbstractMatrix{T}, Δdims::NTuple{2,Int}) where T<:Real =
+    mask(ΔM::AbstractMatrix{T}, Δdims::NTuple{2,Int}) where T<:Real
 
 Create mask that encodes the various types of differences.
 
