@@ -52,20 +52,20 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
-    Δ(cs::AbstractVector{<:PartitionalClustering}, i::Int)
+    forward(cs::AbstractVector{<:Clustering}, i::Int)
+    Δ(cs::AbstractVector{<:Clustering}, i::Int)
 
 Compute the forward difference of the clustering model at the given `i`.
 """
-function forward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
+function forward(cs::AbstractVector{<:Clustering}, i::Int)
     i == length(cs) && return nothing
     return cs[i + 1] - cs[i]
 end
 const Δ = forward
 
 """
-    backward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
-    ∇(cs::AbstractVector{<:PartitionalClustering}, i::Int)
+    backward(cs::AbstractVector{<:Clustering}, i::Int)
+    ∇(cs::AbstractVector{<:Clustering}, i::Int)
 
 Compute the backward difference of the clustering model at the given `i`.
 """
@@ -82,14 +82,14 @@ end
 const ∇ = backward
 
 """
-    differences(cs::AbstractVector{<:PartitionalClustering}; <keyword arguments>)
+    differences(cs::AbstractVector{<:Clustering}; <keyword arguments>)
 
 Compute the differences between adjacent clustering models.
 
 # Keyword arguments
 - `asc::Bool=true`: Whether to compute the differences in ascending order (``true``) instead of descending order (``false``).
 """
-function differences(cs::AbstractVector{<:PartitionalClustering};
+function differences(cs::AbstractVector{<:Clustering};
                     asc::Bool=true)
     n = length(cs)
     n > 1 || throw(ArgumentError("number of clusterings must at least be 2"))
