@@ -87,7 +87,7 @@ const ∇ = backward
 Compute the differences between adjacent clustering models.
 
 # Keyword arguments
-- `asc::Bool=true`: Wheter to compute the differences in ascending order (``true``) instead of descending order (``false``).
+- `asc::Bool=true`: Whether to compute the differences in ascending order (``true``) instead of descending order (``false``).
 """
 function differences(cs::AbstractVector{<:PartitionalClustering};
                     asc::Bool=true)
