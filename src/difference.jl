@@ -84,7 +84,7 @@ const ∇ = backward
 """
     differences(cs::AbstractVector{<:PartitionalClustering}; <keyword arguments>)
 
-Compute the differences between adjacent clusterings.
+Compute the differences between adjacent clustering models.
 
 # Keyword arguments
 - `asc::Bool=true`: Wheter to compute the differences in ascending order (``true``) instead of descending order (``false``).
