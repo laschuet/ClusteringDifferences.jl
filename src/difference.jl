@@ -52,8 +52,8 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forward(cs::AbstractVector{PartitionalClustering}, i::Int)
-    Δ(cs::AbstractVector{PartitionalClustering}, i::Int)
+    forward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
+    Δ(cs::AbstractVector{<:PartitionalClustering}, i::Int)
 
 Compute the forward difference of the clustering model at the given `i`.
 """
@@ -64,8 +64,8 @@ end
 const Δ = forward
 
 """
-    backward(cs::AbstractVector{PartitionalClustering}, i::Int)
-    ∇(cs::AbstractVector{PartitionalClustering}, i::Int)
+    backward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
+    ∇(cs::AbstractVector{<:PartitionalClustering}, i::Int)
 
 Compute the backward difference of the clustering model at the given `i`.
 """
