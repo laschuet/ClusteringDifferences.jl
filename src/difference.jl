@@ -71,7 +71,7 @@ const Δ = forward
 Compute the backward difference of the clustering model at the position `i` with
 step size `h`.
 """
-function backward(cs::AbstractVector{<:PartitionalClustering}, i::Int, h::Int=1)
+function backward(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
     if i == 1
         c = cs[1]
         m, n = size(c.X)
