@@ -52,24 +52,26 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forward(cs::AbstractVector{<:Clustering}, i::Int)
-    Δ(cs::AbstractVector{<:Clustering}, i::Int)
+    forward(cs::AbstractVector{<:Clustering}, i::Int, [h::Int=1])
+    Δ(cs::AbstractVector{<:Clustering}, i::Int, [h::Int=1])
 
-Compute the forward difference of the clustering model at the given `i`.
+Compute the forward difference of the clustering model at the position `i` with
+step size `h`.
 """
-function forward(cs::AbstractVector{<:Clustering}, i::Int)
+function forward(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
     i == length(cs) && return nothing
-    return cs[i + 1] - cs[i]
+    return cs[i + h] - cs[i]
 end
 const Δ = forward
 
 """
-    backward(cs::AbstractVector{<:Clustering}, i::Int)
-    ∇(cs::AbstractVector{<:Clustering}, i::Int)
+    backward(cs::AbstractVector{<:Clustering}, i::Int, [h::Int=1])
+    ∇(cs::AbstractVector{<:Clustering}, i::Int, [h::Int=1])
 
-Compute the backward difference of the clustering model at the given `i`.
+Compute the backward difference of the clustering model at the position `i` with
+step size `h`.
 """
-function backward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
+function backward(cs::AbstractVector{<:PartitionalClustering}, i::Int, h::Int=1)
     if i == 1
         c = cs[1]
         m, n = size(c.X)
@@ -77,7 +79,7 @@ function backward(cs::AbstractVector{<:PartitionalClustering}, i::Int)
         cd = PartitionalClusteringDifference(c.X, c.C, c.W, c.Y, c.M, m, n, k)
         return cd
     end
-    return cs[i] - cs[i - 1]
+    return cs[i] - cs[i - h]
 end
 const ∇ = backward
 
