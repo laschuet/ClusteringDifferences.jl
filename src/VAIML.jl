@@ -4,6 +4,7 @@ using Distances
 
 export
     # clustering.jl
+    Clustering,
     HierarchicalClustering,
     PartitionalClustering,
     assignments,
