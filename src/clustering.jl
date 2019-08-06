@@ -38,7 +38,7 @@ PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
                     Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm} =
     PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, C, W, Y, M)
 
-# Partitional clustering equality operator
+# Partitional clustering model equality operator
 Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
     a.X == b.X && a.C == b.C && a.W == b.W && a.Y == b.Y && a.M == b.M
 
