@@ -52,52 +52,29 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forward(cs::AbstractVector{<:Clustering}, i::Int [, h::Int=1])
-    Δ(cs::AbstractVector{<:Clustering}, i::Int [, h::Int=1])
+    forwarddiff(cs::AbstractVector{<:Clustering}, i::Int[, h::Int=1])
 
-Compute the forward difference of the clustering model at the position `i` with
-step size `h`.
+Compute the forward difference of the clustering model at index `i` with step
+size `h`.
 """
-function forward(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
-    i == length(cs) && return nothing
+function forwarddiff(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
+    i > length(cs) - h && return nothing
     return cs[i + h] - cs[i]
 end
-const Δ = forward
 
 """
-    backward(cs::AbstractVector{<:Clustering}, i::Int [, h::Int=1])
-    ∇(cs::AbstractVector{<:Clustering}, i::Int [, h::Int=1])
+    backwarddiff(cs::AbstractVector{<:Clustering}, i::Int[, h::Int=1])
 
-Compute the backward difference of the clustering model at the position `i` with
-step size `h`.
+Compute the backward difference of the clustering model at index `i` with step
+size `h`.
 """
-function backward(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
-    if i == 1
-        c = cs[1]
+function backwarddiff(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
+    if i - h < 1
+        c = cs[i]
         m, n = size(c.X)
         k = size(c.M, 2)
         cd = PartitionalClusteringDifference(c.X, c.C, c.W, c.Y, c.M, m, n, k)
         return cd
     end
     return cs[i] - cs[i - h]
-end
-const ∇ = backward
-
-"""
-    differences(cs::AbstractVector{<:Clustering}; <keyword arguments>)
-
-Compute the differences between adjacent clustering models.
-
-# Keyword arguments
-- `asc::Bool=true`: Whether to compute the differences in ascending order (``true``) instead of descending order (``false``).
-"""
-function differences(cs::AbstractVector{<:Clustering};
-                    asc::Bool=true)
-    n = length(cs)
-    n > 1 || throw(ArgumentError("number of clusterings must at least be 2"))
-    cds = Vector{PartitionalClusteringDifference}(undef, n - 1)
-    @inbounds for i = 1:(n - 1)
-        cds[i] = asc ? cs[i + 1] - cs[i] : cs[i] - cs[i + 1]
-    end
-    return cds
 end

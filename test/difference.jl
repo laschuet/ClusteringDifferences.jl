@@ -47,52 +47,23 @@
     end
 
     @testset "forward difference" begin
-        cd = forward([c, c2], 1)
+        cd = forwarddiff([c, c2], 1)
         @test isa(cd, PartitionalClusteringDifference)
         @test (cd.X == X2 && cd.C == C2 && cd.W == W2 && cd.Y == Y2
                 && cd.M == M2 && cd.m == m2 && cd.n == n2 && cd.k == k2)
-        @test isnothing(forward([c, c2], 2))
+        cd = forwarddiff([c, c2], 2)
+        @test isnothing(cd)
     end
 
     @testset "backward difference" begin
-        cd = backward([c, c2], 1)
+        cd = backwarddiff([c, c2], 1)
         @test isa(cd, PartitionalClusteringDifference)
         @test (cd.X == c.X && cd.C == c.C && cd.W == c.W && cd.Y == c.Y
                 && cd.M == c.M && cd.m == size(c.X, 1) && cd.n == size(c.X, 2)
                 && cd.k == size(c.M, 2))
-        cd = backward([c, c2], 2)
+        cd = backwarddiff([c, c2], 2)
         @test isa(cd, PartitionalClusteringDifference)
         @test (cd.X == X2 && cd.C == C2 && cd.W == W2 && cd.Y == Y2
                 && cd.M == M2 && cd.m == m2 && cd.n == n2 && cd.k == k2)
-    end
-
-    @testset "differences" begin
-        cds = differences([c, c2, c])
-        @test isa(cds, Vector{PartitionalClusteringDifference})
-        @test length(cds) == 2
-        cd = cds[1]
-        cd2 = c2 - c
-        @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
-                && cd.M == cd2.M && cd.m == cd2.m && cd.n == cd2.n
-                && cd.k == cd2.k)
-        cd = cds[2]
-        cd2 = c - c2
-        @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
-                && cd.M == cd2.M && cd.m == cd2.m && cd.n == cd2.n
-                && cd.k == cd2.k)
-
-        cds = differences([c, c2, c]; asc=false)
-        @test isa(cds, Vector{PartitionalClusteringDifference})
-        @test length(cds) == 2
-        cd = cds[1]
-        cd2 = c - c2
-        @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
-                && cd.M == cd2.M && cd.m == cd2.m && cd.n == cd2.n
-                && cd.k == cd2.k)
-        cd = cds[2]
-        cd2 = c2 - c
-        @test(cd.X == cd2.X && cd.C == cd2.C && cd.W == cd2.W && cd.Y == cd2.Y
-                && cd.M == cd2.M && cd.m == cd2.m && cd.n == cd2.n
-                && cd.k == cd2.k)
     end
 end

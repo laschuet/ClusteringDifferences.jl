@@ -15,9 +15,8 @@ export
     weights,
     # difference.jl
     PartitionalClusteringDifference,
-    backward, ∇,
-    differences,
-    forward, Δ,
+    backwarddiff,
+    forwarddiff,
     # encoding.jl
     PartitionalClusteringDifferenceEncoding,
     # kmeans.jl
