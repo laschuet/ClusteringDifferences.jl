@@ -14,10 +14,12 @@ export
     θ,
     weights,
     # difference.jl
+    ClusteringDifference,
     PartitionalClusteringDifference,
     backwarddiff,
     forwarddiff,
     # encoding.jl
+    ClusteringDifferenceEncoding,
     PartitionalClusteringDifferenceEncoding,
     # kmeans.jl
     kmeans
