@@ -103,7 +103,6 @@ assignments(c::PartitionalClustering) = c.Y
     centers(c::PartitionalClustering)
 
 Access the centers.
-.
 """
 centers(c::PartitionalClustering) = c.M
 
