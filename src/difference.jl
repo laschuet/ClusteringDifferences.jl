@@ -39,7 +39,7 @@ PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
                                 n::Integer, k::Integer) where {Tx,Tc,Tw,Ty,Tm} =
     PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, C, W, Y, M, m, n, k)
 
-# Partitional clustering model subtraction
+# Partitional clustering model subtraction operator
 function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     X = a.X ⊟ b.X
     C = a.C ⊟ b.C
