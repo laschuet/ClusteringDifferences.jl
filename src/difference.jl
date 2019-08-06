@@ -39,6 +39,17 @@ PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
                                 n::Integer, k::Integer) where {Tx,Tc,Tw,Ty,Tm} =
     PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, C, W, Y, M, m, n, k)
 
+# Partitional clustering model difference equality operator
+Base.:(==)(a::PartitionalClusteringDifference,
+        b:: PartitionalClusteringDifference) =
+    (a.X == b.X && a.C == b.C && a.W == b.W && a.Y == b.Y && a.M == b.M
+            && a.m == b.m && a.n == b.n && a.k == b.k)
+
+# Compute hash code
+Base.hash(a::PartitionalClusteringDifference, h::UInt) =
+    hash(a.X, hash(a.C, hash(a.W, hash(a.Y, hash(a.M, hash(a.m, hash(a.n,
+        hash(a.k, hash(:PartitionalClusteringDifference, h)))))))))
+
 # Partitional clustering model subtraction operator
 function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     X = a.X ⊟ b.X

@@ -29,6 +29,22 @@
                 && cd.m == m && cd.n == n && cd.k == k)
     end
 
+    @testset "equality operator" begin
+        cd = c - c2
+        @test cd == cd
+        cd2 = c - c2
+        @test cd == cd2 && cd2 == cd
+        cd3 = c - c2
+        @test cd == cd2 && cd2 == cd3 && cd == cd3
+    end
+
+    @testset "hash" begin
+        cd = c - c2
+        @test hash(cd) == hash(cd)
+        cd2 = c - c2
+        @test cd == cd2 && hash(cd) == hash(cd2)
+    end
+
     @testset "subtraction operator" begin
         cd = c - c
         @test isa(cd, PartitionalClusteringDifference)
