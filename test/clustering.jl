@@ -11,7 +11,7 @@
             @test(c.X == X && c.C == C && c.W == W && c.Y == Y && c.M == M)
         end
 
-        @testset "==" begin
+        @testset "equality operator" begin
             @test c == c
             c2 = PartitionalClustering(X, C, W, Y, M)
             @test c == c2 && c2 == c
