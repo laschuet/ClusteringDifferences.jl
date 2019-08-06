@@ -84,8 +84,7 @@ function backwarddiff(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
         c = cs[i]
         m, n = size(c.X)
         k = size(c.M, 2)
-        cd = PartitionalClusteringDifference(c.X, c.C, c.W, c.Y, c.M, m, n, k)
-        return cd
+        return PartitionalClusteringDifference(c.X, c.C, c.W, c.Y, c.M, m, n, k)
     end
     return cs[i] - cs[i - h]
 end
