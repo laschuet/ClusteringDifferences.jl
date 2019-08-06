@@ -35,7 +35,7 @@ function PartitionalClusteringDifferenceEncoding(cd::PartitionalClusteringDiffer
     W = mask(cd.W, (cd.n, cd.n))
     Y = mask(cd.Y, (cd.k, cd.n))
     M = mask(cd.M, (cd.m, cd.k))
-    PartitionalClusteringDifferenceEncoding(X, C, W, Y, M)
+    return PartitionalClusteringDifferenceEncoding(X, C, W, Y, M)
 end
 
 """
