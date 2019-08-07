@@ -5,33 +5,32 @@
         W = [0 0 0; 0 0 0; 0 0 0]
         Y = [1.0 0.0 0.5; 0.0 1.0 0.5]
         M = [0 1; 1 0]
+        a = PartitionalClustering(X, C, W, Y, M)
+        b = PartitionalClustering(X, C, W, Y, M)
         c = PartitionalClustering(X, C, W, Y, M)
 
         @testset "constructors" begin
-            @test(c.X == X && c.C == C && c.W == W && c.Y == Y && c.M == M)
+            @test a.X == X && a.C == C && a.W == W && a.Y == Y && a.M == M
         end
 
         @testset "equality operator" begin
-            @test c == c
-            c2 = PartitionalClustering(X, C, W, Y, M)
-            @test c == c2 && c2 == c
-            c3 = PartitionalClustering(X, C, W, Y, M)
-            @test c == c2 && c2 == c3 && c == c3
+            @test a == a
+            @test a == b && b == a
+            @test a == b && b == c && a == c
         end
 
         @testset "hash" begin
-            @test hash(c) == hash(c)
-            c2 = PartitionalClustering(X, C, W, Y, M)
-            @test c == c2 && hash(c) == hash(c2)
+            @test hash(a) == hash(a)
+            @test a == b && hash(a) == hash(b)
         end
 
         @testset "accessors" begin
-            @test data(c) == X
-            @test constraints(c) == C
-            @test weights(c) == W
-            @test assignments(c) == Y
-            @test centers(c) == M
-            @test θ(c) == (M)
+            @test data(a) == X
+            @test constraints(a) == C
+            @test weights(a) == W
+            @test assignments(a) == Y
+            @test centers(a) == M
+            @test θ(a) == (M)
         end
     end
 
@@ -39,16 +38,16 @@
         X = [1 0 0; 2 2 3]
         C = rand([-1, 0, 1], 3, 3, 3)
         W = rand(3, 3, 3) .+ 1
-        c = HierarchicalClustering(X, C, W)
+        a = HierarchicalClustering(X, C, W)
 
         @testset "constructors" begin
-            @test (c.X == X && c.C == C && c.W == W)
+            @test a.X == X && a.C == C && a.W == W
         end
 
         @testset "accessors" begin
-            @test data(c) == X
-            @test constraints(c) == C
-            @test weights(c) == W
+            @test data(a) == X
+            @test constraints(a) == C
+            @test weights(a) == W
         end
     end
 end
