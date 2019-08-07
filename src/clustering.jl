@@ -58,7 +58,7 @@ struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: Clustering
     W::Array{Tw,3}
 
     function HierarchicalClustering{Tx,Tc,Tw}(X::Matrix{Tx}, C::Array{Tc,3},
-                                        W::Array{Tw,3}) where {Tx<:Real,Tc<:Integer,Tw<:Real}
+                                            W::Array{Tw,3}) where {Tx<:Real,Tc<:Integer,Tw<:Real}
         mx, nx = size(X)
         nc = size(C, 2)
         nw = size(W, 2)
