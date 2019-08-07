@@ -1,7 +1,8 @@
 abstract type ClusteringDifference end
 
 """
-    PartitionalClusteringDifference{Tx<:Real,Tc<:Integer,Tw<:Real,Tm<:Real} <: ClusteringDifference
+    PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
+                                    Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: ClusteringDifference
 
 Difference between two partitional clustering models.
 """
