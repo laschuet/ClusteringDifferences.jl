@@ -44,7 +44,8 @@ Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
 
 # Compute hash code
 Base.hash(a::PartitionalClustering, h::UInt) =
-    hash(a.X, hash(a.C, hash(a.W, hash(a.Y, hash(a.M, hash(:PartitionalClustering, h))))))
+    hash(a.X, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
+        hash(:PartitionalClustering, h))))))
 
 """
     HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: Clustering
