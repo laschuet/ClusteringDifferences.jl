@@ -39,8 +39,8 @@ function PartitionalClusteringDifferenceEncoding(a::PartitionalClusteringDiffere
 end
 
 """
-    mask(A::AbstractMatrix{Union{Nothing,T}}, Δdims::NTuple{2,Int}) where T<:Real
-    mask(A::AbstractMatrix{T}, Δdims::NTuple{2,Int}) where T<:Real
+    mask(A::AbstractMatrix{Union{Nothing,T}}, Δdimx::Int, Δdimy::Int) where T<:Real
+    mask(A::AbstractMatrix{T}, Δdimx::Int, Δdimy::Int) where T<:Real
 
 Create mask that encodes the various types of differences.
 
