@@ -25,22 +25,22 @@ struct PartitionalClusteringDifferenceEncoding <: ClusteringDifferenceEncoding
 end
 
 """
-    PartitionalClusteringDifferenceEncoding(cd::PartitionalClusteringDifference)
+    PartitionalClusteringDifferenceEncoding(a::PartitionalClusteringDifference)
 
 Construct partitional clustering difference encoding from partitional clustering difference.
 """
-function PartitionalClusteringDifferenceEncoding(cd::PartitionalClusteringDifference)
-    X = mask(cd.X, cd.m, cd.n)
-    C = mask(cd.C, cd.n, cd.n)
-    W = mask(cd.W, cd.n, cd.n)
-    Y = mask(cd.Y, cd.k, cd.n)
-    M = mask(cd.M, cd.m, cd.k)
+function PartitionalClusteringDifferenceEncoding(a::PartitionalClusteringDifference)
+    X = mask(a.X, a.m, a.n)
+    C = mask(a.C, a.n, a.n)
+    W = mask(a.W, a.n, a.n)
+    Y = mask(a.Y, a.k, a.n)
+    M = mask(a.M, a.m, a.k)
     return PartitionalClusteringDifferenceEncoding(X, C, W, Y, M)
 end
 
 """
-    mask(ΔM::AbstractMatrix{Union{Nothing,T}}, Δdims::NTuple{2,Int}) where T<:Real
-    mask(ΔM::AbstractMatrix{T}, Δdims::NTuple{2,Int}) where T<:Real
+    mask(A::AbstractMatrix{Union{Nothing,T}}, Δdims::NTuple{2,Int}) where T<:Real
+    mask(A::AbstractMatrix{T}, Δdims::NTuple{2,Int}) where T<:Real
 
 Create mask that encodes the various types of differences.
 
@@ -53,8 +53,8 @@ Create mask that encodes the various types of differences.
 | deletion of previous value |   -1 |
 | value difference           |    2 |
 """
-function mask(ΔM::AbstractMatrix{Union{Nothing,T}}, Δdimx::Int, Δdimy::Int) where T<:Real
-    szx, szy = size(ΔM)
+function mask(A::AbstractMatrix{Union{Nothing,T}}, Δdimx::Int, Δdimy::Int) where T<:Real
+    szx, szy = size(A)
     return map(m -> begin
         idx, val = m
         isnothing(val) && return 3
@@ -63,7 +63,7 @@ function mask(ΔM::AbstractMatrix{Union{Nothing,T}}, Δdimx::Int, Δdimy::Int) w
         y > szy - abs(Δdimy) && return sign(Δdimy)
         iszero(val) && return 0
         return 2
-    end, enumerate(ΔM))
+    end, enumerate(A))
 end
-mask(ΔM::AbstractMatrix{T}, Δdimx::Int, Δdimy::Int) where T<:Real =
-    mask(convert(AbstractMatrix{Union{T,Nothing}}, ΔM), Δdimx, Δdimy)
+mask(A::AbstractMatrix{T}, Δdimx::Int, Δdimy::Int) where T<:Real =
+    mask(convert(AbstractMatrix{Union{T,Nothing}}, A), Δdimx, Δdimy)

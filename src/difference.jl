@@ -64,28 +64,28 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forwarddiff(cs::AbstractVector{<:Clustering}, i::Int[, h::Int=1])
+    forwarddiff(a::AbstractVector{<:Clustering}, i::Int[, h::Int=1])
 
 Compute the forward difference of the clustering model at index `i` with step
 size `h`.
 """
-function forwarddiff(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
-    i > length(cs) - h && return nothing
-    return cs[i + h] - cs[i]
+function forwarddiff(a::AbstractVector{<:Clustering}, i::Int, h::Int=1)
+    i > length(a) - h && return nothing
+    return a[i + h] - a[i]
 end
 
 """
-    backwarddiff(cs::AbstractVector{<:Clustering}, i::Int[, h::Int=1])
+    backwarddiff(a::AbstractVector{<:Clustering}, i::Int[, h::Int=1])
 
 Compute the backward difference of the clustering model at index `i` with step
 size `h`.
 """
-function backwarddiff(cs::AbstractVector{<:Clustering}, i::Int, h::Int=1)
+function backwarddiff(a::AbstractVector{<:Clustering}, i::Int, h::Int=1)
     if i - h < 1
-        c = cs[i]
+        c = a[i]
         m, n = size(c.X)
         k = size(c.M, 2)
         return PartitionalClusteringDifference(c.X, c.C, c.W, c.Y, c.M, m, n, k)
     end
-    return cs[i] - cs[i - h]
+    return a[i] - a[i - h]
 end

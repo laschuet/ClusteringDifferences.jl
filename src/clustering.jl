@@ -73,43 +73,43 @@ HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,
     HierarchicalClustering{Tx,Tc,Tw}(X, C, W)
 
 """
-    data(c::Clustering)
+    data(a::Clustering)
 
 Access the data.
 """
-data(c::Clustering) = c.X
+data(a::Clustering) = a.X
 
 """
-    constraints(c::Clustering)
+    constraints(a::Clustering)
 
 Access the contraints.
 """
-constraints(c::Clustering) = c.C
+constraints(a::Clustering) = a.C
 
 """
-    weights(c::Clustering)
+    weights(a::Clustering)
 
 Access the weights.
 """
-weights(c::Clustering) = c.W
+weights(a::Clustering) = a.W
 
 """
-    assignments(c::PartitionalClustering)
+    assignments(a::PartitionalClustering)
 
 Access the assignments of the data instances to the clusters.
 """
-assignments(c::PartitionalClustering) = c.Y
+assignments(a::PartitionalClustering) = a.Y
 
 """
-    centers(c::PartitionalClustering)
+    centers(a::PartitionalClustering)
 
 Access the centers.
 """
-centers(c::PartitionalClustering) = c.M
+centers(a::PartitionalClustering) = a.M
 
 """
     θ(c::PartitionalClustering)
 
 Access the parameters.
 """
-θ(c::PartitionalClustering) = (c.M)
+θ(a::PartitionalClustering) = (a.M)
