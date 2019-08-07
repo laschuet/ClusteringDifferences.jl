@@ -66,4 +66,4 @@ function mask(A::AbstractMatrix{Union{Nothing,T}}, Δdimx::Int, Δdimy::Int) whe
     end, enumerate(A))
 end
 mask(A::AbstractMatrix{T}, Δdimx::Int, Δdimy::Int) where T<:Real =
-    mask(convert(AbstractMatrix{Union{T,Nothing}}, A), Δdimx, Δdimy)
+    mask(convert(AbstractMatrix{Union{Nothing,T}}, A), Δdimx, Δdimy)
