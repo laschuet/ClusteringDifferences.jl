@@ -27,7 +27,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
     c = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
     push!(cs, c)
 
-    DIST = pairwise(dist, M, X; dims=2)
+    DIST = pairwise(dist, M, X, dims=2)
     pre_objcosts = 0
     i = 1
     while i <= maxiter
@@ -48,13 +48,13 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
             M[:, j] /= sum(Y[j, :])
         end
 
-        pairwise!(DIST, dist, M, X; dims=2)
+        pairwise!(DIST, dist, M, X, dims=2)
 
         c = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
         push!(cs, c)
 
         # Check for convergence
-        if isapprox(objcosts, pre_objcosts; atol=ϵ)
+        if isapprox(objcosts, pre_objcosts, atol=ϵ)
             break
         end
 

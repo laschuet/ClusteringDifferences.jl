@@ -25,7 +25,7 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
 
     # TODO derive neighborhood sets, and finish the initialization
 
-    DIST = pairwise(dist, M, X; dims=2)
+    DIST = pairwise(dist, M, X, dims=2)
 
     cs = Vector{PartitionalClustering}(undef, 0)
     pre_objcosts = 0
@@ -48,13 +48,13 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
             M[:, j] /= sum(Y[j, :])
         end
 
-        pairwise!(DIST, dist, M, X; dims=2)
+        pairwise!(DIST, dist, M, X, dims=2)
 
         c = PartitionalClustering(X, C, W, Y, M)
         push!(cs, c)
 
         # Check for convergence
-        if isapprox(objcosts, pre_objcosts; atol=ϵ)
+        if isapprox(objcosts, pre_objcosts, atol=ϵ)
             break
         end
 
