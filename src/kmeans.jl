@@ -16,7 +16,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
 
     m == m2 || throw(DimensionMismatch("number of data features must match"))
     k > 1 || throw(ArgumentError("number of clusters must at least be 2"))
-    k < n || throw(ArgumentError("more clusters than data instances are not allowed"))
+    k <= n || throw(ArgumentError("more clusters than data instances are not allowed"))
 
     C = Matrix{Int}(undef, 0, 0)
     W = Matrix{Float64}(undef, 0, 0)
