@@ -11,10 +11,10 @@ Cluster the data instances `X` with the ``k``-means algorithm.
 function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
                 maxiter::Int=256, dist::SemiMetric=SqEuclidean(),
                 ϵ::AbstractFloat=1.0e-6)
-    m, n = size(X)
-    m2, k = size(M)
+    mx, n = size(X)
+    mm, k = size(M)
 
-    m == m2 || throw(DimensionMismatch("number of data features must match"))
+    mx == mm || throw(DimensionMismatch("number of data features must match"))
     k > 1 || throw(ArgumentError("number of clusters must at least be 2"))
     k <= n || throw(ArgumentError("more clusters than data instances are not allowed"))
 
