@@ -26,10 +26,10 @@ struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <:
         if mx > 0
             mx == mm || throw(DimensionMismatch("number of data features must match"))
         end
-        nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
         if nc > 0 && nx > 0
             nc == nx || throw(DimensionMismatch("number of data instances and maximum number of constraints must match"))
         end
+        nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
         ky == km || throw(DimensionMismatch("number of clusters must match"))
         return new(X, C, W, Y, M)
     end
