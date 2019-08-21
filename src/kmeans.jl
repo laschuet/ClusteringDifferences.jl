@@ -31,11 +31,11 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
     pre_objcosts = 0
     i = 1
     while i <= maxiter
-        # Update cluster assignments, objective function costs, and center
-        # coordinates per cluster
         objcosts = 0
         fill!(Y, zero(eltype(Y)))
         fill!(M, zero(eltype(M)))
+        # Update cluster assignments, objective function costs, and center
+        # coordinates per cluster
         @inbounds for j = 1:n
             cost, y = findmin(view(DIST, :, j))
             Y[y, j] = 1
