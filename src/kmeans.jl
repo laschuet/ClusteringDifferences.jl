@@ -54,9 +54,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
         push!(cs, c)
 
         # Check for convergence
-        if isapprox(objcosts, pre_objcosts, atol=ϵ)
-            break
-        end
+        isapprox(objcosts, pre_objcosts, atol=ϵ) && break
 
         pre_objcosts = objcosts
         i += 1
