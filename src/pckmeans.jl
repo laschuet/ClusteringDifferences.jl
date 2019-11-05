@@ -1,3 +1,28 @@
+#=
+"""
+    transitive_closure!(A::AbstractMatrix{Int})
+
+Compute the transitive closure of the matrix `A`.
+"""
+function transitive_closure!(A::AbstractMatrix{Int})
+    mustlinkto = findall(val -> val == 1, C)
+    for instance in mustlinkto
+        first = instance[1]
+        second = instance[2]
+        C[C[first, second] == && C[second, :]] == 1
+    end
+    return A
+end
+
+"""
+"""
+function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
+                W::AbstractMatrix{<:Real}, k::Int;
+                maxiter::Int=256, dist::SemiMetric=SqEuclidean(),
+                ϵ::AbstractFloat=1.0e-6)
+    pckmeans(X, C, W, M, maxiter=maxiter, dist=dist, ϵ=ϵ)
+end
+
 """
     pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int}, W::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real}; <keyword arguments>)
 
@@ -8,39 +33,55 @@ Cluster the data `X` with the pairwise constrained ``k``-means algorithm.
 - `dist::SemiMetric=SqEuclidean()`: the distance function.
 - `ϵ::AbstractFloat=1.0e-6`: the absolute tolerance for convergence.
 """
-#=
 function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
                 W::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
                 maxiter::Int=256, dist::SemiMetric=SqEuclidean(),
                 ϵ::AbstractFloat=1.0e-6)
-    m, n = size(X)
-    m2, k = size(M)
+    mx, nx = size(X)
+    nc = size(C, 2)
+    nw = size(W, 2)
+    mm, k = size(M)
 
-    m == m2 || throw(DimensionMismatch("number of data features must match"))
+    mx == mm || throw(DimensionMismatch("number of data features must match"))
+    nc == nx || throw(DimensionMismatch("number of data instances and maximum number of constraints must match"))
+    nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
     k > 1 || throw(ArgumentError("number of clusters must at least be 2"))
-    k < n || throw(ArgumentError("more clusters than data instances are not allowed"))
+    k <= nx || throw(ArgumentError("more clusters than data instances are not allowed"))
 
-    Y = zeros(Real, k, n)
-    M = convert(Matrix{AbstractFloat}, M)
-
-    # TODO derive neighborhood sets, and finish the initialization
-
-    DIST = pairwise(dist, M, X, dims=2)
+    n = nx
+    Y = zeros(Float64, k, n)
+    M = convert(Matrix{Float64}, M)
 
     cs = Vector{PartitionalClustering}(undef, 0)
+    c = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
+    push!(cs, c)
+
+    # Derive neighborhood sets, and initialize the cluster centers
+    transitive_closure!(C)
+
+    DIST = pairwise(dist, M, X, dims=2)
     pre_objcosts = 0
     i = 1
     while i <= maxiter
+        COST = DIST
+        objcosts = 0
+        fill!(Y, zero(eltype(Y)))
+        fill!(M, zero(eltype(M)))
         # Update cluster assignments, objective function costs, and center
         # coordinates per cluster
-        objcosts = 0
-        fill!(M, zero(eltype(M)))
         @inbounds for j = 1:n
-            # Distance-based costs
-            cost = minimum(view(DIST, :, j))
-            # TODO add costs for violating must-link constraints
-            # TODO add costs for violating cannot-link constraints
-            # TODO finish assignment
+            cj = view(C, :, j)
+            mustlinkto = findall(val -> val == 1, cj)
+            for instance in mustlinkto
+                y = argmax(view(Y, :, instance))
+                COST[, j] += W[, ] * 1
+            end
+            cannotlink = findall(val -> val == -1, cj)
+
+            cost, y = findmin(view(COST, :, j))
+            Y[y, j] = 1
+            objcosts += cost
+            M[:, y] += X[:, j]
         end
 
         # Update cluster centers
@@ -54,9 +95,7 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
         push!(cs, c)
 
         # Check for convergence
-        if isapprox(objcosts, pre_objcosts, atol=ϵ)
-            break
-        end
+        isapprox(objcosts, pre_objcosts, atol=ϵ) && break
 
         pre_objcosts = objcosts
         i += 1
