@@ -11,6 +11,8 @@ export
     centers,
     constraints,
     data,
+    features,
+    instances,
     θ,
     weights,
     # difference.jl
