@@ -23,3 +23,13 @@ function sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
     return S
 end
 const ⊟ = sub
+
+"""
+"""
+function diff(A::Matrix, B::Matrix, I::Vector, J::Vector)
+    sza = size(A)
+    szb = size(B)
+end
+
+diff(A::Vector, B::Vector) =
+    length(A) > length(B) ? setdiff(A, B) : -setdiff(B, A)
