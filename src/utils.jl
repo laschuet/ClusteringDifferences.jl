@@ -31,5 +31,16 @@ function diff(A::Matrix, B::Matrix, I::Vector, J::Vector)
     szb = size(B)
 end
 
-diff(A::Vector, B::Vector) =
-    length(A) > length(B) ? setdiff(A, B) : -setdiff(B, A)
+"""
+    diff(a::Vector, b::Vector)
+
+Compute the difference between the vectors `a` and `b`.
+"""
+function Base.diff(a::Vector, b::Vector)
+    ab = union(a, b)
+    removed = -1 * setdiff(ab, a)
+    added = setdiff(ab, b)
+    result = [removed; added]
+    sort!(result, by=abs)
+    return result
+end
