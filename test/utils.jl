@@ -13,5 +13,26 @@
         @test diff(a, a) == []
         @test diff(a, b) == [4, -5]
         @test diff(b, a) == [-4, 5]
+
+        A = [1 0 0; 0 1 0; 0 0 1]
+        B = [1 1 1 1; 1 1 1 1]
+        ia = [1, 3, 4]
+        ja = [2, 3, 4]
+        ib = [1, 2]
+        jb = [1, 2, 4, 5]
+        @test isequal(diff(A, A, ia, ja, ia, ja), [
+            missing 0 0 0;
+            missing missing missing missing;
+            missing 0 0 0;
+            missing 0 0 0
+        ])
+        R = Matrix{Union{Missing, Int}}(missing, 4, 5)
+        R[1, 2] = 0
+        R[1, 4] = -1
+        @test isequal(diff(A, B, ia, ja, ib, jb), R)
+        #@test diff(B, A, ia, ja, ib, jb) == []
+        #@test diff(A, A) == []
+        #@test diff(A, B) == []
+        #@test diff(B, A) == []
     end
 end
