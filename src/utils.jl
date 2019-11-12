@@ -22,7 +22,6 @@ function sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
     end, S, A2, B2)
     return S
 end
-const ⊟ = sub
 
 """
 """
