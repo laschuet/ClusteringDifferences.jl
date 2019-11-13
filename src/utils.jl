@@ -1,10 +1,10 @@
 """
-    sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
-    ⊟(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
+    sub(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real,Tb<:Real}
+    ⊟(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real,Tb<:Real}
 
 Subtract matrices of possibly different dimensions.
 """
-function sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
+function sub(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real,Tb<:Real}
     sza = size(A)
     szb = size(B)
     sza == szb && return A - B
@@ -24,11 +24,11 @@ function sub(A::Matrix{Ta}, B::Matrix{Tb}) where {Ta<:Real,Tb<:Real}
 end
 
 """
-    diff(a::Vector, b::Vector)
+    diff(a::AbstractVector, b::AbstractVector)
 
 Compute the difference between the vectors `a` and `b`.
 """
-function Base.diff(a::Vector, b::Vector)
+function Base.diff(a::AbstractVector, b::AbstractVector)
     ab = union(a, b)
     removed = -1 * setdiff(ab, a)
     added = setdiff(ab, b)
@@ -38,12 +38,12 @@ function Base.diff(a::Vector, b::Vector)
 end
 
 """
-    diff(A::Matrix, B::Matrix, ia::Vector, ja::Vector, ib::Vector, jb::Vector)
+    diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector, ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
 
 Compute the difference between the matrices `A` and `B`.
 """
-function Base.diff(A::Matrix, B::Matrix, ia::Vector, ja::Vector, ib::Vector,
-                jb::Vector)
+function Base.diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
+                ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
     sza = size(A)
     szb = size(B)
     i = union(ia, ib)
@@ -66,4 +66,4 @@ function Base.diff(A::Matrix, B::Matrix, ia::Vector, ja::Vector, ib::Vector,
     return R
     =#
 end
-#Base.diff(A::Matrix, B::Matrix) = diff(A, B, [], [], [], [])
+#Base.diff(A::AbstractMatrix, B::AbstractMatrix) = diff(A, B, [], [], [], [])
