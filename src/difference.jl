@@ -1,13 +1,13 @@
-abstract type ClusteringDifference end
+abstract type AbstractClusteringDifference end
 
 """
     PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
-                                    Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: ClusteringDifference
+                                    Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: AbstractClusteringDifference
 
 Difference between two partitional clustering models.
 """
 struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
-                                    Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: ClusteringDifference
+                                    Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: AbstractClusteringDifference
     X::Matrix{Tx}
     i::Vector{Int}
     j::Vector{Int}
@@ -82,23 +82,23 @@ function -(a::PartitionalClustering, b::PartitionalClustering)
 end
 
 """
-    forwarddiff(a::AbstractVector{<:Clustering}, i::Int[, h::Int=1])
+    forwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int[, h::Int=1])
 
 Compute the forward difference of the clustering model at index `i` with step
 size `h`.
 """
-function forwarddiff(a::AbstractVector{<:Clustering}, i::Int, h::Int=1)
+function forwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1)
     i > length(a) - h && return nothing
     return a[i + h] - a[i]
 end
 
 """
-    backwarddiff(a::AbstractVector{<:Clustering}, i::Int[, h::Int=1])
+    backwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int[, h::Int=1])
 
 Compute the backward difference of the clustering model at index `i` with step
 size `h`.
 """
-function backwarddiff(a::AbstractVector{<:Clustering}, i::Int, h::Int=1)
+function backwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1)
     if i - h < 1
         c = a[i]
         m, n = size(c.X)

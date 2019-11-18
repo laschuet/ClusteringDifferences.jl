@@ -1,11 +1,11 @@
-abstract type Clustering end
+abstract type AbstractClustering end
 
 """
-    PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
+    PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
 
 Partitional clustering model.
 """
-struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
+struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
     X::Matrix{Tx}
     i::Vector{Int}
     j::Vector{Int}
@@ -62,11 +62,11 @@ hash(a::PartitionalClustering, h::UInt) =
         hash(:PartitionalClustering, h))))))))
 
 """
-    HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: Clustering
+    HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClustering
 
 Hierarchical clustering model.
 """
-struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: Clustering
+struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClustering
     X::Matrix{Tx}
     i::Vector{Int}
     j::Vector{Int}
@@ -99,39 +99,39 @@ function HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) w
 end
 
 """
-    data(a::Clustering)
+    data(a::AbstractClustering)
 
 Access the data.
 """
-data(a::Clustering) = a.X
+data(a::AbstractClustering) = a.X
 
 """
-    instances(a::Clustering)
+    instances(a::AbstractClustering)
 
 Access the instance indices.
 """
-instances(a::Clustering) = a.j
+instances(a::AbstractClustering) = a.j
 
 """
-    features(a::Clustering)
+    features(a::AbstractClustering)
 
 Access the feature indices.
 """
-features(a::Clustering) = a.i
+features(a::AbstractClustering) = a.i
 
 """
-    constraints(a::Clustering)
+    constraints(a::AbstractClustering)
 
 Access the contraints.
 """
-constraints(a::Clustering) = a.C
+constraints(a::AbstractClustering) = a.C
 
 """
-    weights(a::Clustering)
+    weights(a::AbstractClustering)
 
 Access the weights.
 """
-weights(a::Clustering) = a.W
+weights(a::AbstractClustering) = a.W
 
 """
     assignments(a::PartitionalClustering)
