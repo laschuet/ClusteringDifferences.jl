@@ -7,7 +7,7 @@ import Base: diff, hash, instances, show
 
 export
     # clustering.jl
-    Clustering,
+    AbstractClustering,
     HierarchicalClustering,
     PartitionalClustering,
     assignments,
@@ -18,12 +18,12 @@ export
     θ,
     weights,
     # difference.jl
-    ClusteringDifference,
+    AbstractClusteringDifference,
     PartitionalClusteringDifference,
     backwarddiff,
     forwarddiff,
     # encoding.jl
-    ClusteringDifferenceEncoding,
+    AbstractClusteringDifferenceEncoding,
     PartitionalClusteringDifferenceEncoding,
     # kmeans.jl
     kmeans
