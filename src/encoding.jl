@@ -1,11 +1,16 @@
-abstract type ClusteringDifferenceEncoding end
+"""
+    AbstractClusteringDifferenceEncoding
+
+Supertype for clustering difference encodings.
+"""
+abstract type AbstractClusteringDifferenceEncoding end
 
 """
-    PartitionalClusteringDifferenceEncoding <: ClusteringDifferenceEncoding
+    PartitionalClusteringDifferenceEncoding <: AbstractClusteringDifferenceEncoding
 
 Explicit encoding of a partitional clustering difference.
 """
-struct PartitionalClusteringDifferenceEncoding <: ClusteringDifferenceEncoding
+struct PartitionalClusteringDifferenceEncoding <: AbstractClusteringDifferenceEncoding
     X::Matrix{Int}
     C::Matrix{Int}
     W::Matrix{Int}
