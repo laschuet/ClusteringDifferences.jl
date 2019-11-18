@@ -1,6 +1,5 @@
 """
     sub(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real,Tb<:Real}
-    ⊟(A::AbstractMatrix{Ta}, B::AbstractMatrix{Tb}) where {Ta<:Real,Tb<:Real}
 
 Subtract matrices of possibly different dimensions.
 """
