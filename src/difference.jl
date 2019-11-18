@@ -9,8 +9,8 @@ Difference between two partitional clustering models.
 struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
                                     Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: ClusteringDifference
     X::Matrix{Tx}
-    I::Vector{Int}
-    J::Vector{Int}
+    i::Vector{Int}
+    j::Vector{Int}
     C::Matrix{Tc}
     W::Matrix{Tw}
     Y::Matrix{Ty}
@@ -20,8 +20,8 @@ struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing
     k::Int
 
     function PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X::Matrix{Tx},
-                                                            I::Vector{<:Integer},
-                                                            J::Vector{<:Integer},
+                                                            i::Vector{<:Integer},
+                                                            j::Vector{<:Integer},
                                                             C::Matrix{Tc},
                                                             W::Matrix{Tw},
                                                             Y::Matrix{Ty},
@@ -36,49 +36,49 @@ struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing
         nc = size(C, 2)
         nw = size(W, 2)
         nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
-        return new(X, I, J, C, W, Y, M, m, n, k)
+        return new(X, i, j, C, W, Y, M, m, n, k)
     end
 end
-PartitionalClusteringDifference(X::Matrix{Tx}, I::Vector{Ti}, J::Vector{Tj},
+PartitionalClusteringDifference(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
                                 C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty},
                                 M::Matrix{Tm}, m::Integer, n::Integer,
                                 k::Integer) where {Tx,Ti,Tj,Tc,Tw,Ty,Tm} =
-    PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, I, J, C, W, Y, M, m, n, k)
+    PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M, m, n, k)
 
 function PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Tc},
                                         W::Matrix{Tw}, Y::Matrix{Ty},
                                         M::Matrix{Tm}, m::Integer, n::Integer,
                                         k::Integer) where {Tx,Tc,Tw,Ty,Tm}
-    I = Int[]
-    J = Int[]
-    return PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, I, J, C, W, Y, M, m, n, k)
+    i = Int[]
+    j = Int[]
+    return PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M, m, n, k)
 end
 
 # Partitional clustering model difference equality operator
 Base.:(==)(a::PartitionalClusteringDifference,
         b:: PartitionalClusteringDifference) =
-    (a.X == b.X && a.I == b.I && a.J == b.J && a.C == b.C && a.W == b.W
+    (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
             && a.Y == b.Y && a.M == b.M && a.m == b.m && a.n == b.n
             && a.k == b.k)
 
 # Compute hash code
 Base.hash(a::PartitionalClusteringDifference, h::UInt) =
-    hash(a.X, hash(a.I, hash(a.J, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
+    hash(a.X, hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
         hash(a.m, hash(a.n, hash(a.k,
             hash(:PartitionalClusteringDifference, h)))))))))))
 
 # Partitional clustering model subtraction operator
 function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
-    X = diff(a.X, b.X, a.I, a.J, b.I, b.J)
-    I = diff(a.I, b.I)
-    J = diff(a.J, b.J)
-    C = diff(a.C, b.C, a.J, a.J, b.J, b.J)
-    W = diff(a.W, b.W, a.J, a.J, b.J, b.J)
-    Y = diff(a.Y, b.Y, 1:size(a.Y, 1), a.J, 1:size(b.Y, 1), b.J)
-    M = diff(a.M, b.M, a.I, 1:size(a.M, 2), b.I, 1:size(b.M, 2))
+    X = diff(a.X, b.X, a.i, a.j, b.i, b.j)
+    i = diff(a.i, b.i)
+    j = diff(a.j, b.j)
+    C = diff(a.C, b.C, a.j, a.j, b.j, b.j)
+    W = diff(a.W, b.W, a.j, a.j, b.j, b.j)
+    Y = diff(a.Y, b.Y, 1:size(a.Y, 1), a.j, 1:size(b.Y, 1), b.j)
+    M = diff(a.M, b.M, a.i, 1:size(a.M, 2), b.i, 1:size(b.M, 2))
     m, n = size(a.X) .- size(b.X)
     k = size(a.M, 2) - size(b.M, 2)
-    return PartitionalClusteringDifference(X, I, J, C, W, Y, M, m, n, k)
+    return PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
 end
 
 """
@@ -103,7 +103,7 @@ function backwarddiff(a::AbstractVector{<:Clustering}, i::Int, h::Int=1)
         c = a[i]
         m, n = size(c.X)
         k = size(c.M, 2)
-        return PartitionalClusteringDifference(c.X, c.I, c.J, c.C, c.W, c.Y,
+        return PartitionalClusteringDifference(c.X, c.i, c.j, c.C, c.W, c.Y,
                 c.M, m, n, k)
     end
     return a[i] - a[i - h]

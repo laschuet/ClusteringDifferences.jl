@@ -6,8 +6,8 @@
             [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0], [0 1 1; 1 0 1])
     # a - b
     X = [0 0 0; 0 0 0]
-    I = Int[]
-    J = Int[]
+    i = Int[]
+    j = Int[]
     C = [0 0 1; 0 0 1; 1 1 0]
     W = [0 0 -1.0; 0 0 -1.0; -1.0 -1.0 0]
     Y = [0.0 0.0 0.5; 0.0 0.0 0.5; 0.0 0.0 1.0]
@@ -15,13 +15,13 @@
     m = 0
     n = 0
     k = -1
-    cd = PartitionalClusteringDifference(X, I, J, C, W, Y, M, m, n, k)
-    cd2 = PartitionalClusteringDifference(X, I, J, C, W, Y, M, m, n, k)
-    cd3 = PartitionalClusteringDifference(X, I, J, C, W, Y, M, m, n, k)
+    cd = PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
+    cd2 = PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
+    cd3 = PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
     # b - a
     X2 = [0 0 0; 0 0 0]
-    I2 = Int[]
-    J2 = Int[]
+    i2 = Int[]
+    j2 = Int[]
     C2 = [0 0 -1; 0 0 -1; -1 -1 0]
     W2 = [0 0 1.0; 0 0 1.0; 1.0 1.0 0]
     Y2 = [0.0 0.0 -0.5; 0.0 0.0 -0.5; 0.0 0.0 1.0]
@@ -31,7 +31,7 @@
     k2 = 1
 
     @testset "constructors" begin
-        @test (cd.X == X && cd.I == I && cd.J == J && cd.C == C && cd.W == W
+        @test (cd.X == X && cd.i == i && cd.j == j && cd.C == C && cd.W == W
                 && cd.Y == Y && cd.M == M && cd.m == m && cd.n == n
                 && cd.k == k)
     end
@@ -50,19 +50,19 @@
     @testset "subtraction operator" begin
         cd = a - a
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == [0 0 0; 0 0 0] && cd.I == [] && cd.J == []
+        @test (cd.X == [0 0 0; 0 0 0] && cd.i == [] && cd.j == []
                 && cd.C == [0 0 0; 0 0 0; 0 0 0]
                 && cd.W == [0 0 0; 0 0 0; 0 0 0]
                 && cd.Y == [0.0 0.0 0.0; 0.0 0.0 0.0] && cd.M == [0 0; 0 0]
                 && cd.m == 0 && cd.n == 0 && cd.k == 0)
         cd = a - b
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == X && cd.I == I && cd.J == J && cd.C == C && cd.W == W
+        @test (cd.X == X && cd.i == i && cd.j == j && cd.C == C && cd.W == W
                 && cd.Y == Y && cd.M == M && cd.m == m && cd.n == n
                 && cd.k == k)
         cd = b - a
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == X2 && cd.I == I2 && cd.J == J2 && cd.C == C2
+        @test (cd.X == X2 && cd.i == i2 && cd.j == j2 && cd.C == C2
                 && cd.W == W2 && cd.Y == Y2 && cd.M == M2 && cd.m == m2
                 && cd.n == n2 && cd.k == k2)
     end
@@ -70,7 +70,7 @@
     @testset "forward difference" begin
         cd = forwarddiff([a, b], 1)
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == X2 && cd.I == I2 && cd.J == J2 && cd.C == C2
+        @test (cd.X == X2 && cd.i == i2 && cd.j == j2 && cd.C == C2
                 && cd.W == W2 && cd.Y == Y2 && cd.M == M2 && cd.m == m2
                 && cd.n == n2 && cd.k == k2)
         @test isnothing(forwarddiff([a, b], 2))
@@ -79,13 +79,13 @@
     @testset "backward difference" begin
         cd = backwarddiff([a, b], 1)
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == a.X && cd.I == a.I && cd.J == a.J && cd.C == a.C
+        @test (cd.X == a.X && cd.i == a.i && cd.j == a.j && cd.C == a.C
                 && cd.W == a.W && cd.Y == a.Y && cd.M == a.M
                 && cd.m == size(a.X, 1) && cd.n == size(a.X, 2)
                 && cd.k == size(a.M, 2))
         cd = backwarddiff([a, b], 2)
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == X2 && cd.I == I2 && cd.J == J2 && cd.C == C2
+        @test (cd.X == X2 && cd.i == i2 && cd.j == j2 && cd.C == C2
                 && cd.W == W2 && cd.Y == Y2 && cd.M == M2 && cd.m == m2
                 && cd.n == n2 && cd.k == k2)
     end

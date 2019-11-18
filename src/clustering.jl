@@ -7,16 +7,16 @@ Partitional clustering model.
 """
 struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: Clustering
     X::Matrix{Tx}
-    I::Vector{Int}
-    J::Vector{Int}
+    i::Vector{Int}
+    j::Vector{Int}
     C::Matrix{Tc}
     W::Matrix{Tw}
     Y::Matrix{Ty}
     M::Matrix{Tm}
 
     function PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X::Matrix{Tx},
-                                                I::Vector{<:Integer},
-                                                J::Vector{<:Integer},
+                                                i::Vector{<:Integer},
+                                                j::Vector{<:Integer},
                                                 C::Matrix{Tc}, W::Matrix{Tw},
                                                 Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx<:Real,Tc<:Integer,Tw<:Real,
                                                                                     Ty<:Real,Tm<:Real}
@@ -36,29 +36,29 @@ struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <:
         end
         nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
         ky == km || throw(DimensionMismatch("number of clusters must match"))
-        return new(X, I, J, C, W, Y, M)
+        return new(X, i, j, C, W, Y, M)
     end
 end
-PartitionalClustering(X::Matrix{Tx}, I::Vector{Ti}, J::Vector{Tj},
+PartitionalClustering(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
                     C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Ti,Tj,Tc,Tw,Ty,Tm} =
-    PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, I, J, C, W, Y, M)
+    PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
 
 function PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
                     Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm}
     sz = size(X)
-    I = collect(1:sz[1])
-    J = collect(1:sz[2])
-    return PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, I, J, C, W, Y, M)
+    i = collect(1:sz[1])
+    j = collect(1:sz[2])
+    return PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
 end
 
 # Partitional clustering model equality operator
 Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
-    (a.X == b.X && a.I == b.I && a.J == b.J && a.C == b.C && a.W == b.W
+    (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
             && a.Y == b.Y && a.M == b.M)
 
 # Compute hash code
 Base.hash(a::PartitionalClustering, h::UInt) =
-    hash(a.X, hash(a.I, hash(a.J, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
+    hash(a.X, hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
         hash(:PartitionalClustering, h))))))))
 
 """
@@ -68,14 +68,14 @@ Hierarchical clustering model.
 """
 struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: Clustering
     X::Matrix{Tx}
-    I::Vector{Int}
-    J::Vector{Int}
+    i::Vector{Int}
+    j::Vector{Int}
     C::Array{Tc,3}
     W::Array{Tw,3}
 
     function HierarchicalClustering{Tx,Tc,Tw}(X::Matrix{Tx},
-                                            I::Vector{<:Integer},
-                                            J::Vector{<:Integer},
+                                            i::Vector{<:Integer},
+                                            j::Vector{<:Integer},
                                             C::Array{Tc,3}, W::Array{Tw,3}) where {Tx<:Real,Tc<:Integer,Tw<:Real}
         mx, nx = size(X)
         nc = size(C, 2)
@@ -84,18 +84,18 @@ struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: Clustering
         if nc > 0 && nx > 0
             nc == nx || throw(DimensionMismatch("number of data instances and maximum number of constraints must match"))
         end
-        return new(X, I, J, C, W)
+        return new(X, i, j, C, W)
     end
 end
-HierarchicalClustering(X::Matrix{Tx}, I::Vector{Ti}, J::Vector{Tj},
+HierarchicalClustering(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
                     C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Ti,Tj,Tc,Tw} =
-    HierarchicalClustering{Tx,Tc,Tw}(X, I, J, C, W)
+    HierarchicalClustering{Tx,Tc,Tw}(X, i, j, C, W)
 
 function HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Ti,Tj,Tc,Tw}
     sz = size(X)
-    I = collect(1:sz[1])
-    J = collect(1:sz[2])
-    return HierarchicalClustering{Tx,Tc,Tw}(X, I, J, C, W)
+    i = collect(1:sz[1])
+    j = collect(1:sz[2])
+    return HierarchicalClustering{Tx,Tc,Tw}(X, i, j, C, W)
 end
 
 """
@@ -110,14 +110,14 @@ data(a::Clustering) = a.X
 
 Access the instance indices.
 """
-instances(a::Clustering) = a.J
+instances(a::Clustering) = a.j
 
 """
     features(a::Clustering)
 
 Access the feature indices.
 """
-features(a::Clustering) = a.I
+features(a::Clustering) = a.i
 
 """
     constraints(a::Clustering)
