@@ -20,16 +20,18 @@
         ja = [2, 3, 4]
         ib = [1, 2]
         jb = [1, 2, 4, 5]
-        @test isequal(diff(A, A, ia, ja, ia, ja), [
-            missing 0 0 0;
-            missing missing missing missing;
-            missing 0 0 0;
-            missing 0 0 0
-        ])
-        R = Matrix{Union{Missing, Int}}(missing, 4, 5)
-        R[1, 2] = 0
-        R[1, 4] = -1
-        @test isequal(diff(A, B, ia, ja, ib, jb), R)
+        @test diff(A, A, ia, ja, ia, ja) == [
+            nothing 0 0 0;
+            nothing nothing nothing nothing;
+            nothing 0 0 0;
+            nothing 0 0 0
+        ]
+        @test diff(A, B, ia, ja, ib, jb) == [
+            1 0 0 -1 1;
+            1 1 nothing 1 1;
+            nothing 0 1 0 nothing;
+            nothing 0 0 1 nothing
+        ]
         #@test diff(B, A, ia, ja, ib, jb) == []
         #@test diff(A, A) == []
         #@test diff(A, B) == []

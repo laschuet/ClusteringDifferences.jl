@@ -50,20 +50,17 @@ function Base.diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
     j = union(ja, jb)
     maxi = maximum(i)
     maxj = maximum(j)
-    A2 = Matrix{Union{Missing,eltype(A)}}(missing, maxi, maxj)
-    B2 = Matrix{Union{Missing,eltype(B)}}(missing, maxi, maxj)
+    A2 = Matrix{Union{Nothing,eltype(A)}}(nothing, maxi, maxj)
+    B2 = Matrix{Union{Nothing,eltype(B)}}(nothing, maxi, maxj)
     A2[CartesianIndex.(Iterators.product(ia, ja))] = A
     B2[CartesianIndex.(Iterators.product(ib, jb))] = B
-    return A2 - B2
-    #=
     T = promote_type(eltype(A), eltype(B))
-    R = Matrix{Union{Missing,T}}(undef, maxi, maxj)
+    R = Matrix{Union{Nothing,T}}(undef, maxi, maxj)
     map!((a, b) -> begin
-        ismissing(a) && return b
-        ismissing(b) && return a
+        isnothing(a) && return b
+        isnothing(b) && return a
         return a - b
     end, R, A2, B2)
     return R
-    =#
 end
 #Base.diff(A::AbstractMatrix, B::AbstractMatrix) = diff(A, B, [], [], [], [])
