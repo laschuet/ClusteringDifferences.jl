@@ -52,12 +52,12 @@ function PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
 end
 
 # Partitional clustering model equality operator
-Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
+==(a::PartitionalClustering, b::PartitionalClustering) =
     (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
             && a.Y == b.Y && a.M == b.M)
 
 # Compute hash code
-Base.hash(a::PartitionalClustering, h::UInt) =
+hash(a::PartitionalClustering, h::UInt) =
     hash(a.X, hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
         hash(:PartitionalClustering, h))))))))
 

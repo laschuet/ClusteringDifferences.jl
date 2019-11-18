@@ -34,7 +34,7 @@
             @test data(a) == X
             @test constraints(a) == C
             @test features(a) == i
-            @test VAIML.instances(a) == j
+            @test instances(a) == j
             @test weights(a) == W
             @test assignments(a) == Y
             @test centers(a) == M

@@ -2,6 +2,9 @@ module VAIML
 
 using Distances
 
+import Base: -, ==
+import Base: diff, hash, instances, show
+
 export
     # clustering.jl
     Clustering,
@@ -12,7 +15,6 @@ export
     constraints,
     data,
     features,
-    instances,
     θ,
     weights,
     # difference.jl

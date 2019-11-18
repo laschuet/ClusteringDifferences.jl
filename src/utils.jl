@@ -27,7 +27,7 @@ end
 
 Compute the difference between the vectors `a` and `b`.
 """
-function Base.diff(a::AbstractVector, b::AbstractVector)
+function diff(a::AbstractVector, b::AbstractVector)
     ab = union(a, b)
     removed = -1 * setdiff(ab, a)
     added = setdiff(ab, b)
@@ -41,7 +41,7 @@ end
 
 Compute the difference between the matrices `A` and `B`.
 """
-function Base.diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
+function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
                 ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
     sza = size(A)
     szb = size(B)
@@ -62,4 +62,4 @@ function Base.diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
     end, R, A2, B2)
     return R
 end
-#Base.diff(A::AbstractMatrix, B::AbstractMatrix) = diff(A, B, [], [], [], [])
+#diff(A::AbstractMatrix, B::AbstractMatrix) = diff(A, B, [], [], [], [])

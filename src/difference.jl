@@ -55,20 +55,20 @@ function PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Tc},
 end
 
 # Partitional clustering model difference equality operator
-Base.:(==)(a::PartitionalClusteringDifference,
+==(a::PartitionalClusteringDifference,
         b:: PartitionalClusteringDifference) =
     (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
             && a.Y == b.Y && a.M == b.M && a.m == b.m && a.n == b.n
             && a.k == b.k)
 
 # Compute hash code
-Base.hash(a::PartitionalClusteringDifference, h::UInt) =
+hash(a::PartitionalClusteringDifference, h::UInt) =
     hash(a.X, hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
         hash(a.m, hash(a.n, hash(a.k,
             hash(:PartitionalClusteringDifference, h)))))))))))
 
 # Partitional clustering model subtraction operator
-function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
+function -(a::PartitionalClustering, b::PartitionalClustering)
     X = diff(a.X, b.X, a.i, a.j, b.i, b.j)
     i = diff(a.i, b.i)
     j = diff(a.j, b.j)
