@@ -1,3 +1,8 @@
+"""
+    AbstractClustering
+
+Supertype for clusterings.
+"""
 abstract type AbstractClustering end
 
 """

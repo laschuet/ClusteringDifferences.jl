@@ -1,3 +1,8 @@
+"""
+    AbstractClusteringDifference
+
+Supertype for clustering differences.
+"""
 abstract type AbstractClusteringDifference end
 
 """
