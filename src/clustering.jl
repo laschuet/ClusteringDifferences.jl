@@ -1,14 +1,14 @@
 """
     AbstractClustering
 
-Supertype for clustering models.
+Supertype for clusterings.
 """
 abstract type AbstractClustering end
 
 """
     PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
 
-Partitional clustering model.
+Partitional clustering.
 """
 struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
     X::Matrix{Tx}
@@ -56,7 +56,7 @@ function PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
     return PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
 end
 
-# Partitional clustering model equality operator
+# Partitional clustering equality operator
 ==(a::PartitionalClustering, b::PartitionalClustering) =
     (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
             && a.Y == b.Y && a.M == b.M)
@@ -69,7 +69,7 @@ hash(a::PartitionalClustering, h::UInt) =
 """
     HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClustering
 
-Hierarchical clustering model.
+Hierarchical clustering.
 """
 struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClustering
     X::Matrix{Tx}

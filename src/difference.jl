@@ -9,7 +9,7 @@ abstract type AbstractClusteringDifference end
     PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
                                     Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: AbstractClusteringDifference
 
-Difference between two partitional clustering models.
+Difference between two partitional clusterings.
 """
 struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
                                     Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: AbstractClusteringDifference
@@ -59,7 +59,7 @@ function PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Tc},
     return PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M, m, n, k)
 end
 
-# Partitional clustering model difference equality operator
+# Partitional clustering difference equality operator
 ==(a::PartitionalClusteringDifference,
         b:: PartitionalClusteringDifference) =
     (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
@@ -72,7 +72,7 @@ hash(a::PartitionalClusteringDifference, h::UInt) =
         hash(a.m, hash(a.n, hash(a.k,
             hash(:PartitionalClusteringDifference, h)))))))))))
 
-# Partitional clustering model subtraction operator
+# Partitional clustering subtraction operator
 function -(a::PartitionalClustering, b::PartitionalClustering)
     X = diff(a.X, b.X, a.i, a.j, b.i, b.j)
     i = diff(a.i, b.i)
@@ -89,7 +89,7 @@ end
 """
     forwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int[, h::Int=1])
 
-Compute the forward difference of the clustering model at index `i` with step
+Compute the forward difference of the clustering at index `i` with step
 size `h`.
 """
 function forwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1)
@@ -100,7 +100,7 @@ end
 """
     backwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int[, h::Int=1])
 
-Compute the backward difference of the clustering model at index `i` with step
+Compute the backward difference of the clustering at index `i` with step
 size `h`.
 """
 function backwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1)
