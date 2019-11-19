@@ -50,9 +50,9 @@ PartitionalClustering(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
 
 function PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
                     Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm}
-    sz = size(X)
-    i = collect(1:sz[1])
-    j = collect(1:sz[2])
+    szi, szj = size(X)
+    i = collect(1:szi)
+    j = collect(1:szj)
     return PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
 end
 
@@ -97,9 +97,9 @@ HierarchicalClustering(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
     HierarchicalClustering{Tx,Tc,Tw}(X, i, j, C, W)
 
 function HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Ti,Tj,Tc,Tw}
-    sz = size(X)
-    i = collect(1:sz[1])
-    j = collect(1:sz[2])
+    szi, szj = size(X)
+    i = collect(1:szi)
+    j = collect(1:szj)
     return HierarchicalClustering{Tx,Tc,Tw}(X, i, j, C, W)
 end
 
