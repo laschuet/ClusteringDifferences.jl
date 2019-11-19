@@ -49,7 +49,7 @@ PartitionalClustering(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
     PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
 
 function PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
-                    Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm}
+                            Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm}
     szi, szj = size(X)
     i = collect(1:szi)
     j = collect(1:szj)
