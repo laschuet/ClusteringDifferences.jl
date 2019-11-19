@@ -1,7 +1,7 @@
 """
     AbstractClustering
 
-Supertype for clusterings.
+Supertype for clustering models.
 """
 abstract type AbstractClustering end
 
