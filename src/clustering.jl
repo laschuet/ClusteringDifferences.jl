@@ -6,25 +6,28 @@ Supertype for clusterings.
 abstract type AbstractClustering end
 
 """
-    PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
+    PartitionalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
 
 Partitional clustering.
 """
-struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
+struct PartitionalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
     X::Matrix{Tx}
-    i::Vector{Int}
-    j::Vector{Int}
+    i::IdDict{Ti}
+    j::IdDict{Tj}
     C::Matrix{Tc}
     W::Matrix{Tw}
     Y::Matrix{Ty}
     M::Matrix{Tm}
 
-    function PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X::Matrix{Tx},
-                                                i::Vector{<:Integer},
-                                                j::Vector{<:Integer},
-                                                C::Matrix{Tc}, W::Matrix{Tw},
-                                                Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx<:Real,Tc<:Integer,Tw<:Real,
-                                                                                    Ty<:Real,Tm<:Real}
+    function PartitionalClustering{Tx,Ti,Tj,Tc,Tw,Ty,Tm}(X::Matrix{Tx},
+                                                        i::IdDict{Ti},
+                                                        j::IdDict{Tj},
+                                                        C::Matrix{Tc},
+                                                        W::Matrix{Tw},
+                                                        Y::Matrix{Ty},
+                                                        M::Matrix{Tm}) where {Tx<:Real,Ti<:Integer,Tj<:Integer,
+                                                                            Tc<:Integer,Tw<:Real,Ty<:Real,
+                                                                            Tm<:Real}
         mx, nx = size(X)
         nc = size(C, 2)
         nw = size(W, 2)
@@ -44,16 +47,16 @@ struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <:
         return new(X, i, j, C, W, Y, M)
     end
 end
-PartitionalClustering(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
+PartitionalClustering(X::Matrix{Tx}, i::IdDict{Ti}, j::IdDict{Tj},
                     C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Ti,Tj,Tc,Tw,Ty,Tm} =
-    PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
+    PartitionalClustering{Tx,Ti,Tj,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
 
 function PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
                             Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm}
     szi, szj = size(X)
-    i = collect(1:szi)
-    j = collect(1:szj)
-    return PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
+    i = IdDict(i => i for i = 1:szi)
+    j = IdDict(j => j for j = 1:szj)
+    return PartitionalClustering(X, i, j, C, W, Y, M)
 end
 
 # Partitional clustering equality operator
@@ -67,21 +70,23 @@ hash(a::PartitionalClustering, h::UInt) =
         hash(:PartitionalClustering, h))))))))
 
 """
-    HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClustering
+    HierarchicalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Real} <: AbstractClustering
 
 Hierarchical clustering.
 """
-struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClustering
+struct HierarchicalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Real} <: AbstractClustering
     X::Matrix{Tx}
-    i::Vector{Int}
-    j::Vector{Int}
+    i::IdDict{Ti}
+    j::IdDict{Tj}
     C::Array{Tc,3}
     W::Array{Tw,3}
 
-    function HierarchicalClustering{Tx,Tc,Tw}(X::Matrix{Tx},
-                                            i::Vector{<:Integer},
-                                            j::Vector{<:Integer},
-                                            C::Array{Tc,3}, W::Array{Tw,3}) where {Tx<:Real,Tc<:Integer,Tw<:Real}
+    function HierarchicalClustering{Tx,Ti,Tj,Tc,Tw}(X::Matrix{Tx},
+                                                    i::IdDict{Ti},
+                                                    j::IdDict{Tj},
+                                                    C::Array{Tc,3},
+                                                    W::Array{Tw,3}) where {Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,
+                                                                        Tw<:Real}
         mx, nx = size(X)
         nc = size(C, 2)
         nw = size(W, 2)
@@ -92,15 +97,15 @@ struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClusteri
         return new(X, i, j, C, W)
     end
 end
-HierarchicalClustering(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
+HierarchicalClustering(X::Matrix{Tx}, i::IdDict{Ti}, j::IdDict{Tj},
                     C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Ti,Tj,Tc,Tw} =
-    HierarchicalClustering{Tx,Tc,Tw}(X, i, j, C, W)
+    HierarchicalClustering{Tx,Ti,Tj,Tc,Tw}(X, i, j, C, W)
 
-function HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Ti,Tj,Tc,Tw}
+function HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Tc,Tw}
     szi, szj = size(X)
-    i = collect(1:szi)
-    j = collect(1:szj)
-    return HierarchicalClustering{Tx,Tc,Tw}(X, i, j, C, W)
+    i = IdDict(i => i for i = 1:szi)
+    j = IdDict(j => j for j = 1:szj)
+    return HierarchicalClustering(X, i, j, C, W)
 end
 
 """
