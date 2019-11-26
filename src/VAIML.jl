@@ -23,9 +23,6 @@ export
     PartitionalClusteringDifference,
     backwarddiff,
     forwarddiff,
-    # encoding.jl
-    AbstractClusteringDifferenceEncoding,
-    PartitionalClusteringDifferenceEncoding,
     # kmeans.jl
     kmeans
     # pckmeans.jl
@@ -33,7 +30,6 @@ export
 
 include("clustering.jl")
 include("difference.jl")
-include("encoding.jl")
 include("kmeans.jl")
 #include("pckmeans.jl")
 include("utils.jl")
