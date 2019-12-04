@@ -13,24 +13,24 @@ Difference between two partitional clusterings.
 """
 struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
                                     Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: AbstractClusteringDifference
-    X::Matrix{Tx}
-    i::Vector{Int}
-    j::Vector{Int}
-    C::Matrix{Tc}
-    W::Matrix{Tw}
-    Y::Matrix{Ty}
-    M::Matrix{Tm}
+    X::MatrixDifference{Tx}
+    i::NTuple{2,Vector{Int}}
+    j::NTuple{2,Vector{Int}}
+    C::MatrixDifference{Tc}
+    W::MatrixDifference{Tw}
+    Y::MatrixDifference{Ty}
+    M::MatrixDifference{Tm}
     m::Int
     n::Int
     k::Int
 
-    function PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X::Matrix{Tx},
-                                                            i::Vector{<:Integer},
-                                                            j::Vector{<:Integer},
-                                                            C::Matrix{Tc},
-                                                            W::Matrix{Tw},
-                                                            Y::Matrix{Ty},
-                                                            M::Matrix{Tm},
+    function PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X::MatrixDifference{Tx},
+                                                            i::NTuple{2,Vector{<:Integer}},
+                                                            j::NTuple{2,Vector{<:Integer}},
+                                                            C::MatrixDifference{Tc},
+                                                            W::MatrixDifference{Tw},
+                                                            Y::MatrixDifference{Ty},
+                                                            M::MatrixDifference{Tm},
                                                             m::Integer,
                                                             n::Integer,
                                                             k::Integer) where {Tx<:Union{Nothing,Real},
@@ -44,19 +44,25 @@ struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing
         return new(X, i, j, C, W, Y, M, m, n, k)
     end
 end
-PartitionalClusteringDifference(X::Matrix{Tx}, i::Vector{Ti}, j::Vector{Tj},
-                                C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty},
-                                M::Matrix{Tm}, m::Integer, n::Integer,
+PartitionalClusteringDifference(X::MatrixDifference{Tx},
+                                i::NTuple{2,Vector{Ti}},
+                                j::NTuple{2,Vector{Tj}},
+                                C::MatrixDifference{Tc},
+                                W::MatrixDifference{Tw},
+                                Y::MatrixDifference{Ty},
+                                M::MatrixDifference{Tm}, m::Integer, n::Integer,
                                 k::Integer) where {Tx,Ti,Tj,Tc,Tw,Ty,Tm} =
     PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M, m, n, k)
 
-function PartitionalClusteringDifference(X::Matrix{Tx}, C::Matrix{Tc},
-                                        W::Matrix{Tw}, Y::Matrix{Ty},
-                                        M::Matrix{Tm}, m::Integer, n::Integer,
-                                        k::Integer) where {Tx,Tc,Tw,Ty,Tm}
-    i = Int[]
-    j = Int[]
-    return PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M, m, n, k)
+function PartitionalClusteringDifference(X::MatrixDifference{Tx},
+                                        C::MatrixDifference{Tc},
+                                        W::MatrixDifference{Tw},
+                                        Y::MatrixDifference{Ty},
+                                        M::MatrixDifference{Tm},
+                                        m::Integer, n::Integer, k::Integer) where {Tx,Tc,Tw,Ty,Tm}
+    i = Int[], Int[]
+    j = Int[], Int[]
+    return PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
 end
 
 # Partitional clustering difference equality operator
@@ -74,13 +80,13 @@ hash(a::PartitionalClusteringDifference, h::UInt) =
 
 # Partitional clustering subtraction operator
 function -(a::PartitionalClustering, b::PartitionalClustering)
-    X = diff(a.X, b.X, a.i, a.j, b.i, b.j)
-    i = diff(a.i, b.i)
-    j = diff(a.j, b.j)
-    C = diff(a.C, b.C, a.j, a.j, b.j, b.j)
-    W = diff(a.W, b.W, a.j, a.j, b.j, b.j)
-    Y = diff(a.Y, b.Y, 1:size(a.Y, 1), a.j, 1:size(b.Y, 1), b.j)
-    M = diff(a.M, b.M, a.i, 1:size(a.M, 2), b.i, 1:size(b.M, 2))
+    X = change(a.X, b.X, a.i, a.j, b.i, b.j)
+    i = setchange(a.i, b.i)
+    j = setchange(a.j, b.j)
+    C = change(a.C, b.C, a.j, a.j, b.j, b.j)
+    W = change(a.W, b.W, a.j, a.j, b.j, b.j)
+    Y = change(a.Y, b.Y, 1:size(a.Y, 1), a.j, 1:size(b.Y, 1), b.j)
+    M = change(a.M, b.M, a.i, 1:size(a.M, 2), b.i, 1:size(b.M, 2))
     m, n = size(a.X) .- size(b.X)
     k = size(a.M, 2) - size(b.M, 2)
     return PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)

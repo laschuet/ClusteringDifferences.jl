@@ -28,10 +28,10 @@ export
     # pckmeans.jl
     #pckmeans
 
+include("utils.jl")
 include("clustering.jl")
 include("difference.jl")
 include("kmeans.jl")
 #include("pckmeans.jl")
-include("utils.jl")
 
 end # module VAIML
