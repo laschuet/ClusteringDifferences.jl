@@ -14,8 +14,8 @@ Difference between two partitional clusterings.
 struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing,Integer},Tw<:Union{Nothing,Real},
                                     Ty<:Union{Nothing,Real},Tm<:Union{Nothing,Real}} <: AbstractClusteringDifference
     X::MatrixDifference{Tx}
-    i::NTuple{2,Vector{Int}}
-    j::NTuple{2,Vector{Int}}
+    i::NTuple{3,Vector{Int}}
+    j::NTuple{3,Vector{Int}}
     C::MatrixDifference{Tc}
     W::MatrixDifference{Tw}
     Y::MatrixDifference{Ty}
@@ -25,8 +25,8 @@ struct PartitionalClusteringDifference{Tx<:Union{Nothing,Real},Tc<:Union{Nothing
     k::Int
 
     function PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X::MatrixDifference{Tx},
-                                                            i::NTuple{2,Vector{<:Integer}},
-                                                            j::NTuple{2,Vector{<:Integer}},
+                                                            i::NTuple{3,Vector{<:Integer}},
+                                                            j::NTuple{3,Vector{<:Integer}},
                                                             C::MatrixDifference{Tc},
                                                             W::MatrixDifference{Tw},
                                                             Y::MatrixDifference{Ty},
@@ -60,8 +60,8 @@ function PartitionalClusteringDifference(X::MatrixDifference{Tx},
                                         Y::MatrixDifference{Ty},
                                         M::MatrixDifference{Tm},
                                         m::Integer, n::Integer, k::Integer) where {Tx,Tc,Tw,Ty,Tm}
-    i = Int[], Int[]
-    j = Int[], Int[]
+    i = Int[], Int[], Int[]
+    j = Int[], Int[], Int[]
     return PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
 end
 
@@ -81,8 +81,8 @@ hash(a::PartitionalClusteringDifference, h::UInt) =
 # Partitional clustering subtraction operator
 function -(a::PartitionalClustering, b::PartitionalClustering)
     X = change(a.X, b.X, a.i, a.j, b.i, b.j)
-    i = setchange(a.i, b.i)
-    j = setchange(a.j, b.j)
+    i = change(a.i, b.i)
+    j = change(a.j, b.j)
     C = change(a.C, b.C, a.j, a.j, b.j, b.j)
     W = change(a.W, b.W, a.j, a.j, b.j, b.j)
     Y = change(a.Y, b.Y, 1:size(a.Y, 1), a.j, 1:size(b.Y, 1), b.j)
