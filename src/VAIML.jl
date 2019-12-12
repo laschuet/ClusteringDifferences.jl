@@ -4,7 +4,8 @@ using Distances
 using SparseArrays
 
 import Base: -, ==
-import Base: diff, hash, instances, show
+import Base: replace, replace!
+import Base: hash, instances, show
 
 export
     # clustering.jl
