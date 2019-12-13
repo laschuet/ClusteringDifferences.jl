@@ -31,7 +31,7 @@ added(a::MatrixDifference) = a.AI, a.AJ
 Access the elements added in dimension `d`.
 """
 function added(a::MatrixDifference, dim::Integer)
-    1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)")
+    1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)"))
     added(a)[dim]
 end
 
@@ -48,7 +48,7 @@ removed(a::MatrixDifference) = a.RI, a.RJ
 Access the elements removed from dimension `d`.
 """
 function removed(a::MatrixDifference, dim::Integer) =
-    1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)")
+    1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)"))
     removed(a)[dim]
 end
 
