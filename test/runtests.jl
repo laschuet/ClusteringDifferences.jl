@@ -1,4 +1,5 @@
 using VAIML
+using SparseArrays
 using Test
 
 @testset "VAIML" begin

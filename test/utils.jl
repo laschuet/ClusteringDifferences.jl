@@ -1,40 +1,32 @@
 @testset "utils" begin
-    @testset "subtraction operator" begin
-        A = [1 1 1; 2 2 2]
-        B = [1 1; 2 2; 3 3]
-        @test VAIML.sub(A, A) == [0 0 0; 0 0 0]
-        @test VAIML.sub(A, B) == [0 0 1; 0 0 2; 3 3 nothing]
-        @test VAIML.sub(B, A) == [0 0 1; 0 0 2; 3 3 nothing]
-    end
-
     @testset "difference operator" begin
-        a = [1, 2, 3, 4]
-        b = [1, 2, 3, 5]
-        @test diff(a, a) == []
-        @test diff(a, b) == [4, -5]
-        @test diff(b, a) == [-4, 5]
+        a = [1, 2, 3, 3]
+        b = [4, 2, 1]
+        @test diff(a, a) == ([1, 2, 3], [], [])
+        @test diff(a, b) == ([1, 2], [4], [3])
+        @test diff(b, a) == ([2, 1], [3], [4])
 
-        A = [1 0 0; 0 1 0; 0 0 1]
+        A = [1 0 1; 0 1 0; 0 0 1]
         B = [1 1 1 1; 1 1 1 1]
-        ia = [1, 3, 4]
-        ja = [2, 3, 4]
-        ib = [1, 2]
-        jb = [1, 2, 4, 5]
-        @test diff(A, A, ia, ja, ia, ja) == [
-            nothing 0 0 0;
-            nothing nothing nothing nothing;
-            nothing 0 0 0;
-            nothing 0 0 0
-        ]
-        @test diff(A, B, ia, ja, ib, jb) == [
-            1 0 0 -1 1;
-            1 1 nothing 1 1;
-            nothing 0 1 0 nothing;
-            nothing 0 0 1 nothing
-        ]
+        ia = [1, 2, 5]
+        ja = [2, 8, 11]
+        ib = [1, 8]
+        jb = [2, 3, 4, 11]
+        #@test diff(A, A, ia, ja, ia, ja) == (
+        #
+        #)
+        @test diff(A, B, ia, ja, ib, jb) == (
+            #sparse([0 0]),
+            #view(B, [2], :), view(B, :, [2, 3]),
+            #view(A, [2, 3], :), view(A, :, [2])
+            sparse([0 0]),
+            [1 1 1 1], [1 1; 1 1],
+            [0 1 0; 0 0 1], reshape([0, 1, 0], :, 1)
+        )
         #@test diff(B, A, ia, ja, ib, jb) == []
-        #@test diff(A, A) == []
-        #@test diff(A, B) == []
-        #@test diff(B, A) == []
+
+        #@test diff(A, A) == ()
+        #@test diff(A, B) == ()
+        #@test diff(B, A) == ()
     end
 end
