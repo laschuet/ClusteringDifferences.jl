@@ -1,9 +1,9 @@
 """
-    MatrixChange{T<:Real}
+    MatrixDifference{T<:Real}
 
-Matrix change.
+Matrix difference.
 """
-struct MatrixChange{T<:Real}
+struct MatrixDifference{T<:Real}
     M::SparseMatrixCSC{T}
     AI::SubArray{T}
     AJ::SubArray{T}
@@ -12,42 +12,42 @@ struct MatrixChange{T<:Real}
 end
 
 """
-    modified(a::MatrixChange)
+    modified(a::MatrixDifference)
 
 Access the modified elements.
 """
-modified(a::MatrixChange) = a.M
+modified(a::MatrixDifference) = a.M
 
 """
-    added(a::MatrixChange)
+    added(a::MatrixDifference)
 
 Access the tuple containing the elements added in each dimension.
 """
-added(a::MatrixChange) = a.AI, a.AJ
+added(a::MatrixDifference) = a.AI, a.AJ
 
 """
-    added(a::MatrixChange, dim::Integer)
+    added(a::MatrixDifference, dim::Integer)
 
 Access the elements added in dimension `d`.
 """
-function added(a::MatrixChange, dim::Integer)
+function added(a::MatrixDifference, dim::Integer)
     1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)")
     added(a)[dim]
 end
 
 """
-    removed(a::MatrixChange)
+    removed(a::MatrixDifference)
 
 Access the tuple containing the elements removed from each dimension.
 """
-removed(a::MatrixChange) = a.RI, a.RJ
+removed(a::MatrixDifference) = a.RI, a.RJ
 
 """
-    removed(a::MatrixChange, dim::Integer)
+    removed(a::MatrixDifference, dim::Integer)
 
 Access the elements removed from dimension `d`.
 """
-function removed(a::MatrixChange, dim::Integer) =
+function removed(a::MatrixDifference, dim::Integer) =
     1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)")
     removed(a)[dim]
 end
@@ -72,28 +72,28 @@ function replace!(a::AbstractVector{T}, d::AbstractDict{T,T}) where {T<:Integer}
 end
 
 """
-    change(a::AbstractVector, b::AbstractVector)
+    diff(a::AbstractVector, b::AbstractVector)
 
 Compute the change from vector `a` to vector `b`, and return a tuple containing
 the unique elements that have been shared, added and removed.
 
 # Examples
 ```jldoctest
-julia> change([1, 2, 3, 3], [4, 2, 1])
+julia> diff([1, 2, 3, 3], [4, 2, 1])
 ([4], [3])
 ```
 """
-change(a::AbstractVector, b::AbstractVector) =
+diff(a::AbstractVector, b::AbstractVector) =
     intersect(a, b), setdiff(b, a), setdiff(a, b)
 
 """
-    change(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict, ja::AbstractDict, ib::AbstractDict, jb::AbstractDict)
+    diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict, ja::AbstractDict, ib::AbstractDict, jb::AbstractDict)
 
 Compute the change from matrix `A` to matrix `B`, and return a tuple containing
 the elements that have been modified, added (per row and column), removed (per
 row and column).
 """
-function change(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
+function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
             ja::AbstractDict, ib::AbstractDict, jb::AbstractDict)
     T = promote_type(eltype(A), eltype(B))
     iakeys = collect(keys(ia))
@@ -161,10 +161,10 @@ function change(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
 
     return modval, addival, addjval, remival, remjval
 end
-function change(A::AbstractMatrix, B::AbstractMatrix)
+function diff(A::AbstractMatrix, B::AbstractMatrix)
     ia = Dict(i => i for i = 1:size(A, 1)
     ja = Dict(i => i for i = 1:size(A, 2)
     ib = Dict(i => i for i = 1:size(B, 1)
     jb = Dict(i => i for i = 1:size(B, 2)
-    return change(A, B, ia, ja, ib, jb)
+    return diff(A, B, ia, ja, ib, jb)
 end

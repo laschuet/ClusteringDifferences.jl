@@ -5,7 +5,7 @@ using SparseArrays
 
 import Base: -, ==
 import Base: replace, replace!
-import Base: hash, instances, show
+import Base: diff, hash, instances, show
 
 export
     # clustering.jl
