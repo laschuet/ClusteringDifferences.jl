@@ -16,9 +16,6 @@
         #
         #)
         @test diff(A, B, ia, ja, ib, jb) == (
-            #sparse([0 0]),
-            #view(B, [2], :), view(B, :, [2, 3]),
-            #view(A, [2, 3], :), view(A, :, [2])
             sparse([0 0]),
             [1 1 1 1], [1 1; 1 1],
             [0 1 0; 0 0 1], reshape([0, 1, 0], :, 1)
