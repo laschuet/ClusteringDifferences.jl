@@ -12,18 +12,35 @@
         ja = [2, 8, 11]
         ib = [1, 8]
         jb = [2, 3, 4, 11]
-        #@test diff(A, A, ia, ja, ia, ja) == (
-        #
-        #)
+        @test diff(A, A, ia, ja, ia, ja) == (
+            sparse([0 0 0; 0 0 0; 0 0 0]),
+            [], [],
+            [], []
+        )
         @test diff(A, B, ia, ja, ib, jb) == (
             sparse([0 0]),
             [1 1 1 1], [1 1; 1 1],
             [0 1 0; 0 0 1], reshape([0, 1, 0], :, 1)
         )
-        #@test diff(B, A, ia, ja, ib, jb) == []
-
-        #@test diff(A, A) == ()
-        #@test diff(A, B) == ()
-        #@test diff(B, A) == ()
+        @test diff(B, A, ib, jb, ia, ja) == (
+            sparse([0 0]),
+            [0 1 0; 0 0 1], reshape([0, 1, 0], :, 1),
+            [1 1 1 1], [1 1; 1 1]
+        )
+        @test diff(A, A) == (
+            sparse([0 0 0; 0 0 0; 0 0 0]),
+            [], [],
+            [], []
+        )
+        @test diff(A, B) == (
+            sparse([0 -1 0; -1 0 -1]),
+            [], reshape([1, 1], :, 1),
+            [0 0 1], []
+        )
+        @test diff(B, A) == (
+            sparse([0 -1 0; -1 0 -1]),
+            [0 0 1], [],
+            [], reshape([1, 1], :, 1)
+        )
     end
 end
