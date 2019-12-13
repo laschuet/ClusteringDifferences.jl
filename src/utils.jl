@@ -47,7 +47,7 @@ removed(a::MatrixDifference) = a.RI, a.RJ
 
 Access the elements removed from dimension `d`.
 """
-function removed(a::MatrixDifference, dim::Integer) =
+function removed(a::MatrixDifference, dim::Integer)
     1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)"))
     return removed(a)[dim]
 end
@@ -162,9 +162,9 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
     return modval, addival, addjval, remival, remjval
 end
 function diff(A::AbstractMatrix, B::AbstractMatrix)
-    ia = Dict(i => i for i = 1:size(A, 1)
-    ja = Dict(i => i for i = 1:size(A, 2)
-    ib = Dict(i => i for i = 1:size(B, 1)
-    jb = Dict(i => i for i = 1:size(B, 2)
+    ia = Dict(i => i for i = 1:size(A, 1))
+    ja = Dict(i => i for i = 1:size(A, 2))
+    ib = Dict(i => i for i = 1:size(B, 1))
+    jb = Dict(i => i for i = 1:size(B, 2))
     return diff(A, B, ia, ja, ib, jb)
 end
