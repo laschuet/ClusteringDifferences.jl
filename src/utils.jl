@@ -32,7 +32,7 @@ Access the elements added in dimension `d`.
 """
 function added(a::MatrixDifference, dim::Integer)
     1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)"))
-    added(a)[dim]
+    return added(a)[dim]
 end
 
 """
@@ -49,7 +49,7 @@ Access the elements removed from dimension `d`.
 """
 function removed(a::MatrixDifference, dim::Integer) =
     1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)"))
-    removed(a)[dim]
+    return removed(a)[dim]
 end
 
 """
