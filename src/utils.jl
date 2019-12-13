@@ -161,6 +161,14 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
 
     return modval, addival, addjval, remival, remjval
 end
+function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
+            ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
+    ia = Dict(zip(ia, 1:length(ia)))
+    ja = Dict(zip(ja, 1:length(ja)))
+    ib = Dict(zip(ib, 1:length(ib)))
+    jb = Dict(zip(jb, 1:length(jb)))
+    return diff(A, B, ia, ja, ib, jb)
+end
 function diff(A::AbstractMatrix, B::AbstractMatrix)
     ia = Dict(i => i for i = 1:size(A, 1))
     ja = Dict(i => i for i = 1:size(A, 2))
