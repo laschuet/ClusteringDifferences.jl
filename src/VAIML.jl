@@ -25,9 +25,11 @@ export
     backwarddiff,
     forwarddiff,
     # kmeans.jl
-    kmeans
+    kmeans,
     # pckmeans.jl
     #pckmeans
+    # utils.jl
+    MatrixDifference
 
 include("utils.jl")
 include("clustering.jl")

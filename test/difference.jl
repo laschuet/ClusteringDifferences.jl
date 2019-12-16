@@ -1,17 +1,19 @@
 @testset "difference" begin
-    a = PartitionalClustering([0 1 1; 1 0 1], [0 0 0; 0 0 0; 0 0 0],
+    a = PartitionalClustering([0 1 1; 1 0 1], IdDict(1 => 1, 2 => 2),
+            IdDict(1 => 1, 2 => 2, 3 => 3), [0 0 0; 0 0 0; 0 0 0],
             [0 0 0; 0 0 0; 0 0 0], [1.0 0.0 0.5; 0.0 1.0 0.5], [0 1; 1 0])
-    b = PartitionalClustering([0 1 1; 1 0 1], [0 0 -1; 0 0 -1; -1 -1 0],
+    b = PartitionalClustering([0 1 1; 1 0 1], IdDict(1 => 1, 2 => 2),
+            IdDict(1 => 1, 2 => 2, 3 => 3), [0 0 -1; 0 0 -1; -1 -1 0],
             [0 0 1.0; 0 0 1.0; 1.0 1.0 0],
             [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0], [0 1 1; 1 0 1])
     # a - b
-    X = [0 0 0; 0 0 0]
-    i = Int[]
-    j = Int[]
-    C = [0 0 1; 0 0 1; 1 1 0]
-    W = [0 0 -1.0; 0 0 -1.0; -1.0 -1.0 0]
-    Y = [0.0 0.0 0.5; 0.0 0.0 0.5; 0.0 0.0 1.0]
-    M = [0 0 1; 0 0 1]
+    X = MatrixDifference(sparse([0 0 0; 0 0 0]), view([], :), view([], :), view([], :), view([], :))
+    i = Int[], Int[], Int[]
+    j = Int[], Int[], Int[]
+    C = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), view([], :), view([], :), view([], :), view([], :))
+    W = MatrixDifference(sparse([0 0 -1.0; 0 0 -1.0; -1.0 -1.0 0]), view([], :), view([], :), view([], :), view([], :))
+    Y = MatrixDifference(sparse([0.0 0.0 0.5; 0.0 0.0 0.5; 0.0 0.0 1.0]), view([], :), view([], :), view([], :), view([], :))
+    M = MatrixDifference(sparse([0 0 1; 0 0 1]), view([], :), view([], :), view([], :), view([], :))
     m = 0
     n = 0
     k = -1
@@ -20,8 +22,8 @@
     cd3 = PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
     # b - a
     X2 = [0 0 0; 0 0 0]
-    i2 = Int[]
-    j2 = Int[]
+    i2 = Int[], Int[], Int[]
+    j2 = [Int], Int[], Int[]
     C2 = [0 0 -1; 0 0 -1; -1 -1 0]
     W2 = [0 0 1.0; 0 0 1.0; 1.0 1.0 0]
     Y2 = [0.0 0.0 -0.5; 0.0 0.0 -0.5; 0.0 0.0 1.0]
@@ -50,10 +52,11 @@
     @testset "subtraction operator" begin
         cd = a - a
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == [0 0 0; 0 0 0] && cd.i == [] && cd.j == []
-                && cd.C == [0 0 0; 0 0 0; 0 0 0]
-                && cd.W == [0 0 0; 0 0 0; 0 0 0]
-                && cd.Y == [0.0 0.0 0.0; 0.0 0.0 0.0] && cd.M == [0 0; 0 0]
+        @test (cd.X == sparse([0 0 0; 0 0 0]) && cd.i == [] && cd.j == []
+                && cd.C == sparse([0 0 0; 0 0 0; 0 0 0])
+                && cd.W == sparse([0 0 0; 0 0 0; 0 0 0])
+                && cd.Y == sparse([0.0 0.0 0.0; 0.0 0.0 0.0])
+                && cd.M == sparse([0 0; 0 0])
                 && cd.m == 0 && cd.n == 0 && cd.k == 0)
         cd = a - b
         @test isa(cd, PartitionalClusteringDifference)
@@ -73,16 +76,9 @@
         @test (cd.X == X2 && cd.i == i2 && cd.j == j2 && cd.C == C2
                 && cd.W == W2 && cd.Y == Y2 && cd.M == M2 && cd.m == m2
                 && cd.n == n2 && cd.k == k2)
-        @test isnothing(forwarddiff([a, b], 2))
     end
 
     @testset "backward difference" begin
-        cd = backwarddiff([a, b], 1)
-        @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == a.X && cd.i == a.i && cd.j == a.j && cd.C == a.C
-                && cd.W == a.W && cd.Y == a.Y && cd.M == a.M
-                && cd.m == size(a.X, 1) && cd.n == size(a.X, 2)
-                && cd.k == size(a.M, 2))
         cd = backwarddiff([a, b], 2)
         @test isa(cd, PartitionalClusteringDifference)
         @test (cd.X == X2 && cd.i == i2 && cd.j == j2 && cd.C == C2

@@ -5,10 +5,10 @@ Matrix difference.
 """
 struct MatrixDifference{T<:Real}
     M::SparseMatrixCSC{T}
-    AI::SubArray{T}
-    AJ::SubArray{T}
-    RI::SubArray{T}
-    RJ::SubArray{T}
+    AI::SubArray
+    AJ::SubArray
+    RI::SubArray
+    RJ::SubArray
 end
 
 """
@@ -114,8 +114,8 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
     end
 
     # Compute added values
-    addival = T[]
-    addjval = T[]
+    addival = view(T[], :)
+    addjval = view(T[], :)
     i = setdiff(ibkeys, iakeys)
     j = setdiff(jbkeys, jakeys)
     if length(i) > 0 && length(j) <= 0
@@ -137,8 +137,8 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
     end
 
     # Compute removed values
-    remival = T[]
-    remjval = T[]
+    remival = view(T[], :)
+    remjval = view(T[], :)
     i = setdiff(iakeys, ibkeys)
     j = setdiff(jakeys, jbkeys)
     if length(i) > 0 && length(j) <= 0
@@ -159,7 +159,7 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
         remjval = view(A, :, j)
     end
 
-    return modval, addival, addjval, remival, remjval
+    return MatrixDifference(modval, addival, addjval, remival, remjval)
 end
 function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
             ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
