@@ -23,11 +23,11 @@
         MOD = sparse([0 0; 1 2])
         E = Matrix(undef, 0, 0)
         a = MatrixDifference(MOD, [2 3], [4 5], E, E)
-        b = MatrixDifference(MOD, [2 3], [4 5], E, E)
-        c = MatrixDifference(MOD, view([2 3], :, :), view([4 5], :, :),
+        b = MatrixDifference(MOD, view([2 3], :, :), view([4 5], :, :),
                 view(E, :, :), view(E, :, :))
+        c = MatrixDifference(MOD, [2 3], [4 5], E, E)
 
-        @test isa(a, MatrixDifference)
+        @test isa(a, MatrixDifference) && isa(b, MatrixDifference)
         @test (a.MODVAL == MOD && a.ADDIVAL == [2 3] && a.ADDJVAL == [4 5]
                 && a.REMIVAL == E && a.REMJVAL == E)
 
