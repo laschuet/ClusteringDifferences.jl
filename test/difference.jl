@@ -8,8 +8,8 @@
     E = Matrix(undef, 0, 0)
     # a - b
     X = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
-    i = SetDifference(Int[], Int[], Int[])
-    j = SetDifference(Int[], Int[], Int[])
+    i = SetDifference([1, 2], Int[], Int[])
+    j = SetDifference([1, 2, 3], Int[], Int[])
     C = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E, E, E)
     W = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E, E, E)
     Y = MatrixDifference(sparse([0 0 0.5; 0 0 0.5]), [0 0 1], E, E, E)
@@ -22,8 +22,8 @@
     cd3 = PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
     # b - a
     X2 = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
-    i2 = SetDifference(Int[], Int[], Int[])
-    j2 = SetDifference(Int[], Int[], Int[])
+    i2 = SetDifference([1, 2], Int[], Int[])
+    j2 = SetDifference([1, 2, 3], Int[], Int[])
     C2 = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E, E, E)
     W2 = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E, E, E)
     Y2 = MatrixDifference(sparse([0 0 -0.5; 0 0 -0.5]), E, E, [0 0 1], E)
@@ -52,11 +52,13 @@
     @testset "subtraction operator" begin
         cd = a - a
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == sparse([0 0 0; 0 0 0]) && cd.i == [] && cd.j == []
-                && cd.C == sparse([0 0 0; 0 0 0; 0 0 0])
-                && cd.W == sparse([0 0 0; 0 0 0; 0 0 0])
-                && cd.Y == sparse([0.0 0.0 0.0; 0.0 0.0 0.0])
-                && cd.M == sparse([0 0; 0 0])
+        @test (cd.X == MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
+                && cd.i == SetDifference([1, 2], Int[], Int[])
+                && cd.j == SetDifference([1, 2, 3], Int[], Int[])
+                && cd.C == MatrixDifference(sparse([0 0 0; 0 0 0; 0 0 0]), E, E, E, E)
+                && cd.W == MatrixDifference(sparse([0 0 0; 0 0 0; 0 0 0]), E, E, E, E)
+                && cd.Y == MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
+                && cd.M == MatrixDifference(sparse([0 0; 0 0]), E, E, E, E)
                 && cd.m == 0 && cd.n == 0 && cd.k == 0)
         cd = a - b
         @test isa(cd, PartitionalClusteringDifference)
