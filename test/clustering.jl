@@ -12,9 +12,11 @@
         c = PartitionalClustering(X, i, j, C, W, Y, M)
 
         @testset "constructors" begin
+            @test isa(a, PartitionalClustering)
             @test (a.X == X && a.i == i && a.j == j && a.C == C && a.W == W
                     && a.Y == Y && a.M == M)
             d = PartitionalClustering(X, C, W, Y, M)
+            @test isa(d, PartitionalClustering)
             @test (d.X == X && d.i == i && d.j == j && d.C == C && d.W == W
                     && d.Y == Y && d.M == M)
         end
@@ -51,8 +53,10 @@
         a = HierarchicalClustering(X, i, j, C, W)
 
         @testset "constructors" begin
+            @test isa(a, HierarchicalClustering)
             @test a.X == X && a.i == i && a.j == j && a.C == C && a.W == W
             b = HierarchicalClustering(X, C, W)
+            @test isa(b, HierarchicalClustering)
             @test b.X == X && b.i == i && b.j == j && b.C == C && b.W == W
         end
 
