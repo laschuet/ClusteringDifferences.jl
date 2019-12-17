@@ -33,6 +33,7 @@
     k2 = 1
 
     @testset "constructors" begin
+        @test isa(cd, PartitionalClusteringDifference)
         @test (cd.X == X && cd.i == i && cd.j == j && cd.C == C && cd.W == W
                 && cd.Y == Y && cd.M == M && cd.m == m && cd.n == n
                 && cd.k == k)
