@@ -51,8 +51,8 @@ PartitionalClustering(X::Matrix{Tx}, i::OrderedDict{Int,Int},
 function PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
                             Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm}
     szi, szj = size(X)
-    i = OrderedDict(i => i for i = 1:szi)
-    j = OrderedDict(j => j for j = 1:szj)
+    i = OrderedDict{Int,Int}(i => i for i = 1:szi)
+    j = OrderedDict{Int,Int}(j => j for j = 1:szj)
     return PartitionalClustering(X, i, j, C, W, Y, M)
 end
 
@@ -98,8 +98,8 @@ HierarchicalClustering(X::Matrix{Tx}, i::OrderedDict{Int,Int},
 
 function HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Tc,Tw}
     szi, szj = size(X)
-    i = OrderedDict(i => i for i = 1:szi)
-    j = OrderedDict(j => j for j = 1:szj)
+    i = OrderedDict{Int,Int}(i => i for i = 1:szi)
+    j = OrderedDict{Int,Int}(j => j for j = 1:szj)
     return HierarchicalClustering(X, i, j, C, W)
 end
 
