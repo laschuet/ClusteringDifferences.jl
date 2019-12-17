@@ -1,14 +1,54 @@
 """
+    SetDifference{T<:Real}
+
+Set difference.
+"""
+struct SetDifference{T<:Real}
+    comval::Vector{T}
+    addval::Vector{T}
+    remval::Vector{T}
+end
+
+"""
+    common(a::SetDifference)
+
+Access the common elements.
+"""
+common(a::SetDifference) = a.comval
+
+"""
+    added(a::SetDifference)
+
+Access the added elements.
+"""
+added(a::SetDifference) = a.addval
+
+"""
+    removed(a::SetDifference)
+
+Access the removed elements.
+"""
+removed(a::SetDifference) = a.remval
+
+# Set difference equality operator
+==(a::SetDifference, b::SetDifference) =
+    a.comval == b.comval && a.addval == b.addval && a.remval == b.remval
+
+# Set difference hash code
+hash(a::SetDifference, h::UInt) =
+    hash(a.comval, hash(a.addval, hash(a.remval, hash(:SetDifference, h))))
+
+"""
     MatrixDifference{T<:Real}
 
 Matrix difference.
 """
 struct MatrixDifference{T<:Real}
-    M::SparseMatrixCSC{T}
-    AI::SubArray
-    AJ::SubArray
-    RI::SubArray
-    RJ::SubArray
+    MODVAL::SparseMatrixCSC{T}
+    ADDIVAL::SubArray
+    ADDJVAL::SubArray
+    REMIVAL::SubArray
+    REMJVAL::SubArray
 end
 
 """
@@ -16,14 +56,14 @@ end
 
 Access the modified elements.
 """
-modified(a::MatrixDifference) = a.M
+modified(a::MatrixDifference) = a.MODVAL
 
 """
     added(a::MatrixDifference)
 
 Access the tuple containing the elements added in each dimension.
 """
-added(a::MatrixDifference) = a.AI, a.AJ
+added(a::MatrixDifference) = a.ADDIVAL, a.ADDJVAL
 
 """
     added(a::MatrixDifference, dim::Integer)
@@ -40,7 +80,7 @@ end
 
 Access the tuple containing the elements removed from each dimension.
 """
-removed(a::MatrixDifference) = a.RI, a.RJ
+removed(a::MatrixDifference) = a.REMIVAL, a.REMJVAL
 
 """
     removed(a::MatrixDifference, dim::Integer)
@@ -53,6 +93,9 @@ function removed(a::MatrixDifference, dim::Integer)
 end
 
 """
+    replace(a::AbstractVector{T}, d::AbstractDict{T,T}) where {T<:Integer}
+
+TODO.
 """
 function replace(a::AbstractVector{T}, d::AbstractDict{T,T}) where {T<:Integer}
     t = similar(a)
@@ -63,6 +106,9 @@ function replace(a::AbstractVector{T}, d::AbstractDict{T,T}) where {T<:Integer}
 end
 
 """
+    replace!(a::AbstractVector{T}, d::AbstractDict{T,T}) where {T<:Integer}
+
+TODO.
 """
 function replace!(a::AbstractVector{T}, d::AbstractDict{T,T}) where {T<:Integer}
     @inbounds for i = 1:length(a)
@@ -74,13 +120,13 @@ end
 """
     diff(a::AbstractVector, b::AbstractVector)
 
-Compute the change from vector `a` to vector `b`, and return a tuple containing
-the unique elements that have been shared, added and removed.
+Compute the difference between vector `a` and vector `b`, and return a tuple
+containing the unique elements that have been shared, added and removed.
 
 # Examples
 ```jldoctest
 julia> diff([1, 2, 3, 3], [4, 2, 1])
-([4], [3])
+([1, 2], [4], [3])
 ```
 """
 diff(a::AbstractVector, b::AbstractVector) =
@@ -89,9 +135,9 @@ diff(a::AbstractVector, b::AbstractVector) =
 """
     diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict, ja::AbstractDict, ib::AbstractDict, jb::AbstractDict)
 
-Compute the change from matrix `A` to matrix `B`, and return a tuple containing
-the elements that have been modified, added (per row and column), removed (per
-row and column).
+Compute the difference between matrix `A` and matrix `B`, and return a tuple
+containing the elements that have been modified, added (per row and column),
+removed (per row and column).
 """
 function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
             ja::AbstractDict, ib::AbstractDict, jb::AbstractDict)
@@ -114,8 +160,8 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
     end
 
     # Compute added values
-    addival = view(T[], :)
-    addjval = view(T[], :)
+    addival = view(T[], :, :)
+    addjval = view(T[], :, :)
     i = setdiff(ibkeys, iakeys)
     j = setdiff(jbkeys, jakeys)
     if length(i) > 0 && length(j) <= 0
@@ -137,8 +183,8 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
     end
 
     # Compute removed values
-    remival = view(T[], :)
-    remjval = view(T[], :)
+    remival = view(T[], :, :)
+    remjval = view(T[], :, :)
     i = setdiff(iakeys, ibkeys)
     j = setdiff(jakeys, jbkeys)
     if length(i) > 0 && length(j) <= 0
@@ -159,7 +205,7 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
         remjval = view(A, :, j)
     end
 
-    return MatrixDifference(modval, addival, addjval, remival, remjval)
+    return modval, addival, addjval, remival, remjval
 end
 function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
             ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)

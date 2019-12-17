@@ -30,7 +30,11 @@ export
     # pckmeans.jl
     #pckmeans
     # utils.jl
-    MatrixDifference
+    MatrixDifference,
+    SetDifference,
+    common,
+    added,
+    removed
 
 include("utils.jl")
 include("clustering.jl")

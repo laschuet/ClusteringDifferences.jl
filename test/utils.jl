@@ -1,4 +1,28 @@
 @testset "utils" begin
+    @testset "set difference" begin
+        a = SetDifference([1], [2, 3], [4, 5])
+        b = SetDifference([1], [2, 3], [4, 5])
+        c = SetDifference([1], [2, 3], [4, 5])
+
+        @test isa(a, SetDifference)
+        @test a.comval == [1] && a.addval == [2, 3] && a.remval == [4, 5]
+
+        @test a == a
+        @test a == b && b == a
+        @test a == b && b == c && a == c
+
+        @test hash(a) == hash(a)
+        @test a == b && hash(a) == hash(b)
+
+        @test common(a) == [1]
+        @test added(a) == [2, 3]
+        @test removed(a) == [4, 5]
+    end
+
+    @testset "matrix difference" begin
+        # TODO Implement tests
+    end
+
     @testset "difference operator" begin
         a = [1, 2, 3, 3]
         b = [4, 2, 1]
