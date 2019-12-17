@@ -170,8 +170,8 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
     end
 
     # Compute added values
-    addival = view(T[], :, :)
-    addjval = view(T[], :, :)
+    addival = view(Matrix{T}(undef, 0, 0), :, :)
+    addjval = view(Matrix{T}(undef, 0, 0), :, :)
     i = setdiff(ibkeys, iakeys)
     j = setdiff(jbkeys, jakeys)
     if length(i) > 0 && length(j) <= 0
@@ -193,8 +193,8 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
     end
 
     # Compute removed values
-    remival = view(T[], :, :)
-    remjval = view(T[], :, :)
+    remival = view(Matrix{T}(undef, 0, 0), :, :)
+    remjval = view(Matrix{T}(undef, 0, 0), :, :)
     i = setdiff(iakeys, ibkeys)
     j = setdiff(jakeys, jbkeys)
     if length(i) > 0 && length(j) <= 0
@@ -219,16 +219,16 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
 end
 function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
             ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
-    ia = Dict(zip(ia, 1:length(ia)))
-    ja = Dict(zip(ja, 1:length(ja)))
-    ib = Dict(zip(ib, 1:length(ib)))
-    jb = Dict(zip(jb, 1:length(jb)))
-    return diff(A, B, ia, ja, ib, jb)
+    iadict = OrderedDict(zip(ia, 1:length(ia)))
+    jadict = OrderedDict(zip(ja, 1:length(ja)))
+    ibdict = OrderedDict(zip(ib, 1:length(ib)))
+    jbdict = OrderedDict(zip(jb, 1:length(jb)))
+    return diff(A, B, iadict, jadict, ibdict, jbdict)
 end
 function diff(A::AbstractMatrix, B::AbstractMatrix)
-    ia = Dict(i => i for i = 1:size(A, 1))
-    ja = Dict(i => i for i = 1:size(A, 2))
-    ib = Dict(i => i for i = 1:size(B, 1))
-    jb = Dict(i => i for i = 1:size(B, 2))
+    ia = OrderedDict{Int,Int}(i => i for i = 1:size(A, 1))
+    ja = OrderedDict{Int,Int}(j => j for j = 1:size(A, 2))
+    ib = OrderedDict{Int,Int}(i => i for i = 1:size(B, 1))
+    jb = OrderedDict{Int,Int}(j => j for j = 1:size(B, 2))
     return diff(A, B, ia, ja, ib, jb)
 end
