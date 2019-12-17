@@ -59,7 +59,6 @@
         ib = [1, 8]
         jb = [2, 3, 4, 11]
         E = Matrix(undef, 0, 0)
-        println(diff(A, A, ia, ja, ia, ja))
         @test diff(A, A, ia, ja, ia, ja) == (
             sparse([0 0 0; 0 0 0; 0 0 0]),
             E, E,
