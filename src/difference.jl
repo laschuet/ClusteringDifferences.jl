@@ -43,17 +43,6 @@ PartitionalClusteringDifference(X::MatrixDifference{Tx}, i::SetDifference{Int},
                                 k::Integer) where {Tx,Tc,Tw,Ty,Tm} =
     PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M, m, n, k)
 
-function PartitionalClusteringDifference(X::MatrixDifference{Tx},
-                                        C::MatrixDifference{Tc},
-                                        W::MatrixDifference{Tw},
-                                        Y::MatrixDifference{Ty},
-                                        M::MatrixDifference{Tm},
-                                        m::Integer, n::Integer, k::Integer) where {Tx,Tc,Tw,Ty,Tm}
-    i = SetDifference(Int[], Int[], Int[])
-    j = SetDifference(Int[], Int[], Int[])
-    return PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
-end
-
 # Partitional clustering difference equality operator
 ==(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference) =
     (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
