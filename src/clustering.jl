@@ -6,28 +6,24 @@ Supertype for clusterings.
 abstract type AbstractClustering end
 
 """
-    PartitionalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
+    PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
 
 Partitional clustering.
 """
-struct PartitionalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
+struct PartitionalClustering{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
     X::Matrix{Tx}
-    i::IdDict{Ti}
-    j::IdDict{Tj}
+    i::OrderedDict{Int,Int}
+    j::OrderedDict{Int,Int}
     C::Matrix{Tc}
     W::Matrix{Tw}
     Y::Matrix{Ty}
     M::Matrix{Tm}
 
-    function PartitionalClustering{Tx,Ti,Tj,Tc,Tw,Ty,Tm}(X::Matrix{Tx},
-                                                        i::IdDict{Ti},
-                                                        j::IdDict{Tj},
-                                                        C::Matrix{Tc},
-                                                        W::Matrix{Tw},
-                                                        Y::Matrix{Ty},
-                                                        M::Matrix{Tm}) where {Tx<:Real,Ti<:Integer,Tj<:Integer,
-                                                                            Tc<:Integer,Tw<:Real,Ty<:Real,
-                                                                            Tm<:Real}
+    function PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X::Matrix{Tx},
+                                                i::OrderedDict{Int,Int},
+                                                j::OrderedDict{Int,Int},
+                                                C::Matrix{Tc}, W::Matrix{Tw},
+                                                Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real}
         mx, nx = size(X)
         nc = size(C, 2)
         nw = size(W, 2)
@@ -47,15 +43,16 @@ struct PartitionalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Re
         return new(X, i, j, C, W, Y, M)
     end
 end
-PartitionalClustering(X::Matrix{Tx}, i::IdDict{Ti}, j::IdDict{Tj},
-                    C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Ti,Tj,Tc,Tw,Ty,Tm} =
-    PartitionalClustering{Tx,Ti,Tj,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
+PartitionalClustering(X::Matrix{Tx}, i::OrderedDict{Int,Int},
+                    j::OrderedDict{Int,Int}, C::Matrix{Tc}, W::Matrix{Tw},
+                    Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm} =
+    PartitionalClustering{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M)
 
 function PartitionalClustering(X::Matrix{Tx}, C::Matrix{Tc}, W::Matrix{Tw},
                             Y::Matrix{Ty}, M::Matrix{Tm}) where {Tx,Tc,Tw,Ty,Tm}
     szi, szj = size(X)
-    i = IdDict(i => i for i = 1:szi)
-    j = IdDict(j => j for j = 1:szj)
+    i = OrderedDict(i => i for i = 1:szi)
+    j = OrderedDict(j => j for j = 1:szj)
     return PartitionalClustering(X, i, j, C, W, Y, M)
 end
 
@@ -70,23 +67,21 @@ hash(a::PartitionalClustering, h::UInt) =
         hash(:PartitionalClustering, h))))))))
 
 """
-    HierarchicalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Real} <: AbstractClustering
+    HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClustering
 
 Hierarchical clustering.
 """
-struct HierarchicalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:Real} <: AbstractClustering
+struct HierarchicalClustering{Tx<:Real,Tc<:Integer,Tw<:Real} <: AbstractClustering
     X::Matrix{Tx}
-    i::IdDict{Ti}
-    j::IdDict{Tj}
+    i::OrderedDict{Int,Int}
+    j::OrderedDict{Int,Int}
     C::Array{Tc,3}
     W::Array{Tw,3}
 
-    function HierarchicalClustering{Tx,Ti,Tj,Tc,Tw}(X::Matrix{Tx},
-                                                    i::IdDict{Ti},
-                                                    j::IdDict{Tj},
-                                                    C::Array{Tc,3},
-                                                    W::Array{Tw,3}) where {Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,
-                                                                        Tw<:Real}
+    function HierarchicalClustering{Tx,Tc,Tw}(X::Matrix{Tx},
+                                            i::OrderedDict{Int,Int},
+                                            j::OrderedDict{Int,Int},
+                                            C::Array{Tc,3}, W::Array{Tw,3}) where {Tx<:Real,Tc<:Integer,Tw<:Real}
         mx, nx = size(X)
         nc = size(C, 2)
         nw = size(W, 2)
@@ -97,14 +92,14 @@ struct HierarchicalClustering{Tx<:Real,Ti<:Integer,Tj<:Integer,Tc<:Integer,Tw<:R
         return new(X, i, j, C, W)
     end
 end
-HierarchicalClustering(X::Matrix{Tx}, i::IdDict{Ti}, j::IdDict{Tj},
-                    C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Ti,Tj,Tc,Tw} =
-    HierarchicalClustering{Tx,Ti,Tj,Tc,Tw}(X, i, j, C, W)
+HierarchicalClustering(X::Matrix{Tx}, i::OrderedDict{Int,Int},
+                    j::OrderedDict{Int,Int}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Tc,Tw} =
+    HierarchicalClustering{Tx,Tc,Tw}(X, i, j, C, W)
 
 function HierarchicalClustering(X::Matrix{Tx}, C::Array{Tc,3}, W::Array{Tw,3}) where {Tx,Tc,Tw}
     szi, szj = size(X)
-    i = IdDict(i => i for i = 1:szi)
-    j = IdDict(j => j for j = 1:szj)
+    i = OrderedDict(i => i for i = 1:szi)
+    j = OrderedDict(j => j for j = 1:szj)
     return HierarchicalClustering(X, i, j, C, W)
 end
 

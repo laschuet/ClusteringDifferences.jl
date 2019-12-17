@@ -1,6 +1,7 @@
 module VAIML
 
 using Distances
+using OrderedCollections
 using SparseArrays
 
 import Base: -, ==
