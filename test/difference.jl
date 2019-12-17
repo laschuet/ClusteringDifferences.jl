@@ -1,19 +1,19 @@
 @testset "difference" begin
-    a = PartitionalClustering([0 1 1; 1 0 1], IdDict(1 => 1, 2 => 2),
-            IdDict(1 => 1, 2 => 2, 3 => 3), [0 0 0; 0 0 0; 0 0 0],
-            [0 0 0; 0 0 0; 0 0 0], [1.0 0.0 0.5; 0.0 1.0 0.5], [0 1; 1 0])
-    b = PartitionalClustering([0 1 1; 1 0 1], IdDict(1 => 1, 2 => 2),
-            IdDict(1 => 1, 2 => 2, 3 => 3), [0 0 -1; 0 0 -1; -1 -1 0],
-            [0 0 1.0; 0 0 1.0; 1.0 1.0 0],
-            [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0], [0 1 1; 1 0 1])
+    a = PartitionalClustering([0 1 1; 1 0 1], OrderedDict(1 => 1, 2 => 2),
+            OrderedDict(1 => 1, 2 => 2, 3 => 3), [0 0 0; 0 0 0; 0 0 0],
+            [0 0 0; 0 0 0; 0 0 0], [1 0 0.5; 0 1 0.5], [0 1; 1 0])
+    b = PartitionalClustering([0 1 1; 1 0 1], OrderedDict(1 => 1, 2 => 2),
+            OrderedDict(1 => 1, 2 => 2, 3 => 3), [0 0 -1; 0 0 -1; -1 -1 0],
+            [0 0 1; 0 0 1; 1 1 0], [1 0 0; 0 1 0; 0 0 1], [0 1 1; 1 0 1])
+    E = Matrix(undef, 0, 0)
     # a - b
-    X = MatrixDifference(sparse([0 0 0; 0 0 0]), view([], :), view([], :), view([], :), view([], :))
-    i = Int[], Int[], Int[]
-    j = Int[], Int[], Int[]
-    C = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), view([], :), view([], :), view([], :), view([], :))
-    W = MatrixDifference(sparse([0 0 -1.0; 0 0 -1.0; -1.0 -1.0 0]), view([], :), view([], :), view([], :), view([], :))
-    Y = MatrixDifference(sparse([0.0 0.0 0.5; 0.0 0.0 0.5; 0.0 0.0 1.0]), view([], :), view([], :), view([], :), view([], :))
-    M = MatrixDifference(sparse([0 0 1; 0 0 1]), view([], :), view([], :), view([], :), view([], :))
+    X = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
+    i = SetDifference(Int[], Int[], Int[])
+    j = SetDifference(Int[], Int[], Int[])
+    C = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E, E, E)
+    W = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E, E, E)
+    Y = MatrixDifference(sparse([0 0 0.5; 0 0 0.5]), [0 0 1], E, E, E)
+    M = MatrixDifference(sparse([0 0; 0 0]), E, reshape([1, 1], :, 1), E, E)
     m = 0
     n = 0
     k = -1
@@ -21,13 +21,13 @@
     cd2 = PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
     cd3 = PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
     # b - a
-    X2 = [0 0 0; 0 0 0]
-    i2 = Int[], Int[], Int[]
-    j2 = [Int], Int[], Int[]
-    C2 = [0 0 -1; 0 0 -1; -1 -1 0]
-    W2 = [0 0 1.0; 0 0 1.0; 1.0 1.0 0]
-    Y2 = [0.0 0.0 -0.5; 0.0 0.0 -0.5; 0.0 0.0 1.0]
-    M2 = [0 0 1; 0 0 1]
+    X2 = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
+    i2 = SetDifference(Int[], Int[], Int[])
+    j2 = SetDifference(Int[], Int[], Int[])
+    C2 = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E, E, E)
+    W2 = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E, E, E)
+    Y2 = MatrixDifference(sparse([0 0 -0.5; 0 0 -0.5]), E, E, [0 0 1], E)
+    M2 = MatrixDifference(sparse([0 0; 0 0]), E, E, E, reshape([1, 1], :, 1))
     m2 = 0
     n2 = 0
     k2 = 1
