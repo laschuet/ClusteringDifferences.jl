@@ -20,7 +20,29 @@
     end
 
     @testset "matrix difference" begin
-        # TODO Implement tests
+        MOD = sparse([0 0; 1 2])
+        E = Matrix(undef, 0, 0)
+        a = MatrixDifference(MOD, [2 3], [4 5], E, E)
+        b = MatrixDifference(MOD, [2 3], [4 5], E, E)
+        c = MatrixDifference(MOD, view([2 3], :, :), view([4 5], :, :),
+                view(E, :, :), view(E, :, :))
+
+        @test isa(a, MatrixDifference)
+        @test (a.MODVAL == MOD && a.ADDIVAL == [2 3] && a.ADDJVAL == [4 5]
+                && a.REMIVAL == E && a.REMJVAL == E)
+
+        @test a == a
+        @test a == b && b == a
+        @test a == b && b == c && a == c
+
+        @test hash(a) == hash(a)
+        @test a == b && hash(a) == hash(b)
+
+        @test modified(a) == MOD
+        @test added(a) == ([2 3], [4 5])
+        @test added(a, 1) == [2 3] && added(a, 2) == [4 5]
+        @test removed(a) == (E, E)
+        @test removed(a, 1) == E && removed(a, 2) == E
     end
 
     @testset "difference operator" begin

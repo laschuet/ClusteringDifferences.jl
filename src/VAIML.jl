@@ -32,8 +32,9 @@ export
     # utils.jl
     MatrixDifference,
     SetDifference,
-    common,
     added,
+    common,
+    modified,
     removed
 
 include("utils.jl")

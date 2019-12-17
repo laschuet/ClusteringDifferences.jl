@@ -43,13 +43,23 @@ hash(a::SetDifference, h::UInt) =
 
 Matrix difference.
 """
-struct MatrixDifference{T<:Real}
-    MODVAL::SparseMatrixCSC{T}
-    ADDIVAL::SubArray
-    ADDJVAL::SubArray
-    REMIVAL::SubArray
-    REMJVAL::SubArray
+struct MatrixDifference{Tm<:Real,Tai<:AbstractMatrix,Taj<:AbstractMatrix,Tri<:AbstractMatrix,Trj<:AbstractMatrix}
+    MODVAL::SparseMatrixCSC{Tm,Int}
+    ADDIVAL::Tai
+    ADDJVAL::Taj
+    REMIVAL::Tri
+    REMJVAL::Trj
 end
+
+# Matrix difference equality operator
+==(a::MatrixDifference, b::MatrixDifference) =
+    (a.MODVAL == b.MODVAL && a.ADDIVAL == b.ADDIVAL && a.ADDJVAL == b.ADDJVAL
+            && a.REMIVAL == b.REMIVAL && a.REMJVAL == b.REMJVAL)
+
+# Matrix difference hash code
+hash(a::MatrixDifference, h::UInt) =
+    hash(a.MODVAL, hash(a.ADDIVAL, hash(a.ADDJVAL, hash(a.REMIVAL,
+        hash(a.REMJVAL, hash(:MatrixDifference, h))))))
 
 """
     modified(a::MatrixDifference)
@@ -61,14 +71,14 @@ modified(a::MatrixDifference) = a.MODVAL
 """
     added(a::MatrixDifference)
 
-Access the tuple containing the elements added in each dimension.
+Access the tuple containing the added elements per dimension.
 """
 added(a::MatrixDifference) = a.ADDIVAL, a.ADDJVAL
 
 """
     added(a::MatrixDifference, dim::Integer)
 
-Access the elements added in dimension `d`.
+Access the added elements of dimension `d`.
 """
 function added(a::MatrixDifference, dim::Integer)
     1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)"))
@@ -78,14 +88,14 @@ end
 """
     removed(a::MatrixDifference)
 
-Access the tuple containing the elements removed from each dimension.
+Access the tuple containing the removed elements per dimension.
 """
 removed(a::MatrixDifference) = a.REMIVAL, a.REMJVAL
 
 """
     removed(a::MatrixDifference, dim::Integer)
 
-Access the elements removed from dimension `d`.
+Access the removed elements of dimension `d`.
 """
 function removed(a::MatrixDifference, dim::Integer)
     1 <= dim <= 2 || throw(ArgumentError("dimension $dim out of range (1:2)"))
