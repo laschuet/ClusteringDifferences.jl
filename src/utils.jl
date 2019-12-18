@@ -143,14 +143,46 @@ diff(a::AbstractVector, b::AbstractVector) =
     intersect(a, b), setdiff(b, a), setdiff(a, b)
 
 """
-    diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict, ja::AbstractDict, ib::AbstractDict, jb::AbstractDict)
+    diff(A::AbstractMatrix, B::AbstractMatrix)
 
 Compute the difference between matrix `A` and matrix `B`, and return a tuple
 containing the elements that have been modified, added (per row and column),
 removed (per row and column).
 """
-function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
-            ja::AbstractDict, ib::AbstractDict, jb::AbstractDict)
+#diff(A::AbstractMatrix, B::AbstractMatrix) = _diff(A, B)
+function diff(A::AbstractMatrix, B::AbstractMatrix)
+    iadict = OrderedDict{Int,Int}(i => i for i = 1:size(A, 1))
+    jadict = OrderedDict{Int,Int}(j => j for j = 1:size(A, 2))
+    ibdict = OrderedDict{Int,Int}(i => i for i = 1:size(B, 1))
+    jbdict = OrderedDict{Int,Int}(j => j for j = 1:size(B, 2))
+    return _diff(A, B, iadict, jadict, ibdict, jbdict)
+end
+
+"""
+    diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector, ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
+
+Like [`diff`](@ref), but provide integer vectors that number the rows and
+columns of the matrices `A` and `B`. The vector `ia` represents the row numbers
+of `A`, and the vector `jb` represents the column numbers of `B` etc. The
+position of each vector element refers to the row index (or column index
+respectively) of `A` or `B`.
+"""
+function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
+            ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
+    iadict = OrderedDict(zip(ia, 1:length(ia)))
+    jadict = OrderedDict(zip(ja, 1:length(ja)))
+    ibdict = OrderedDict(zip(ib, 1:length(ib)))
+    jbdict = OrderedDict(zip(jb, 1:length(jb)))
+    return _diff(A, B, iadict, jadict, ibdict, jbdict)
+end
+
+# TODO Implement a more efficient alternative that needs no mapping
+function _diff(A::AbstractMatrix, B::AbstractMatrix)
+end
+
+# TODO
+function _diff(A::AbstractMatrix, B::AbstractMatrix, ia::OrderedDict,
+            ja::OrderedDict, ib::OrderedDict, jb::OrderedDict)
     T = promote_type(eltype(A), eltype(B))
     iakeys = collect(keys(ia))
     jakeys = collect(keys(ja))
@@ -216,19 +248,4 @@ function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractDict,
     end
 
     return modval, addival, addjval, remival, remjval
-end
-function diff(A::AbstractMatrix, B::AbstractMatrix, ia::AbstractVector,
-            ja::AbstractVector, ib::AbstractVector, jb::AbstractVector)
-    iadict = OrderedDict(zip(ia, 1:length(ia)))
-    jadict = OrderedDict(zip(ja, 1:length(ja)))
-    ibdict = OrderedDict(zip(ib, 1:length(ib)))
-    jbdict = OrderedDict(zip(jb, 1:length(jb)))
-    return diff(A, B, iadict, jadict, ibdict, jbdict)
-end
-function diff(A::AbstractMatrix, B::AbstractMatrix)
-    ia = OrderedDict{Int,Int}(i => i for i = 1:size(A, 1))
-    ja = OrderedDict{Int,Int}(j => j for j = 1:size(A, 2))
-    ib = OrderedDict{Int,Int}(i => i for i = 1:size(B, 1))
-    jb = OrderedDict{Int,Int}(j => j for j = 1:size(B, 2))
-    return diff(A, B, ia, ja, ib, jb)
 end

@@ -1,8 +1,8 @@
 @testset "clustering" begin
     @testset "partitional clustering" begin
         X = [0 1 1; 1 0 1]
-        i = OrderedDict(1 => 1, 2 => 2)
-        j = OrderedDict(1 => 1, 2 => 2, 3 => 3)
+        i = [10, 20]
+        j = [2, 3, 5]
         C = [0 0 0; 0 0 0; 0 0 0]
         W = [0 0 0; 0 0 0; 0 0 0]
         Y = [1 0 0.5; 0 1 0.5]
@@ -17,8 +17,8 @@
                     && a.Y == Y && a.M == M)
             d = PartitionalClustering(X, C, W, Y, M)
             @test isa(d, PartitionalClustering)
-            @test (d.X == X && d.i == i && d.j == j && d.C == C && d.W == W
-                    && d.Y == Y && d.M == M)
+            @test (d.X == X && d.i == [1, 2] && d.j == [1, 2, 3] && d.C == C
+                    && d.W == W && d.Y == Y && d.M == M)
         end
 
         @testset "equality operator" begin
@@ -46,8 +46,8 @@
 
     @testset "hierarchical clustering" begin
         X = [1 0 0; 2 2 3]
-        i = OrderedDict(1 => 1, 2 => 2)
-        j = OrderedDict(1 => 1, 2 => 2, 3 => 3)
+        i = [10, 20]
+        j = [2, 3, 5]
         C = rand([-1, 0, 1], 3, 3, 3)
         W = rand(3, 3, 3) .+ 1
         a = HierarchicalClustering(X, i, j, C, W)
@@ -57,7 +57,8 @@
             @test a.X == X && a.i == i && a.j == j && a.C == C && a.W == W
             b = HierarchicalClustering(X, C, W)
             @test isa(b, HierarchicalClustering)
-            @test b.X == X && b.i == i && b.j == j && b.C == C && b.W == W
+            @test (b.X == X && b.i == [1, 2] && b.j == [1, 2, 3] && b.C == C
+                    && b.W == W)
         end
 
         @testset "accessors" begin

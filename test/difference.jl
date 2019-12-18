@@ -1,10 +1,10 @@
 @testset "difference" begin
-    a = PartitionalClustering([0 1 1; 1 0 1], OrderedDict(1 => 1, 2 => 2),
-            OrderedDict(1 => 1, 2 => 2, 3 => 3), [0 0 0; 0 0 0; 0 0 0],
-            [0 0 0; 0 0 0; 0 0 0], [1 0 0.5; 0 1 0.5], [0 1; 1 0])
-    b = PartitionalClustering([0 1 1; 1 0 1], OrderedDict(1 => 1, 2 => 2),
-            OrderedDict(1 => 1, 2 => 2, 3 => 3), [0 0 -1; 0 0 -1; -1 -1 0],
-            [0 0 1; 0 0 1; 1 1 0], [1 0 0; 0 1 0; 0 0 1], [0 1 1; 1 0 1])
+    a = PartitionalClustering([0 1 1; 1 0 1], [1, 2], [1, 2, 3],
+            [0 0 0; 0 0 0; 0 0 0], [0 0 0; 0 0 0; 0 0 0], [1 0 0.5; 0 1 0.5],
+            [0 1; 1 0])
+    b = PartitionalClustering([0 1 1; 1 0 1], [1, 2], [1, 2, 3],
+            [0 0 -1; 0 0 -1; -1 -1 0], [0 0 1; 0 0 1; 1 1 0],
+            [1 0 0; 0 1 0; 0 0 1], [0 1 1; 1 0 1])
     E = Matrix(undef, 0, 0)
     # a - b
     X = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
