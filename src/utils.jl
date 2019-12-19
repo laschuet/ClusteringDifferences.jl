@@ -1,9 +1,9 @@
 """
-    SetDifference{T<:Real}
+    SetDifference{T}
 
 Set difference.
 """
-struct SetDifference{T<:Real}
+struct SetDifference{T}
     comval::Vector{T}
     addval::Vector{T}
     remval::Vector{T}
@@ -39,12 +39,12 @@ hash(a::SetDifference, h::UInt) =
     hash(a.comval, hash(a.addval, hash(a.remval, hash(:SetDifference, h))))
 
 """
-    MatrixDifference{T<:Real}
+    MatrixDifference{Tm<:AbstractMatrix,Tai<:AbstractMatrix,Taj<:AbstractMatrix,Tri<:AbstractMatrix,Trj<:AbstractMatrix}
 
 Matrix difference.
 """
-struct MatrixDifference{Tm<:Real,Tai<:AbstractMatrix,Taj<:AbstractMatrix,Tri<:AbstractMatrix,Trj<:AbstractMatrix}
-    MODVAL::SparseMatrixCSC{Tm,Int}
+struct MatrixDifference{Tm<:AbstractMatrix,Tai<:AbstractMatrix,Taj<:AbstractMatrix,Tri<:AbstractMatrix,Trj<:AbstractMatrix}
+    MODVAL::Tm
     ADDIVAL::Tai
     ADDJVAL::Taj
     REMIVAL::Tri

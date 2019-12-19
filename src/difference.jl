@@ -6,42 +6,33 @@ Supertype for clustering differences.
 abstract type AbstractClusteringDifference end
 
 """
-    PartitionalClusteringDifference{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClusteringDifference
+    PartitionalClusteringDifference <: AbstractClusteringDifference
 
 Difference between two partitional clusterings.
 """
-struct PartitionalClusteringDifference{Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClusteringDifference
-    X::MatrixDifference{Tx}
+struct PartitionalClusteringDifference <: AbstractClusteringDifference
+    X::MatrixDifference
     i::SetDifference{Int}
     j::SetDifference{Int}
-    C::MatrixDifference{Tc}
-    W::MatrixDifference{Tw}
-    Y::MatrixDifference{Ty}
-    M::MatrixDifference{Tm}
+    C::MatrixDifference
+    W::MatrixDifference
+    Y::MatrixDifference
+    M::MatrixDifference
     m::Int
     n::Int
     k::Int
 
-    function PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X::MatrixDifference{Tx},
-                                                            i::SetDifference{Int},
-                                                            j::SetDifference{Int},
-                                                            C::MatrixDifference{Tc},
-                                                            W::MatrixDifference{Tw},
-                                                            Y::MatrixDifference{Ty},
-                                                            M::MatrixDifference{Tm},
-                                                            m::Integer,
-                                                            n::Integer,
-                                                            k::Integer) where {Tx<:Real,Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real}
+    function PartitionalClusteringDifference(X::MatrixDifference,
+                                            i::SetDifference{Int},
+                                            j::SetDifference{Int},
+                                            C::MatrixDifference,
+                                            W::MatrixDifference,
+                                            Y::MatrixDifference,
+                                            M::MatrixDifference, m::Integer,
+                                            n::Integer, k::Integer)
         return new(X, i, j, C, W, Y, M, m, n, k)
     end
 end
-PartitionalClusteringDifference(X::MatrixDifference{Tx}, i::SetDifference{Int},
-                                j::SetDifference{Int}, C::MatrixDifference{Tc},
-                                W::MatrixDifference{Tw},
-                                Y::MatrixDifference{Ty},
-                                M::MatrixDifference{Tm}, m::Integer, n::Integer,
-                                k::Integer) where {Tx,Tc,Tw,Ty,Tm} =
-    PartitionalClusteringDifference{Tx,Tc,Tw,Ty,Tm}(X, i, j, C, W, Y, M, m, n, k)
 
 # Partitional clustering difference equality operator
 ==(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference) =

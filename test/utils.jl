@@ -20,16 +20,18 @@
     end
 
     @testset "matrix difference" begin
-        MOD = sparse([0 0; 1 2])
+        MOD = [0 0; 1 2]
         E = Matrix(undef, 0, 0)
-        a = MatrixDifference(MOD, [2 3], [4 5], E, E)
-        b = MatrixDifference(MOD, view([2 3], :, :), view([4 5], :, :),
-                view(E, :, :), view(E, :, :))
-        c = MatrixDifference(MOD, [2 3], [4 5], E, E)
+        a = MatrixDifference(MOD, view([2 3], :, :), [4 5], E, E)
+        b = MatrixDifference(sparse(MOD), [2 3], view([4 5], :, :), E, E)
+        c = MatrixDifference(sparse(MOD), [2 3], view([4 5], :, :), E, E)
 
         @test isa(a, MatrixDifference) && isa(b, MatrixDifference)
         @test (a.MODVAL == MOD && a.ADDIVAL == [2 3] && a.ADDJVAL == [4 5]
                 && a.REMIVAL == E && a.REMJVAL == E)
+        @test (b.MODVAL == sparse(MOD) && b.ADDIVAL == [2 3]
+                && b.ADDJVAL == view([4 5], :, :) && b.REMIVAL == E
+                && c.REMJVAL == E)
 
         @test a == a
         @test a == b && b == a
