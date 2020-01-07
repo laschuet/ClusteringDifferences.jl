@@ -18,8 +18,6 @@ struct PartitionalClusteringDifference <: AbstractClusteringDifference
     W::MatrixDifference
     Y::MatrixDifference
     M::MatrixDifference
-    m::Int
-    n::Int
     k::Int
 
     function PartitionalClusteringDifference(X::MatrixDifference,
@@ -28,23 +26,20 @@ struct PartitionalClusteringDifference <: AbstractClusteringDifference
                                             C::MatrixDifference,
                                             W::MatrixDifference,
                                             Y::MatrixDifference,
-                                            M::MatrixDifference, m::Integer,
-                                            n::Integer, k::Integer)
-        return new(X, i, j, C, W, Y, M, m, n, k)
+                                            M::MatrixDifference, k::Integer)
+        return new(X, i, j, C, W, Y, M, k)
     end
 end
 
 # Partitional clustering difference equality operator
 ==(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference) =
     (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
-            && a.Y == b.Y && a.M == b.M && a.m == b.m && a.n == b.n
-            && a.k == b.k)
+            && a.Y == b.Y && a.M == b.M && a.k == b.k)
 
 # Compute hash code
 hash(a::PartitionalClusteringDifference, h::UInt) =
     hash(a.X, hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
-        hash(a.m, hash(a.n, hash(a.k,
-            hash(:PartitionalClusteringDifference, h)))))))))))
+        hash(a.k, hash(:PartitionalClusteringDifference, h)))))))))
 
 # Partitional clustering subtraction operator
 function -(a::PartitionalClustering, b::PartitionalClustering)
@@ -59,9 +54,8 @@ function -(a::PartitionalClustering, b::PartitionalClustering)
     amj = collect(1:size(a.M, 2))
     bmj = collect(1:size(b.M, 2))
     M = MatrixDifference(diff(a.M, b.M, a.i, amj, b.i, bmj)...)
-    m, n = size(a.X) .- size(b.X)
     k = size(a.M, 2) - size(b.M, 2)
-    return PartitionalClusteringDifference(X, i, j, C, W, Y, M, m, n, k)
+    return PartitionalClusteringDifference(X, i, j, C, W, Y, M, k)
 end
 
 """
