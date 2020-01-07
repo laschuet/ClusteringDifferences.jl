@@ -184,13 +184,22 @@ end
 function _diff(A::AbstractMatrix, B::AbstractMatrix, ia::OrderedDict,
             ja::OrderedDict, ib::OrderedDict, jb::OrderedDict)
     T = promote_type(eltype(A), eltype(B))
+    modval = sparse([], [], T[])
+    addival = view(Matrix{T}(undef, 0, 0), :, :)
+    addjval = view(Matrix{T}(undef, 0, 0), :, :)
+    remival = view(Matrix{T}(undef, 0, 0), :, :)
+    remjval = view(Matrix{T}(undef, 0, 0), :, :)
+
+    if size(A) == (0, 0) || size(B) == (0, 0)
+        return modval, addival, addjval, remival, remjval
+    end
+
     iakeys = collect(keys(ia))
     jakeys = collect(keys(ja))
     ibkeys = collect(keys(ib))
     jbkeys = collect(keys(jb))
 
     # Compute modified values
-    modval = sparse([], [], T[])
     i = intersect(iakeys, ibkeys)
     j = intersect(jakeys, jbkeys)
     if length(i) > 0 && length(j) > 0
@@ -202,8 +211,6 @@ function _diff(A::AbstractMatrix, B::AbstractMatrix, ia::OrderedDict,
     end
 
     # Compute added values
-    addival = view(Matrix{T}(undef, 0, 0), :, :)
-    addjval = view(Matrix{T}(undef, 0, 0), :, :)
     i = setdiff(ibkeys, iakeys)
     j = setdiff(jbkeys, jakeys)
     if length(i) > 0 && length(j) <= 0
@@ -225,8 +232,6 @@ function _diff(A::AbstractMatrix, B::AbstractMatrix, ia::OrderedDict,
     end
 
     # Compute removed values
-    remival = view(Matrix{T}(undef, 0, 0), :, :)
-    remjval = view(Matrix{T}(undef, 0, 0), :, :)
     i = setdiff(iakeys, ibkeys)
     j = setdiff(jakeys, jbkeys)
     if length(i) > 0 && length(j) <= 0
