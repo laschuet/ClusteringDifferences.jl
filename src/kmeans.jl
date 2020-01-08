@@ -27,7 +27,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
     c = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
     push!(cs, c)
 
-    DIST = pairwise(dist, M, X, dims=2)
+    distances = pairwise(dist, M, X, dims=2)
     pre_objcosts = 0
     i = 1
     while i <= maxiter
@@ -37,7 +37,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
         # Update cluster assignments, objective function costs, and center
         # coordinates per cluster
         @inbounds for j = 1:n
-            cost, y = findmin(view(DIST, :, j))
+            cost, y = findmin(view(distances, :, j))
             Y[y, j] = 1
             objcosts += cost
             M[:, y] += X[:, j]
@@ -48,7 +48,7 @@ function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
             M[:, j] /= sum(Y[j, :])
         end
 
-        pairwise!(DIST, dist, M, X, dims=2)
+        pairwise!(distances, dist, M, X, dims=2)
 
         c = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
         push!(cs, c)

@@ -59,11 +59,11 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
     # Derive neighborhood sets, and initialize the cluster centers
     transitive_closure!(C)
 
-    DIST = pairwise(dist, M, X, dims=2)
+    distances = pairwise(dist, M, X, dims=2)
     pre_objcosts = 0
     i = 1
     while i <= maxiter
-        COST = DIST
+        costs = distances
         objcosts = 0
         fill!(Y, zero(eltype(Y)))
         fill!(M, zero(eltype(M)))
@@ -74,11 +74,11 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
             mustlinkto = findall(val -> val == 1, cj)
             for instance in mustlinkto
                 y = argmax(view(Y, :, instance))
-                COST[, j] += W[, ] * 1
+                costs[, j] += W[, ] * 1
             end
             cannotlink = findall(val -> val == -1, cj)
 
-            cost, y = findmin(view(COST, :, j))
+            cost, y = findmin(view(costs, :, j))
             Y[y, j] = 1
             objcosts += cost
             M[:, y] += X[:, j]
@@ -89,7 +89,7 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
             M[:, j] /= sum(Y[j, :])
         end
 
-        pairwise!(DIST, dist, M, X, dims=2)
+        pairwise!(distances, dist, M, X, dims=2)
 
         c = PartitionalClustering(X, C, W, Y, M)
         push!(cs, c)

@@ -20,18 +20,18 @@
     end
 
     @testset "matrix difference" begin
-        MOD = [0 0; 1 2]
+        mod = [0 0; 1 2]
         E = Matrix(undef, 0, 0)
-        a = MatrixDifference(MOD, view([2 3], :, :), [4 5], E, E)
-        b = MatrixDifference(sparse(MOD), [2 3], view([4 5], :, :), E, E)
-        c = MatrixDifference(sparse(MOD), [2 3], view([4 5], :, :), E, E)
+        a = MatrixDifference(mod, view([2 3], :, :), [4 5], E, E)
+        b = MatrixDifference(sparse(mod), [2 3], view([4 5], :, :), E, E)
+        c = MatrixDifference(sparse(mod), [2 3], view([4 5], :, :), E, E)
 
         @test isa(a, MatrixDifference) && isa(b, MatrixDifference)
-        @test (a.MODVAL == MOD && a.ADDIVAL == [2 3] && a.ADDJVAL == [4 5]
-                && a.REMIVAL == E && a.REMJVAL == E)
-        @test (b.MODVAL == sparse(MOD) && b.ADDIVAL == [2 3]
-                && b.ADDJVAL == view([4 5], :, :) && b.REMIVAL == E
-                && c.REMJVAL == E)
+        @test (a.modval == mod && a.addival == [2 3] && a.addjval == [4 5]
+                && a.remival == E && a.remjval == E)
+        @test (b.modval == sparse(mod) && b.addival == [2 3]
+                && b.addjval == view([4 5], :, :) && b.remival == E
+                && c.remjval == E)
 
         @test a == a
         @test a == b && b == a
@@ -40,7 +40,7 @@
         @test hash(a) == hash(a)
         @test a == b && hash(a) == hash(b)
 
-        @test modified(a) == MOD
+        @test modified(a) == mod
         @test added(a) == ([2 3], [4 5])
         @test added(a, 1) == [2 3] && added(a, 2) == [4 5]
         @test removed(a) == (E, E)

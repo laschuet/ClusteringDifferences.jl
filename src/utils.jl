@@ -44,36 +44,36 @@ hash(a::SetDifference, h::UInt) =
 Matrix difference.
 """
 struct MatrixDifference{Tm<:AbstractMatrix,Tai<:AbstractMatrix,Taj<:AbstractMatrix,Tri<:AbstractMatrix,Trj<:AbstractMatrix}
-    MODVAL::Tm
-    ADDIVAL::Tai
-    ADDJVAL::Taj
-    REMIVAL::Tri
-    REMJVAL::Trj
+    modval::Tm
+    addival::Tai
+    addjval::Taj
+    remival::Tri
+    remjval::Trj
 end
 
 # Matrix difference equality operator
 ==(a::MatrixDifference, b::MatrixDifference) =
-    (a.MODVAL == b.MODVAL && a.ADDIVAL == b.ADDIVAL && a.ADDJVAL == b.ADDJVAL
-            && a.REMIVAL == b.REMIVAL && a.REMJVAL == b.REMJVAL)
+    (a.modval == b.modval && a.addival == b.addival && a.addjval == b.addjval
+            && a.remival == b.remival && a.remjval == b.remjval)
 
 # Matrix difference hash code
 hash(a::MatrixDifference, h::UInt) =
-    hash(a.MODVAL, hash(a.ADDIVAL, hash(a.ADDJVAL, hash(a.REMIVAL,
-        hash(a.REMJVAL, hash(:MatrixDifference, h))))))
+    hash(a.modval, hash(a.addival, hash(a.addjval, hash(a.remival,
+        hash(a.remjval, hash(:MatrixDifference, h))))))
 
 """
     modified(a::MatrixDifference)
 
 Access the modified elements.
 """
-modified(a::MatrixDifference) = a.MODVAL
+modified(a::MatrixDifference) = a.modval
 
 """
     added(a::MatrixDifference)
 
 Access the tuple containing the added elements per dimension.
 """
-added(a::MatrixDifference) = a.ADDIVAL, a.ADDJVAL
+added(a::MatrixDifference) = a.addival, a.addjval
 
 """
     added(a::MatrixDifference, dim::Integer)
@@ -90,7 +90,7 @@ end
 
 Access the tuple containing the removed elements per dimension.
 """
-removed(a::MatrixDifference) = a.REMIVAL, a.REMJVAL
+removed(a::MatrixDifference) = a.remival, a.remjval
 
 """
     removed(a::MatrixDifference, dim::Integer)
