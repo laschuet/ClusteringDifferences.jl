@@ -5,7 +5,7 @@
         c = SetDifference([1], [2, 3], [4, 5])
 
         @test isa(a, SetDifference)
-        @test a.comval == [1] && a.addval == [2, 3] && a.remval == [4, 5]
+        @test a.comvals == [1] && a.addvals == [2, 3] && a.remvals == [4, 5]
 
         @test a == a
         @test a == b && b == a
@@ -27,11 +27,11 @@
         c = MatrixDifference(sparse(mod), [2 3], view([4 5], :, :), E, E)
 
         @test isa(a, MatrixDifference) && isa(b, MatrixDifference)
-        @test (a.modval == mod && a.addival == [2 3] && a.addjval == [4 5]
-                && a.remival == E && a.remjval == E)
-        @test (b.modval == sparse(mod) && b.addival == [2 3]
-                && b.addjval == view([4 5], :, :) && b.remival == E
-                && c.remjval == E)
+        @test (a.modvals == mod && a.addivals == [2 3] && a.addjvals == [4 5]
+                && a.remivals == E && a.remjvals == E)
+        @test (b.modvals == sparse(mod) && b.addivals == [2 3]
+                && b.addjvals == view([4 5], :, :) && b.remivals == E
+                && c.remjvals == E)
 
         @test a == a
         @test a == b && b == a

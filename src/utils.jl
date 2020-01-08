@@ -4,9 +4,9 @@
 Set difference.
 """
 struct SetDifference{T}
-    comval::Vector{T}
-    addval::Vector{T}
-    remval::Vector{T}
+    comvals::Vector{T}
+    addvals::Vector{T}
+    remvals::Vector{T}
 end
 
 """
@@ -14,29 +14,29 @@ end
 
 Access the common elements.
 """
-common(a::SetDifference) = a.comval
+common(a::SetDifference) = a.comvals
 
 """
     added(a::SetDifference)
 
 Access the added elements.
 """
-added(a::SetDifference) = a.addval
+added(a::SetDifference) = a.addvals
 
 """
     removed(a::SetDifference)
 
 Access the removed elements.
 """
-removed(a::SetDifference) = a.remval
+removed(a::SetDifference) = a.remvals
 
 # Set difference equality operator
 ==(a::SetDifference, b::SetDifference) =
-    a.comval == b.comval && a.addval == b.addval && a.remval == b.remval
+    a.comvals == b.comvals && a.addvals == b.addvals && a.remvals == b.remvals
 
 # Set difference hash code
 hash(a::SetDifference, h::UInt) =
-    hash(a.comval, hash(a.addval, hash(a.remval, hash(:SetDifference, h))))
+    hash(a.comvals, hash(a.addvals, hash(a.remvals, hash(:SetDifference, h))))
 
 """
     MatrixDifference{Tm<:AbstractMatrix,Tai<:AbstractMatrix,Taj<:AbstractMatrix,Tri<:AbstractMatrix,Trj<:AbstractMatrix}
@@ -44,36 +44,37 @@ hash(a::SetDifference, h::UInt) =
 Matrix difference.
 """
 struct MatrixDifference{Tm<:AbstractMatrix,Tai<:AbstractMatrix,Taj<:AbstractMatrix,Tri<:AbstractMatrix,Trj<:AbstractMatrix}
-    modval::Tm
-    addival::Tai
-    addjval::Taj
-    remival::Tri
-    remjval::Trj
+    modvals::Tm
+    addivals::Tai
+    addjvals::Taj
+    remivals::Tri
+    remjvals::Trj
 end
 
 # Matrix difference equality operator
 ==(a::MatrixDifference, b::MatrixDifference) =
-    (a.modval == b.modval && a.addival == b.addival && a.addjval == b.addjval
-            && a.remival == b.remival && a.remjval == b.remjval)
+    (a.modvals == b.modvals && a.addivals == b.addivals
+            && a.addjvals == b.addjvals && a.remivals == b.remivals
+            && a.remjvals == b.remjvals)
 
 # Matrix difference hash code
 hash(a::MatrixDifference, h::UInt) =
-    hash(a.modval, hash(a.addival, hash(a.addjval, hash(a.remival,
-        hash(a.remjval, hash(:MatrixDifference, h))))))
+    hash(a.modvals, hash(a.addivals, hash(a.addjvals, hash(a.remivals,
+        hash(a.remjvals, hash(:MatrixDifference, h))))))
 
 """
     modified(a::MatrixDifference)
 
 Access the modified elements.
 """
-modified(a::MatrixDifference) = a.modval
+modified(a::MatrixDifference) = a.modvals
 
 """
     added(a::MatrixDifference)
 
 Access the tuple containing the added elements per dimension.
 """
-added(a::MatrixDifference) = a.addival, a.addjval
+added(a::MatrixDifference) = a.addivals, a.addjvals
 
 """
     added(a::MatrixDifference, dim::Integer)
@@ -90,7 +91,7 @@ end
 
 Access the tuple containing the removed elements per dimension.
 """
-removed(a::MatrixDifference) = a.remival, a.remjval
+removed(a::MatrixDifference) = a.remivals, a.remjvals
 
 """
     removed(a::MatrixDifference, dim::Integer)
@@ -184,14 +185,14 @@ end
 function _diff(A::AbstractMatrix, B::AbstractMatrix, ia::OrderedDict,
             ja::OrderedDict, ib::OrderedDict, jb::OrderedDict)
     T = promote_type(eltype(A), eltype(B))
-    modval = sparse([], [], T[])
-    addival = view(Matrix{T}(undef, 0, 0), :, :)
-    addjval = view(Matrix{T}(undef, 0, 0), :, :)
-    remival = view(Matrix{T}(undef, 0, 0), :, :)
-    remjval = view(Matrix{T}(undef, 0, 0), :, :)
+    modvals = sparse([], [], T[])
+    addivals = view(Matrix{T}(undef, 0, 0), :, :)
+    addjvals = view(Matrix{T}(undef, 0, 0), :, :)
+    remivals = view(Matrix{T}(undef, 0, 0), :, :)
+    remjvals = view(Matrix{T}(undef, 0, 0), :, :)
 
     if size(A) == (0, 0) || size(B) == (0, 0)
-        return modval, addival, addjval, remival, remjval
+        return modvals, addivals, addjvals, remivals, remjvals
     end
 
     iakeys = collect(keys(ia))
@@ -207,7 +208,7 @@ function _diff(A::AbstractMatrix, B::AbstractMatrix, ia::OrderedDict,
         ja2 = replace(j, ja)
         ib2 = replace(i, ib)
         jb2 = replace(j, jb)
-        modval = sparse(view(A, ia2, ja2) - view(B, ib2, jb2))
+        modvals = sparse(view(A, ia2, ja2) - view(B, ib2, jb2))
     end
 
     # Compute added values
@@ -216,19 +217,19 @@ function _diff(A::AbstractMatrix, B::AbstractMatrix, ia::OrderedDict,
     if length(i) > 0 && length(j) <= 0
         # Only rows have been added
         replace!(i, ib)
-        addival = view(B, i, :)
+        addivals = view(B, i, :)
     end
     if length(i) <= 0 && length(j) > 0
         # Only columns have been added
         replace!(j, jb)
-        addjval = view(B, :, j)
+        addjvals = view(B, :, j)
     end
     if length(i) > 0 && length(j) > 0
         # Rows and columns have been added
         replace!(i, ib)
         replace!(j, jb)
-        addival = view(B, i, :)
-        addjval = view(B, :, j)
+        addivals = view(B, i, :)
+        addjvals = view(B, :, j)
     end
 
     # Compute removed values
@@ -237,20 +238,20 @@ function _diff(A::AbstractMatrix, B::AbstractMatrix, ia::OrderedDict,
     if length(i) > 0 && length(j) <= 0
         # Only rows have been removed
         replace!(i, ia)
-        remival = view(A, i, :)
+        remivals = view(A, i, :)
     end
     if length(i) <= 0 && length(j) > 0
         # Only columns have been removed
         replace!(j, ja)
-        remjval = view(A, :, j)
+        remjvals = view(A, :, j)
     end
     if length(i) > 0 && length(j) > 0
         # Rows and columns have been removed
         replace!(i, ia)
         replace!(j, ja)
-        remival = view(A, i, :)
-        remjval = view(A, :, j)
+        remivals = view(A, i, :)
+        remjvals = view(A, :, j)
     end
 
-    return modval, addival, addjval, remival, remjval
+    return modvals, addivals, addjvals, remivals, remjvals
 end
