@@ -1,8 +1,8 @@
-using VAIML
+using ClusteringDifference
 using SparseArrays
 using Test
 
-@testset "VAIML" begin
+@testset "ClusteringDifference" begin
     include("utils.jl")
     include("clustering.jl")
     include("difference.jl")

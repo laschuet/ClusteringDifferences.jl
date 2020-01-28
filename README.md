@@ -1,13 +1,13 @@
-# VAIML.jl
+# ClusteringDifference.jl
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/laschuet/VAIML.jl/blob/master/LICENSE.txt)
-[![build status](https://travis-ci.org/laschuet/VAIML.jl.svg?branch=master)](https://travis-ci.org/laschuet/VAIML.jl)
-[![build status](https://ci.appveyor.com/api/projects/status/2u30pxbafyit4m4a/branch/master?svg=true)](https://ci.appveyor.com/project/laschuet/vaiml-jl/branch/master)
-[![coveralls status](https://coveralls.io/repos/github/laschuet/VAIML.jl/badge.svg?branch=master)](https://coveralls.io/github/laschuet/VAIML.jl?branch=master)
-[![codecov status](https://codecov.io/gh/laschuet/VAIML.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/laschuet/VAIML.jl)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/laschuet/ClusteringDifference.jl/blob/master/LICENSE.txt)
+[![build status](https://travis-ci.org/laschuet/ClusteringDifference.jl.svg?branch=master)](https://travis-ci.org/laschuet/ClusteringDifference.jl)
+[![build status](https://ci.appveyor.com/api/projects/status/oi6v49lt5rqhqc8i/branch/master?svg=true)](https://ci.appveyor.com/project/laschuet/clusteringdifference-jl/branch/master)
+[![coveralls status](https://coveralls.io/repos/github/laschuet/ClusteringDifference.jl/badge.svg?branch=master)](https://coveralls.io/github/laschuet/ClusteringDifference.jl?branch=master)
+[![codecov status](https://codecov.io/gh/laschuet/ClusteringDifference.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/laschuet/ClusteringDifference.jl)
 
-Visual analytics for interpretable machine learning.
+Clustering and clustering difference models.
 
 ## License
 
-VAIML.jl is licensed under the [MIT License](./LICENSE.txt).
+ClusteringDifference.jl is licensed under the [MIT License](./LICENSE.txt).
