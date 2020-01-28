@@ -1,4 +1,4 @@
-module VAIML
+module ClusteringDifference
 
 using Distances
 using OrderedCollections
@@ -43,4 +43,4 @@ include("difference.jl")
 include("kmeans.jl")
 #include("pckmeans.jl")
 
-end # module VAIML
+end # module
