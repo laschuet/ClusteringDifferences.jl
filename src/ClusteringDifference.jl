@@ -1,11 +1,10 @@
 module ClusteringDifference
 
+using DifferenceBase
 using Distances
-using OrderedCollections
 using SparseArrays
 
 import Base: -, ==
-import Base: replace, replace!
 import Base: diff, hash, instances, show
 
 export
@@ -26,18 +25,10 @@ export
     backwarddiff,
     forwarddiff,
     # kmeans.jl
-    kmeans,
+    kmeans
     # pckmeans.jl
     #pckmeans
-    # utils.jl
-    MatrixDifference,
-    SetDifference,
-    added,
-    common,
-    modified,
-    removed
 
-include("utils.jl")
 include("clustering.jl")
 include("difference.jl")
 include("kmeans.jl")
