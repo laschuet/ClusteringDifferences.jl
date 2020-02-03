@@ -1,4 +1,4 @@
-module ClusteringDifference
+module ClusteringDifferences
 
 using DifferenceBase
 using Distances

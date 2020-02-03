@@ -1,9 +1,9 @@
-using ClusteringDifference
+using ClusteringDifferences
 using DifferenceBase
 using SparseArrays
 using Test
 
-@testset "ClusteringDifference" begin
+@testset "ClusteringDifferences" begin
     include("clustering.jl")
     include("difference.jl")
     include("kmeans.jl")
