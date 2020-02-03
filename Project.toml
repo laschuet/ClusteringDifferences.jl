@@ -1,6 +1,7 @@
 name = "ClusteringDifference"
 uuid = "c23e6658-3847-4c7a-a381-acbcfe00cf6d"
 authors = ["Lars Schütz"]
+version = "0.1.0"
 
 [deps]
 DifferenceBase = "0b0e09cb-e13c-4ad2-9b92-e9d81af820a1"
