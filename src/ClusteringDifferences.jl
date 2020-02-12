@@ -2,7 +2,6 @@ module ClusteringDifferences
 
 using DifferencesBase
 using Distances
-using SparseArrays
 
 import Base: -, ==
 import Base: diff, hash, instances, show
