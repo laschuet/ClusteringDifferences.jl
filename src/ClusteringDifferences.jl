@@ -1,6 +1,6 @@
 module ClusteringDifferences
 
-using DifferenceBase
+using DifferencesBase
 using Distances
 using SparseArrays
 
