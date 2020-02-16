@@ -1,5 +1,5 @@
 using ClusteringDifferences
-using DifferenceBase
+using DifferencesBase
 using SparseArrays
 using Test
 
