@@ -44,8 +44,8 @@ hash(a::PartitionalClusteringDifference, h::UInt) =
 # Partitional clustering subtraction operator
 function -(a::PartitionalClustering, b::PartitionalClustering)
     X = MatrixDifference(diff(a.X, b.X, a.i, a.j, b.i, b.j)...)
-    i = SetDifference(diff(a.i, b.i)...)
-    j = SetDifference(diff(a.j, b.j)...)
+    i = SetDifference(diff(Set(a.i), Set(b.i))...)
+    j = SetDifference(diff(Set(a.j), Set(b.j))...)
     C = MatrixDifference(diff(a.C, b.C, a.j, a.j, b.j, b.j)...)
     W = MatrixDifference(diff(a.W, b.W, a.j, a.j, b.j, b.j)...)
     ayi = collect(1:size(a.Y, 1))

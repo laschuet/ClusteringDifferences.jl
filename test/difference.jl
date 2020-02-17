@@ -5,27 +5,27 @@
     b = PartitionalClustering([0 1 1; 1 0 1], [1, 2], [1, 2, 3],
             [0 0 -1; 0 0 -1; -1 -1 0], [0 0 1; 0 0 1; 1 1 0],
             [1 0 0; 0 1 0; 0 0 1], [0 1 1; 1 0 1])
-    E = Matrix(undef, 0, 0)
+    E = Vector(undef, 0)
     # a - b
-    X = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
+    X = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E)
     i = SetDifference([1, 2], Int[], Int[])
     j = SetDifference([1, 2, 3], Int[], Int[])
-    C = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E, E, E)
-    W = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E, E, E)
-    Y = MatrixDifference(sparse([0 0 0.5; 0 0 0.5]), [0 0 1], E, E, E)
-    M = MatrixDifference(sparse([0 0; 0 0]), E, reshape([1, 1], :, 1), E, E)
+    C = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E)
+    W = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E)
+    Y = MatrixDifference(sparse([0 0 0.5; 0 0 0.5]), [0, 0, 1], E)
+    M = MatrixDifference(sparse([0 0; 0 0]), [1, 1], E)
     k = -1
     cd = PartitionalClusteringDifference(X, i, j, C, W, Y, M, k)
     cd2 = PartitionalClusteringDifference(X, i, j, C, W, Y, M, k)
     cd3 = PartitionalClusteringDifference(X, i, j, C, W, Y, M, k)
     # b - a
-    X2 = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
+    X2 = MatrixDifference(sparse([0 0 0; 0 0 0]), E, E)
     i2 = SetDifference([1, 2], Int[], Int[])
     j2 = SetDifference([1, 2, 3], Int[], Int[])
-    C2 = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E, E, E)
-    W2 = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E, E, E)
-    Y2 = MatrixDifference(sparse([0 0 -0.5; 0 0 -0.5]), E, E, [0 0 1], E)
-    M2 = MatrixDifference(sparse([0 0; 0 0]), E, E, E, reshape([1, 1], :, 1))
+    C2 = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E)
+    W2 = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E)
+    Y2 = MatrixDifference(sparse([0 0 -0.5; 0 0 -0.5]), E, [0, 0, 1])
+    M2 = MatrixDifference(sparse([0 0; 0 0]), E, [1, 1])
     k2 = 1
 
     @testset "constructors" begin
@@ -48,13 +48,13 @@
     @testset "subtraction operator" begin
         cd = a - a
         @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.X == MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
+        @test (cd.X == MatrixDifference(sparse([0 0 0; 0 0 0]), E, E)
                 && cd.i == SetDifference([1, 2], Int[], Int[])
                 && cd.j == SetDifference([1, 2, 3], Int[], Int[])
-                && cd.C == MatrixDifference(sparse([0 0 0; 0 0 0; 0 0 0]), E, E, E, E)
-                && cd.W == MatrixDifference(sparse([0 0 0; 0 0 0; 0 0 0]), E, E, E, E)
-                && cd.Y == MatrixDifference(sparse([0 0 0; 0 0 0]), E, E, E, E)
-                && cd.M == MatrixDifference(sparse([0 0; 0 0]), E, E, E, E)
+                && cd.C == MatrixDifference(sparse([0 0 0; 0 0 0; 0 0 0]), E, E)
+                && cd.W == MatrixDifference(sparse([0 0 0; 0 0 0; 0 0 0]), E, E)
+                && cd.Y == MatrixDifference(sparse([0 0 0; 0 0 0]), E, E)
+                && cd.M == MatrixDifference(sparse([0 0; 0 0]), E, E)
                 && cd.k == 0)
         cd = a - b
         @test isa(cd, PartitionalClusteringDifference)
