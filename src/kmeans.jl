@@ -23,20 +23,20 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
     C = Matrix{Int}(undef, 0, 0)
     W = Matrix{Float64}(undef, 0, 0)
     Y = zeros(Float64, k, n)
-    M = convert(Matrix{Float64}, M)
+    M2 = convert(Matrix{Float64}, M)
 
     pcs = Vector{PartitionalClustering}(undef, 0)
     pc = PartitionalClustering(copy(X), copy(r), copy(c), copy(C), copy(W),
-            copy(Y), copy(M))
+            copy(Y), copy(M2))
     push!(pcs, pc)
 
-    distances = pairwise(dist, M, X, dims=2)
+    distances = pairwise(dist, M2, X, dims=2)
     pre_objcosts = 0
     i = 1
     while i <= maxiter
         objcosts = 0
         fill!(Y, zero(eltype(Y)))
-        fill!(M, zero(eltype(M)))
+        fill!(M2, zero(eltype(M2)))
 
         # Update cluster assignments, objective function costs, and cluster
         # centers (part 1/2)
@@ -44,18 +44,19 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
             cost, y = findmin(view(distances, :, j))
             Y[y, j] = 1
             objcosts += cost
-            M[:, y] += X[:, j]
+            M2[:, y] += X[:, j]
         end
 
         # Update cluster centers (part 2/2)
         @inbounds for j = 1:k
-            M[:, j] /= sum(Y[j, :])
+            sz = sum(Y[j, :])
+            M2[:, j] = iszero(sz) ? M[:, j] : M2[:, j] / sz
         end
 
-        pairwise!(distances, dist, M, X, dims=2)
+        pairwise!(distances, dist, M2, X, dims=2)
 
         pc = PartitionalClustering(copy(X), copy(r), copy(c), copy(C), copy(W),
-                copy(Y), copy(M))
+                copy(Y), copy(M2))
         push!(pcs, pc)
 
         # Check for convergence
