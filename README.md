@@ -8,6 +8,14 @@
 
 Clustering and clustering difference models.
 
+## Installation
+
+Open a Julia REPL and enter
+
+```julia
+] add ClusteringDifferences
+```
+
 ## License
 
 ClusteringDifferences.jl is licensed under the [MIT License](./LICENSE.txt).
