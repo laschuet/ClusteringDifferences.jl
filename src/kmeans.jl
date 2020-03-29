@@ -67,3 +67,17 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
 
     return pcs
 end
+
+"""
+    kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real}; <keyword arguments>)
+
+Like [`kmeans`](@ref), but automatically generate `r` and `c` according to the
+size of `X`.
+"""
+function kmeans(X::AbstractMatrix{<:Real}, M::AbstractMatrix{<:Real};
+                maxiter::Int=256, dist::SemiMetric=SqEuclidean(),
+                ϵ::AbstractFloat=1.0e-6)
+    r = collect(1:size(X, 1))
+    c = collect(1:size(X, 2))
+    return kmeans(X, r, c, M, maxiter=maxiter, dist=dist, ϵ=ϵ)
+end
