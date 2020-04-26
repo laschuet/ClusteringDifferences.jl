@@ -11,7 +11,6 @@ abstract type AbstractClusteringDifference end
 Difference between two partitional clusterings.
 """
 struct PartitionalClusteringDifference <: AbstractClusteringDifference
-    X::MatrixDifference
     i::SetDifference{Int}
     j::SetDifference{Int}
     C::MatrixDifference
@@ -20,30 +19,28 @@ struct PartitionalClusteringDifference <: AbstractClusteringDifference
     M::MatrixDifference
     k::Int
 
-    function PartitionalClusteringDifference(X::MatrixDifference,
-                                            i::SetDifference{Int},
+    function PartitionalClusteringDifference(i::SetDifference{Int},
                                             j::SetDifference{Int},
                                             C::MatrixDifference,
                                             W::MatrixDifference,
                                             Y::MatrixDifference,
                                             M::MatrixDifference, k::Integer)
-        return new(X, i, j, C, W, Y, M, k)
+        return new(i, j, C, W, Y, M, k)
     end
 end
 
 # Partitional clustering difference equality operator
 ==(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference) =
-    (a.X == b.X && a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W
-            && a.Y == b.Y && a.M == b.M && a.k == b.k)
+    (a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W && a.Y == b.Y
+            && a.M == b.M && a.k == b.k)
 
 # Compute hash code
 hash(a::PartitionalClusteringDifference, h::UInt) =
-    hash(a.X, hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
-        hash(a.k, hash(:PartitionalClusteringDifference, h)))))))))
+    hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.M, hash(a.k,
+        hash(:PartitionalClusteringDifference, h))))))))
 
 # Partitional clustering subtraction operator
 function -(a::PartitionalClustering, b::PartitionalClustering)
-    X = MatrixDifference(diff(a.X, b.X, a.i, a.j, b.i, b.j)...)
     i = SetDifference(diff(Set(a.i), Set(b.i))...)
     j = SetDifference(diff(Set(a.j), Set(b.j))...)
     C = MatrixDifference(diff(a.C, b.C, a.j, a.j, b.j, b.j)...)
@@ -55,7 +52,7 @@ function -(a::PartitionalClustering, b::PartitionalClustering)
     bmj = collect(1:size(b.M, 2))
     M = MatrixDifference(diff(a.M, b.M, a.i, amj, b.i, bmj)...)
     k = size(a.M, 2) - size(b.M, 2)
-    return PartitionalClusteringDifference(X, i, j, C, W, Y, M, k)
+    return PartitionalClusteringDifference(i, j, C, W, Y, M, k)
 end
 
 """

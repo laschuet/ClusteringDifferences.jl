@@ -1,24 +1,19 @@
 @testset "clustering" begin
     @testset "partitional clustering" begin
-        X = [0 1 1; 1 0 1]
         i = [10, 20]
         j = [2, 3, 5]
         C = [0 0 0; 0 0 0; 0 0 0]
         W = [0 0 0; 0 0 0; 0 0 0]
         Y = [1 0 0.5; 0 1 0.5]
         M = [0 1; 1 0]
-        a = PartitionalClustering(X, i, j, C, W, Y, M)
-        b = PartitionalClustering(X, i, j, C, W, Y, M)
-        c = PartitionalClustering(X, i, j, C, W, Y, M)
+        a = PartitionalClustering(i, j, C, W, Y, M)
+        b = PartitionalClustering(i, j, C, W, Y, M)
+        c = PartitionalClustering(i, j, C, W, Y, M)
 
         @testset "constructors" begin
             @test isa(a, PartitionalClustering)
-            @test (a.X == X && a.i == i && a.j == j && a.C == C && a.W == W
-                    && a.Y == Y && a.M == M)
-            d = PartitionalClustering(X, C, W, Y, M)
-            @test isa(d, PartitionalClustering)
-            @test (d.X == X && d.i == [1, 2] && d.j == [1, 2, 3] && d.C == C
-                    && d.W == W && d.Y == Y && d.M == M)
+            @test (a.i == i && a.j == j && a.C == C && a.W == W && a.Y == Y
+                    && a.M == M)
         end
 
         @testset "equality operator" begin
@@ -33,7 +28,6 @@
         end
 
         @testset "accessors" begin
-            @test data(a) == X
             @test constraints(a) == C
             @test features(a) == i
             @test instances(a) == j
@@ -45,24 +39,18 @@
     end
 
     @testset "hierarchical clustering" begin
-        X = [1 0 0; 2 2 3]
         i = [10, 20]
         j = [2, 3, 5]
         C = rand([-1, 0, 1], 3, 3, 3)
         W = rand(3, 3, 3) .+ 1
-        a = HierarchicalClustering(X, i, j, C, W)
+        a = HierarchicalClustering(i, j, C, W)
 
         @testset "constructors" begin
             @test isa(a, HierarchicalClustering)
-            @test a.X == X && a.i == i && a.j == j && a.C == C && a.W == W
-            b = HierarchicalClustering(X, C, W)
-            @test isa(b, HierarchicalClustering)
-            @test (b.X == X && b.i == [1, 2] && b.j == [1, 2, 3] && b.C == C
-                    && b.W == W)
+            @test a.i == i && a.j == j && a.C == C && a.W == W
         end
 
         @testset "accessors" begin
-            @test data(a) == X
             @test constraints(a) == C
             @test weights(a) == W
         end

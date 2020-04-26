@@ -12,7 +12,6 @@
     pc2 = pcs2[end]
 
     @test isa(pcs1, Vector{PartitionalClustering})
-    @test pc1.X == pc2.X == X
     @test size(pc1.C) == size(pc2.C) == (0, 0)
     @test eltype(pc1.C) == eltype(pc2.C) == Int
     @test size(pc1.W) == size(pc2.W) == (0, 0)

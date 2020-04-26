@@ -14,7 +14,6 @@ export
     assignments,
     centers,
     constraints,
-    data,
     features,
     θ,
     weights,
