@@ -10,47 +10,44 @@ abstract type AbstractClustering end
 
 Partitional clustering.
 """
-struct PartitionalClustering{Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
+struct PartitionalClustering{Tc<:Integer,Tw<:Real,Ty<:Real} <: AbstractClustering
     i::Vector{Int}
     j::Vector{Int}
     C::Matrix{Tc}
     W::Matrix{Tw}
     Y::Matrix{Ty}
-    M::Matrix{Tm}
+    p::NamedTuple
 
-    function PartitionalClustering{Tc,Tw,Ty,Tm}(i::Vector{Int}, j::Vector{Int},
-                                                C::Matrix{Tc}, W::Matrix{Tw},
-                                                Y::Matrix{Ty}, M::Matrix{Tm}) where {Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real}
-        nc = size(C, 2)
-        nw = size(W, 2)
-        ky, ny = size(Y)
-        mm, km = size(M)
-        nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
-        ky == km || throw(DimensionMismatch("number of clusters must match"))
-        return new(i, j, C, W, Y, M)
+    function PartitionalClustering{Tc,Tw,Ty}(i::Vector{Int}, j::Vector{Int},
+                                            C::Matrix{Tc}, W::Matrix{Tw},
+                                            Y::Matrix{Ty}, p::NamedTuple) where {Tc<:Integer,Tw<:Real,Ty<:Real}
+        c = size(C, 2)
+        w = size(W, 2)
+        c == w || throw(DimensionMismatch("dimensions of constraints and weights must match"))
+        return new(i, j, C, W, Y, p)
     end
 end
 PartitionalClustering(i::Vector{Int}, j::Vector{Int}, C::Matrix{Tc},
-                    W::Matrix{Tw}, Y::Matrix{Ty}, M::Matrix{Tm}) where {Tc,Tw,Ty,Tm} =
-    PartitionalClustering{Tc,Tw,Ty,Tm}(i, j, C, W, Y, M)
+                    W::Matrix{Tw}, Y::Matrix{Ty}, p::NamedTuple) where {Tc,Tw,Ty} =
+    PartitionalClustering{Tc,Tw,Ty}(i, j, C, W, Y, p)
 
 #=
 function PartitionalClustering(C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty},
-                            M::Matrix{Tm}) where {Tc,Tw,Ty,Tm}
+                            p::NamedTuple) where {Tc,Tw,Ty}
     i = collect(1:size(X, 1))
     j = collect(1:size(X, 2))
-    return PartitionalClustering(i, j, C, W, Y, M)
+    return PartitionalClustering(i, j, C, W, Y, p)
 end
 =#
 
 # Partitional clustering equality operator
 ==(a::PartitionalClustering, b::PartitionalClustering) =
     (a.i == b.i && a.j == b.j && a.C == b.C && a.W == b.W && a.Y == b.Y
-            && a.M == b.M)
+            && a.p == b.p)
 
 # Compute hash code
 hash(a::PartitionalClustering, h::UInt) =
-    hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.M,
+    hash(a.i, hash(a.j, hash(a.C, hash(a.W, hash(a.Y, hash(a.p,
         hash(:PartitionalClustering, h)))))))
 
 """
@@ -66,9 +63,9 @@ struct HierarchicalClustering{Tc<:Integer,Tw<:Real} <: AbstractClustering
 
     function HierarchicalClustering{Tc,Tw}(i::Vector{Int}, j::Vector{Int},
                                         C::Array{Tc,3}, W::Array{Tw,3}) where {Tc<:Integer,Tw<:Real}
-        nc = size(C, 2)
-        nw = size(W, 2)
-        nc == nw || throw(DimensionMismatch("dimensions of constraints and weights must match"))
+        c = size(C, 2)
+        w = size(W, 2)
+        c == w || throw(DimensionMismatch("dimensions of constraints and weights must match"))
         return new(i, j, C, W)
     end
 end
@@ -120,15 +117,10 @@ Access the assignments of the data instances to the clusters.
 assignments(a::PartitionalClustering) = a.Y
 
 """
-    centers(a::PartitionalClustering)
-
-Access the centers.
-"""
-centers(a::PartitionalClustering) = a.M
-
-"""
+    parameters(c::PartitionalClustering)
     θ(c::PartitionalClustering)
 
 Access the parameters.
 """
-θ(a::PartitionalClustering) = (a.M)
+parameters(a::PartitionalClustering) = a.p
+const θ = parameters

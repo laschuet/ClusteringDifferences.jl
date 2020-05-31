@@ -12,9 +12,10 @@ export
     HierarchicalClustering,
     PartitionalClustering,
     assignments,
-    centers,
     constraints,
     features,
+    instances,
+    parameters,
     θ,
     weights,
     # difference.jl

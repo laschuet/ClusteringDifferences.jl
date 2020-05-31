@@ -5,15 +5,15 @@
         C = [0 0 0; 0 0 0; 0 0 0]
         W = [0 0 0; 0 0 0; 0 0 0]
         Y = [1 0 0.5; 0 1 0.5]
-        M = [0 1; 1 0]
-        a = PartitionalClustering(i, j, C, W, Y, M)
-        b = PartitionalClustering(i, j, C, W, Y, M)
-        c = PartitionalClustering(i, j, C, W, Y, M)
+        p = (μ=[0 1; 1 0],)
+        a = PartitionalClustering(i, j, C, W, Y, p)
+        b = PartitionalClustering(i, j, C, W, Y, p)
+        c = PartitionalClustering(i, j, C, W, Y, p)
 
         @testset "constructors" begin
             @test isa(a, PartitionalClustering)
             @test (a.i == i && a.j == j && a.C == C && a.W == W && a.Y == Y
-                    && a.M == M)
+                    && a.p == p)
         end
 
         @testset "equality operator" begin
@@ -33,8 +33,7 @@
             @test instances(a) == j
             @test weights(a) == W
             @test assignments(a) == Y
-            @test centers(a) == M
-            @test θ(a) == (M)
+            @test parameters(a) == θ(a) == p
         end
     end
 
