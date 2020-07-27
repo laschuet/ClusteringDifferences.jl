@@ -10,8 +10,7 @@
     C = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E)
     W = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E)
     Y = MatrixDifference(sparse([0 0 0.5; 0 0 0.5]), [0, 0, 1], E)
-    p = NamedTupleDifference((μ=(sparse([0 0; 0 0]), [1, 1], E),),
-            NamedTuple(), NamedTuple())
+    p = NamedTupleDifference((μ=MatrixDifference(sparse([0 0; 0 0]), [1, 1], E),), NamedTuple(), NamedTuple())
     cd = PartitionalClusteringDifference(i, j, C, W, Y, p)
     cd2 = PartitionalClusteringDifference(i, j, C, W, Y, p)
     cd3 = PartitionalClusteringDifference(i, j, C, W, Y, p)
@@ -21,8 +20,7 @@
     C2 = MatrixDifference(sparse([0 0 -1; 0 0 -1; -1 -1 0]), E, E)
     W2 = MatrixDifference(sparse([0 0 1; 0 0 1; 1 1 0]), E, E)
     Y2 = MatrixDifference(sparse([0 0 -0.5; 0 0 -0.5]), E, [0, 0, 1])
-    p2 = NamedTupleDifference((μ=(sparse([0 0; 0 0]), E, [1, 1]),),
-            NamedTuple(), NamedTuple())
+    p2 = NamedTupleDifference((μ=MatrixDifference(sparse([0 0; 0 0]), E, [1, 1]),), NamedTuple(), NamedTuple())
 
     @testset "constructors" begin
         @test isa(cd, PartitionalClusteringDifference)
@@ -49,8 +47,7 @@
                 && cd.C == MatrixDifference(sparse([0 0 0; 0 0 0; 0 0 0]), E, E)
                 && cd.W == MatrixDifference(sparse([0 0 0; 0 0 0; 0 0 0]), E, E)
                 && cd.Y == MatrixDifference(sparse([0 0 0; 0 0 0]), E, E)
-                && cd.p == NamedTupleDifference((μ=(sparse([0 0; 0 0]), E, E),),
-                        NamedTuple(), NamedTuple()))
+                && cd.p == NamedTupleDifference((μ=MatrixDifference(sparse([0 0; 0 0]), E, E),), NamedTuple(), NamedTuple()))
         cd = a - b
         @test isa(cd, PartitionalClusteringDifference)
         @test (cd.i == i && cd.j == j && cd.C == C && cd.W == W && cd.Y == Y
