@@ -51,6 +51,8 @@
         end
 
         @testset "accessors" begin
+            @test features(hc) == r
+            @test instances(hc) == c
             @test constraints(hc) == C
             @test weights(hc) == W
             @test parameters(hc) == θ(hc) == p
