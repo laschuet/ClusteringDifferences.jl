@@ -29,15 +29,6 @@ PartitionalClustering(r::Vector{Int}, c::Vector{Int}, C::Matrix{Tc},
                     W::Matrix{Tw}, Y::Matrix{Ty}, p::NamedTuple) where {Tc,Tw,Ty} =
     PartitionalClustering{Tc,Tw,Ty}(r, c, C, W, Y, p)
 
-#=
-function PartitionalClustering(C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty},
-                            p::NamedTuple) where {Tc,Tw,Ty}
-    r = collect(1:size(X, 1))
-    c = collect(1:size(X, 2))
-    return PartitionalClustering(r, c, C, W, Y, p)
-end
-=#
-
 # Partitional clustering equality operator
 ==(a::PartitionalClustering, b::PartitionalClustering) =
     (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y
@@ -68,14 +59,6 @@ end
 HierarchicalClustering(r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3},
                     W::Array{Tw,3}) where {Tc,Tw} =
     HierarchicalClustering{Tc,Tw}(r, c, C, W)
-
-#=
-function HierarchicalClustering(C::Array{Tc,3}, W::Array{Tw,3}) where {Tc,Tw}
-    r = collect(1:size(X, 1))
-    c = collect(1:size(X, 2))
-    return HierarchicalClustering(r, c, C, W)
-end
-=#
 
 """
     instances(a::AbstractClustering)
