@@ -30,8 +30,7 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
     distances = pairwise(dist, μ2, X, dims=2)
     pre_objcosts = 0
     objcosts = 0
-    i = 1
-    while i <= maxiter
+    for i = 1:maxiter
         # Update cluster assignments, objective function costs, and cluster
         # centers (part 1/2)
         @inbounds for j = 1:n
@@ -61,7 +60,6 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
 
         pre_objcosts = objcosts
         objcosts = 0
-        i += 1
     end
 
     return pcs
