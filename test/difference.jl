@@ -39,6 +39,15 @@
         @test cd == cd2 && hash(cd) == hash(cd2)
     end
 
+    @testset "accessors" begin
+        @test features(cd) == r
+        @test instances(cd) == c
+        @test constraints(cd) == C
+        @test weights(cd) == W
+        @test assignments(cd) == Y
+        @test parameters(cd) == θ(cd) == p
+    end
+
     @testset "subtraction operator" begin
         cd = pc - pc
         @test isa(cd, PartitionalClusteringDifference)

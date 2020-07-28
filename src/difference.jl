@@ -38,6 +38,50 @@ hash(a::PartitionalClusteringDifference, h::UInt) =
     hash(a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p,
         hash(:PartitionalClusteringDifference, h)))))))
 
+"""
+    instances(a::AbstractClusteringDifference)
+
+Access the instance indices.
+"""
+instances(a::AbstractClusteringDifference) = a.c
+
+"""
+    features(a::AbstractClusteringDifference)
+
+Access the feature indices.
+"""
+features(a::AbstractClusteringDifference) = a.r
+
+"""
+    constraints(a::AbstractClusteringDifference)
+
+Access the contraints.
+"""
+constraints(a::AbstractClusteringDifference) = a.C
+
+"""
+    weights(a::AbstractClusteringDifference)
+
+Access the weights.
+"""
+weights(a::AbstractClusteringDifference) = a.W
+
+"""
+    assignments(a::PartitionalClusteringDifference)
+
+Access the assignments of the data instances to the clusters.
+"""
+assignments(a::PartitionalClusteringDifference) = a.Y
+
+"""
+    parameters(c::PartitionalClusteringDifference)
+    θ(c::PartitionalClusteringDifference)
+
+Access the parameters.
+"""
+parameters(a::PartitionalClusteringDifference) = a.p
+const θ = parameters
+
 # Partitional clustering subtraction operator
 function -(a::PartitionalClustering, b::PartitionalClustering)
     r = diff(Set(a.r), Set(b.r))
