@@ -49,16 +49,18 @@ struct HierarchicalClustering{Tc<:Integer,Tw<:Real} <: AbstractClustering
     c::Vector{Int}
     C::Array{Tc,3}
     W::Array{Tw,3}
+    p::NamedTuple
 
     function HierarchicalClustering{Tc,Tw}(r::Vector{Int}, c::Vector{Int},
-                                        C::Array{Tc,3}, W::Array{Tw,3}) where {Tc<:Integer,Tw<:Real}
+                                        C::Array{Tc,3}, W::Array{Tw,3},
+                                        p::NamedTuple) where {Tc<:Integer,Tw<:Real}
         size(C, 2) == size(W, 2) || throw(DimensionMismatch("dimensions of constraints and weights must match"))
-        return new(r, c, C, W)
+        return new(r, c, C, W, p)
     end
 end
 HierarchicalClustering(r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3},
-                    W::Array{Tw,3}) where {Tc,Tw} =
-    HierarchicalClustering{Tc,Tw}(r, c, C, W)
+                    W::Array{Tw,3}, p::NamedTuple) where {Tc,Tw} =
+    HierarchicalClustering{Tc,Tw}(r, c, C, W, p)
 
 """
     instances(a::AbstractClustering)
@@ -89,17 +91,17 @@ Access the weights.
 weights(a::AbstractClustering) = a.W
 
 """
-    assignments(a::PartitionalClustering)
-
-Access the assignments of the data instances to the clusters.
-"""
-assignments(a::PartitionalClustering) = a.Y
-
-"""
     parameters(c::PartitionalClustering)
     θ(c::PartitionalClustering)
 
 Access the parameters.
 """
-parameters(a::PartitionalClustering) = a.p
+parameters(a::AbstractClustering) = a.p
 const θ = parameters
+
+"""
+    assignments(a::PartitionalClustering)
+
+Access the assignments of the data instances to the clusters.
+"""
+assignments(a::PartitionalClustering) = a.Y

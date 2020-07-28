@@ -42,16 +42,18 @@
         c = [2, 3, 5]
         C = rand([-1, 0, 1], 3, 3, 3)
         W = rand(3, 3, 3) .+ 1
-        hc = HierarchicalClustering(r, c, C, W)
+        p = NamedTuple()
+        hc = HierarchicalClustering(r, c, C, W, p)
 
         @testset "constructors" begin
             @test isa(hc, HierarchicalClustering)
-            @test hc.r == r && hc.c == c && hc.C == C && hc.W == W
+            @test hc.r == r && hc.c == c && hc.C == C && hc.W == W && hc.p == p
         end
 
         @testset "accessors" begin
             @test constraints(hc) == C
             @test weights(hc) == W
+            @test parameters(hc) == θ(hc) == p
         end
     end
 end
