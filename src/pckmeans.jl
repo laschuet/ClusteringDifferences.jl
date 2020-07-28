@@ -52,9 +52,9 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
     Y = zeros(Float64, k, n)
     M = convert(Matrix{Float64}, M)
 
-    cs = Vector{PartitionalClustering}(undef, 0)
-    c = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
-    push!(cs, c)
+    pcs = Vector{PartitionalClustering}(undef, 0)
+    pc = PartitionalClustering(copy(X), copy(C), copy(W), copy(Y), copy(M))
+    push!(pcs, pc)
 
     # Derive neighborhood sets, and initialize the cluster centers
     transitive_closure!(C)
@@ -91,8 +91,8 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
 
         pairwise!(distances, dist, M, X, dims=2)
 
-        c = PartitionalClustering(X, C, W, Y, M)
-        push!(cs, c)
+        pc = PartitionalClustering(X, C, W, Y, M)
+        push!(pcs, pc)
 
         # Check for convergence
         isapprox(objcosts, pre_objcosts, atol=ϵ) && break
@@ -101,6 +101,6 @@ function pckmeans(X::AbstractMatrix{<:Real}, C::AbstractMatrix{Int},
         i += 1
     end
 
-    return cs
+    return pcs
 end
 =#

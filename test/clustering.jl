@@ -1,57 +1,57 @@
 @testset "clustering" begin
     @testset "partitional clustering" begin
-        i = [10, 20]
-        j = [2, 3, 5]
+        r = [10, 20]
+        c = [2, 3, 5]
         C = [0 0 0; 0 0 0; 0 0 0]
         W = [0 0 0; 0 0 0; 0 0 0]
         Y = [1 0 0.5; 0 1 0.5]
         p = (μ=[0 1; 1 0],)
-        a = PartitionalClustering(i, j, C, W, Y, p)
-        b = PartitionalClustering(i, j, C, W, Y, p)
-        c = PartitionalClustering(i, j, C, W, Y, p)
+        pc = PartitionalClustering(r, c, C, W, Y, p)
+        pc2 = PartitionalClustering(r, c, C, W, Y, p)
+        pc3 = PartitionalClustering(r, c, C, W, Y, p)
 
         @testset "constructors" begin
-            @test isa(a, PartitionalClustering)
-            @test (a.i == i && a.j == j && a.C == C && a.W == W && a.Y == Y
-                    && a.p == p)
+            @test isa(pc, PartitionalClustering)
+            @test (pc.r == r && pc.c == c && pc.C == C && pc.W == W && pc.Y == Y
+                    && pc.p == p)
         end
 
         @testset "equality operator" begin
-            @test a == a
-            @test a == b && b == a
-            @test a == b && b == c && a == c
+            @test pc == pc
+            @test pc == pc2 && pc2 == pc
+            @test pc == pc2 && pc2 == pc3 && pc == pc3
         end
 
         @testset "hash" begin
-            @test hash(a) == hash(a)
-            @test a == b && hash(a) == hash(b)
+            @test hash(pc) == hash(pc)
+            @test pc == pc2 && hash(pc) == hash(pc2)
         end
 
         @testset "accessors" begin
-            @test constraints(a) == C
-            @test features(a) == i
-            @test instances(a) == j
-            @test weights(a) == W
-            @test assignments(a) == Y
-            @test parameters(a) == θ(a) == p
+            @test features(pc) == r
+            @test instances(pc) == c
+            @test constraints(pc) == C
+            @test weights(pc) == W
+            @test assignments(pc) == Y
+            @test parameters(pc) == θ(pc) == p
         end
     end
 
     @testset "hierarchical clustering" begin
-        i = [10, 20]
-        j = [2, 3, 5]
+        r = [10, 20]
+        c = [2, 3, 5]
         C = rand([-1, 0, 1], 3, 3, 3)
         W = rand(3, 3, 3) .+ 1
-        a = HierarchicalClustering(i, j, C, W)
+        hc = HierarchicalClustering(r, c, C, W)
 
         @testset "constructors" begin
-            @test isa(a, HierarchicalClustering)
-            @test a.i == i && a.j == j && a.C == C && a.W == W
+            @test isa(hc, HierarchicalClustering)
+            @test hc.r == r && hc.c == c && hc.C == C && hc.W == W
         end
 
         @testset "accessors" begin
-            @test constraints(a) == C
-            @test weights(a) == W
+            @test constraints(hc) == C
+            @test weights(hc) == W
         end
     end
 end
