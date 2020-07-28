@@ -26,18 +26,12 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
     μ2 = convert(Matrix{Float64}, μ)
 
     pcs = Vector{PartitionalClustering}(undef, 0)
-    pc = PartitionalClustering(copy(r), copy(c), copy(C), copy(W), copy(Y),
-            (μ=copy(μ2),))
-    push!(pcs, pc)
 
     distances = pairwise(dist, μ2, X, dims=2)
     pre_objcosts = 0
+    objcosts = 0
     i = 1
     while i <= maxiter
-        objcosts = 0
-        fill!(Y, zero(eltype(Y)))
-        fill!(μ2, zero(eltype(μ2)))
-
         # Update cluster assignments, objective function costs, and cluster
         # centers (part 1/2)
         @inbounds for j = 1:n
@@ -62,7 +56,11 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
         # Check for convergence
         isapprox(objcosts, pre_objcosts, atol=ϵ) && break
 
+        fill!(Y, zero(eltype(Y)))
+        fill!(μ2, zero(eltype(μ2)))
+
         pre_objcosts = objcosts
+        objcosts = 0
         i += 1
     end
 
