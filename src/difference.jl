@@ -67,20 +67,20 @@ Access the weights.
 weights(a::AbstractClusteringDifference) = a.W
 
 """
+    parameters(c::AbstractClusteringDifference)
+    θ(c::AbstractClusteringDifference)
+
+Access the parameters.
+"""
+parameters(a::AbstractClusteringDifference) = a.p
+const θ = parameters
+
+"""
     assignments(a::PartitionalClusteringDifference)
 
 Access the assignments of the data instances to the clusters.
 """
 assignments(a::PartitionalClusteringDifference) = a.Y
-
-"""
-    parameters(c::PartitionalClusteringDifference)
-    θ(c::PartitionalClusteringDifference)
-
-Access the parameters.
-"""
-parameters(a::PartitionalClusteringDifference) = a.p
-const θ = parameters
 
 # Partitional clustering subtraction operator
 function -(a::PartitionalClustering, b::PartitionalClustering)
