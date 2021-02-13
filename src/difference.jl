@@ -41,7 +41,7 @@ Base.hash(a::PartitionalClusteringDifference, h::UInt) =
 """
     axes(a::AbstractClusteringDifference[, d])
 
-Access the feature and instance identifier differences. Optionally, specify
+Access the feature and instance identifiers differences. Optionally, specify
 dimension `d` to get the identifier difference of that dimension only.
 """
 Base.axes(a::AbstractClusteringDifference) = a.r, a.c
@@ -50,42 +50,42 @@ Base.axes(a::AbstractClusteringDifference, d) = d::Integer <= 2 ? axes(a)[d] : I
 """
     features(a::AbstractClusteringDifference)
 
-Access the feature identifier difference.
+Access the feature identifiers difference.
 """
 features(a::AbstractClusteringDifference) = axes(a, 1)
 
 """
     instances(a::AbstractClusteringDifference)
 
-Access the instance identifier difference.
+Access the instance identifiers difference.
 """
 Base.instances(a::AbstractClusteringDifference) = axes(a, 2)
 
 """
     constraints(a::AbstractClusteringDifference)
 
-Access the contraints.
+Access the contraints difference.
 """
 constraints(a::AbstractClusteringDifference) = a.C
 
 """
     weights(a::AbstractClusteringDifference)
 
-Access the weights.
+Access the weights difference.
 """
 weights(a::AbstractClusteringDifference) = a.W
 
 """
     parameters(c::AbstractClusteringDifference)
 
-Access the parameters.
+Access the parameters difference.
 """
 parameters(a::AbstractClusteringDifference) = a.p
 
 """
     assignments(a::PartitionalClusteringDifference)
 
-Access the assignments of the data instances to the clusters.
+Access the assignments difference.
 """
 assignments(a::PartitionalClusteringDifference) = a.Y
 

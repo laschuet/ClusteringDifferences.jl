@@ -109,6 +109,6 @@ parameters(a::AbstractClustering) = a.p
 """
     assignments(a::PartitionalClustering)
 
-Access the assignments of the data instances to the clusters.
+Access the assignments.
 """
 assignments(a::PartitionalClustering) = a.Y
