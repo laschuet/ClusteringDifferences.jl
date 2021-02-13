@@ -29,12 +29,12 @@ struct PartitionalClusteringDifference <: AbstractClusteringDifference
 end
 
 # Partitional clustering difference equality operator
-==(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference) =
+Base.:(==)(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference) =
     (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y
             && a.p == b.p)
 
 # Compute hash code
-hash(a::PartitionalClusteringDifference, h::UInt) =
+Base.hash(a::PartitionalClusteringDifference, h::UInt) =
     hash(a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p,
         hash(:PartitionalClusteringDifference, h)))))))
 
@@ -43,7 +43,7 @@ hash(a::PartitionalClusteringDifference, h::UInt) =
 
 Access the instance indices.
 """
-instances(a::AbstractClusteringDifference) = a.c
+Base.instances(a::AbstractClusteringDifference) = a.c
 
 """
     features(a::AbstractClusteringDifference)
@@ -81,7 +81,7 @@ Access the assignments of the data instances to the clusters.
 assignments(a::PartitionalClusteringDifference) = a.Y
 
 # Partitional clustering subtraction operator
-function -(a::PartitionalClustering, b::PartitionalClustering)
+function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     r = diff(Set(a.r), Set(b.r))
     c = diff(Set(a.c), Set(b.c))
     C = diff(a.C, b.C, a.c, a.c, b.c, b.c)

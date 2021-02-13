@@ -30,12 +30,12 @@ PartitionalClustering(r::Vector{Int}, c::Vector{Int}, C::Matrix{Tc},
     PartitionalClustering{Tc,Tw,Ty}(r, c, C, W, Y, p)
 
 # Partitional clustering equality operator
-==(a::PartitionalClustering, b::PartitionalClustering) =
+Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
     (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y
             && a.p == b.p)
 
 # Compute hash code
-hash(a::PartitionalClustering, h::UInt) =
+Base.hash(a::PartitionalClustering, h::UInt) =
     hash(a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p,
         hash(:PartitionalClustering, h)))))))
 
@@ -67,7 +67,7 @@ HierarchicalClustering(r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3},
 
 Access the instance indices.
 """
-instances(a::AbstractClustering) = a.c
+Base.instances(a::AbstractClustering) = a.c
 
 """
     features(a::AbstractClustering)

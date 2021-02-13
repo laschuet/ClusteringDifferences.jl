@@ -3,9 +3,6 @@ module ClusteringDifferences
 using DifferencesBase
 using Distances
 
-import Base: -, ==
-import Base: diff, hash, instances, show
-
 export
     # clustering.jl
     AbstractClustering,
