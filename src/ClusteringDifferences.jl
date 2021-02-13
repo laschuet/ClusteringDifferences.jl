@@ -11,7 +11,6 @@ export
     assignments,
     constraints,
     features,
-    instances,
     parameters,
     weights,
     # difference.jl

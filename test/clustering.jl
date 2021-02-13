@@ -28,12 +28,13 @@
         end
 
         @testset "accessors" begin
-            @test features(pc) == r
-            @test instances(pc) == c
+            @test axes(pc) == (r, c)
+            @test features(pc) == axes(pc, 1) == r
+            @test instances(pc) == axes(pc, 2) == c
             @test constraints(pc) == C
             @test weights(pc) == W
-            @test assignments(pc) == Y
             @test parameters(pc) == p
+            @test assignments(pc) == Y
         end
     end
 
@@ -51,8 +52,9 @@
         end
 
         @testset "accessors" begin
-            @test features(hc) == r
-            @test instances(hc) == c
+            @test axes(hc) == (r, c)
+            @test features(hc) == axes(hc, 1) == r
+            @test instances(hc) == axes(hc, 2) == c
             @test constraints(hc) == C
             @test weights(hc) == W
             @test parameters(hc) == p

@@ -39,18 +39,27 @@ Base.hash(a::PartitionalClusteringDifference, h::UInt) =
         hash(:PartitionalClusteringDifference, h)))))))
 
 """
-    instances(a::AbstractClusteringDifference)
+    axes(a::AbstractClusteringDifference[, d])
 
-Access the instance indices.
+Access the feature and instance identifier differences. Optionally, specify
+dimension `d` to get the identifier difference of that dimension only.
 """
-Base.instances(a::AbstractClusteringDifference) = a.c
+Base.axes(a::AbstractClusteringDifference) = a.r, a.c
+Base.axes(a::AbstractClusteringDifference, d) = d::Integer <= 2 ? axes(a)[d] : Int[]
 
 """
     features(a::AbstractClusteringDifference)
 
-Access the feature indices.
+Access the feature identifier difference.
 """
-features(a::AbstractClusteringDifference) = a.r
+features(a::AbstractClusteringDifference) = axes(a, 1)
+
+"""
+    instances(a::AbstractClusteringDifference)
+
+Access the instance identifier difference.
+"""
+Base.instances(a::AbstractClusteringDifference) = axes(a, 2)
 
 """
     constraints(a::AbstractClusteringDifference)

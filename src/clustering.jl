@@ -63,18 +63,27 @@ HierarchicalClustering(r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3},
     HierarchicalClustering{Tc,Tw}(r, c, C, W, p)
 
 """
-    instances(a::AbstractClustering)
+    axes(a::AbstractClustering[, d])
 
-Access the instance indices.
+Access the feature and instance identifiers. Optionally, specify dimension `d`
+to get the identifiers of that dimension only.
 """
-Base.instances(a::AbstractClustering) = a.c
+Base.axes(a::AbstractClustering) = a.r, a.c
+Base.axes(a::AbstractClustering, d) = d::Integer <= 2 ? axes(a)[d] : Int[]
 
 """
     features(a::AbstractClustering)
 
-Access the feature indices.
+Access the feature identifiers.
 """
-features(a::AbstractClustering) = a.r
+features(a::AbstractClustering) = axes(a, 1)
+
+"""
+    instances(a::AbstractClustering)
+
+Access the instance identifiers.
+"""
+Base.instances(a::AbstractClustering) = axes(a, 2)
 
 """
     constraints(a::AbstractClustering)

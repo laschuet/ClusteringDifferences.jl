@@ -39,8 +39,9 @@
     end
 
     @testset "accessors" begin
-        @test features(cd) == r
-        @test instances(cd) == c
+        @test axes(cd) == (r, c)
+        @test features(cd) == axes(cd, 1) == r
+        @test instances(cd) == axes(cd, 2) == c
         @test constraints(cd) == C
         @test weights(cd) == W
         @test assignments(cd) == Y
