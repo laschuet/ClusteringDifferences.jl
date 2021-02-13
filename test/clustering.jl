@@ -33,7 +33,7 @@
             @test constraints(pc) == C
             @test weights(pc) == W
             @test assignments(pc) == Y
-            @test parameters(pc) == θ(pc) == p
+            @test parameters(pc) == p
         end
     end
 
@@ -55,7 +55,7 @@
             @test instances(hc) == c
             @test constraints(hc) == C
             @test weights(hc) == W
-            @test parameters(hc) == θ(hc) == p
+            @test parameters(hc) == p
         end
     end
 end

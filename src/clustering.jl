@@ -92,12 +92,10 @@ weights(a::AbstractClustering) = a.W
 
 """
     parameters(c::PartitionalClustering)
-    θ(c::PartitionalClustering)
 
 Access the parameters.
 """
 parameters(a::AbstractClustering) = a.p
-const θ = parameters
 
 """
     assignments(a::PartitionalClustering)

@@ -68,12 +68,10 @@ weights(a::AbstractClusteringDifference) = a.W
 
 """
     parameters(c::AbstractClusteringDifference)
-    θ(c::AbstractClusteringDifference)
 
 Access the parameters.
 """
 parameters(a::AbstractClusteringDifference) = a.p
-const θ = parameters
 
 """
     assignments(a::PartitionalClusteringDifference)

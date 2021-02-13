@@ -16,7 +16,6 @@ export
     features,
     instances,
     parameters,
-    θ,
     weights,
     # difference.jl
     AbstractClusteringDifference,
