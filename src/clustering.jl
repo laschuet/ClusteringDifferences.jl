@@ -61,6 +61,16 @@ function PartitionalClustering(clust::KmedoidsResult)
             converged=clust.converged)
     return PartitionalClustering(r, c, C, W, Y, p)
 end
+function PartitionalClustering(clust::FuzzyCMeansResult)
+    r = Int[]
+    c = Int[]
+    C = Matrix{Int}(undef, 0, 0)
+    W = Matrix{Float64}(undef, 0, 0)
+    Y = permutedims(clust.weights)
+    p = (centers=clust.centers, iterations=clust.iterations,
+            converged=clust.converged)
+    return PartitionalClustering(r, c, C, W, Y, p)
+end
 
 # Partitional clustering equality operator
 Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =

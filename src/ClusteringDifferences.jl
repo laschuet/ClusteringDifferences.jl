@@ -3,7 +3,7 @@ module ClusteringDifferences
 using DifferencesBase
 using Distances
 
-import Clustering: KmeansResult, KmedoidsResult
+import Clustering: FuzzyCMeansResult, KmeansResult, KmedoidsResult
 
 export
     # clustering.jl
