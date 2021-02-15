@@ -3,7 +3,7 @@ using DifferencesBase
 using SparseArrays
 using Test
 
-import Clustering: KmeansResult
+import Clustering: KmeansResult, KmedoidsResult
 
 @testset "ClusteringDifferences" begin
     include("clustering.jl")

@@ -9,13 +9,16 @@
         pc = PartitionalClustering(r, c, C, W, Y, p)
         pc2 = PartitionalClustering(r, c, C, W, Y, p)
         pc3 = PartitionalClustering(r, c, C, W, Y, p)
-        pc4 = PartitionalClustering(KmeansResult(p.μ, [1, 2, 1],
-                [0.5, 0.25, 0.125], [2, 1], [2, 1], 0.875, 100, true))
 
         @testset "constructors" begin
             @test isa(pc, PartitionalClustering)
             @test (pc.r == r && pc.c == c && pc.C == C && pc.W == W && pc.Y == Y
                     && pc.p == p)
+        end
+
+        @testset "interface constructors" begin
+            pc4 = PartitionalClustering(KmeansResult(p.μ, [1, 2, 1],
+                    [0.5, 0.25, 0.125], [2, 1], [2, 1], 0.875, 100, true))
             @test isa(pc4, PartitionalClustering)
             @test (pc4.r == Int[] && pc4.c == Int[]
                     && pc4.C == Matrix{Int}(undef, 0, 0)
@@ -24,6 +27,16 @@
                     && pc4.p == (centers=p.μ, costs=[0.5, 0.25, 0.125],
                             counts=[2, 1], wcounts=[2, 1], totalcost=0.875,
                             iterations=100, converged=true))
+            pc4 = PartitionalClustering(KmedoidsResult([11, 23], [1, 2, 1],
+                    [0.5, 0.25, 0.125], [2, 1], 0.875, 100, true))
+            @test isa(pc4, PartitionalClustering)
+            @test (pc4.r == Int[] && pc4.c == Int[]
+                    && pc4.C == Matrix{Int}(undef, 0, 0)
+                    && pc4.W == Matrix{Float64}(undef, 0, 0)
+                    && pc4.Y == [1 0 1; 0 1 0]
+                    && pc4.p == (medoids=[11, 23], costs=[0.5, 0.25, 0.125],
+                            counts=[2, 1], totalcost=0.875, iterations=100,
+                            converged=true))
         end
 
         @testset "equality operator" begin

@@ -45,6 +45,22 @@ function PartitionalClustering(clust::KmeansResult)
             iterations=clust.iterations, converged=clust.converged)
     return PartitionalClustering(r, c, C, W, Y, p)
 end
+function PartitionalClustering(clust::KmedoidsResult)
+    r = Int[]
+    c = Int[]
+    C = Matrix{Int}(undef, 0, 0)
+    W = Matrix{Float64}(undef, 0, 0)
+    k = length(clust.medoids)
+    n = length(clust.assignments)
+    Y = zeros(Int, k, n)
+    for i = 1:n
+        Y[clust.assignments[i], i] = 1
+    end
+    p = (medoids=clust.medoids, costs=clust.costs, counts=clust.counts,
+            totalcost=clust.totalcost, iterations=clust.iterations,
+            converged=clust.converged)
+    return PartitionalClustering(r, c, C, W, Y, p)
+end
 
 # Partitional clustering equality operator
 Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
