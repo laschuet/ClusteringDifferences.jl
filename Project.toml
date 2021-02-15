@@ -4,10 +4,12 @@ authors = ["Lars Schütz"]
 version = "0.8.1"
 
 [deps]
+Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
 DifferencesBase = "f7c07657-0d0a-4d46-b086-01df223a7b4f"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
 
 [compat]
+Clustering = "0.14.2"
 DifferencesBase = "0.15"
 Distances = "0.10"
 julia = "1.5"

@@ -29,6 +29,23 @@ PartitionalClustering(r::Vector{Int}, c::Vector{Int}, C::Matrix{Tc},
                     W::Matrix{Tw}, Y::Matrix{Ty}, p::NamedTuple) where {Tc,Tw,Ty} =
     PartitionalClustering{Tc,Tw,Ty}(r, c, C, W, Y, p)
 
+function PartitionalClustering(clust::KmeansResult)
+    r = Int[]
+    c = Int[]
+    C = Matrix{Int}(undef, 0, 0)
+    W = Matrix{Float64}(undef, 0, 0)
+    k = size(clust.centers, 2)
+    n = length(clust.assignments)
+    Y = zeros(Int, k, n)
+    for i = 1:n
+        Y[clust.assignments[i], i] = 1
+    end
+    p = (centers=clust.centers, costs=clust.costs, counts=clust.counts,
+            wcounts=clust.wcounts, totalcost=clust.totalcost,
+            iterations=clust.iterations, converged=clust.converged)
+    return PartitionalClustering(r, c, C, W, Y, p)
+end
+
 # Partitional clustering equality operator
 Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
     (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y

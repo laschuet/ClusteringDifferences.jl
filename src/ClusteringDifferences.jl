@@ -3,6 +3,8 @@ module ClusteringDifferences
 using DifferencesBase
 using Distances
 
+import Clustering: KmeansResult
+
 export
     # clustering.jl
     AbstractClustering,
