@@ -1,32 +1,32 @@
 @testset "clustering" begin
-    @testset "partitional clustering" begin
+    @testset "clustering" begin
         r = [10, 20]
         c = [2, 3, 5]
         C = [0 0 0; 0 0 0; 0 0 0]
         W = [0 0 0; 0 0 0; 0 0 0]
         Y = [1 0 0.5; 0 1 0.5]
         p = (μ=[0 1.0; 1.0 0],)
-        pc = PartitionalClustering(r, c, C, W, Y, p)
-        pc2 = PartitionalClustering(r, c, C, W, Y, p)
-        pc3 = PartitionalClustering(r, c, C, W, Y, p)
+        c1 = Clustering(r, c, C, W, Y, p)
+        c2 = Clustering(r, c, C, W, Y, p)
+        c3 = Clustering(r, c, C, W, Y, p)
 
         @testset "constructors" begin
-            @test isa(pc, PartitionalClustering)
-            @test (pc.r == r && pc.c == c && pc.C == C && pc.W == W && pc.Y == Y && pc.p == p)
+            @test isa(c1, Clustering)
+            @test (c1.r == r && c1.c == c && c1.C == C && c1.W == W && c1.Y == Y && c1.p == p)
         end
 
         @testset "interface constructors" begin
-            pc4 = PartitionalClustering(
+            c4 = Clustering(
                 KmeansResult(p.μ, [1, 2, 1], [0.5, 0.25, 0.125], [2, 1], [2, 1], 0.875, 100, true)
             )
-            @test isa(pc4, PartitionalClustering)
+            @test isa(c4, Clustering)
             @test (
-                pc4.r == Int[] &&
-                pc4.c == Int[] &&
-                pc4.C == Matrix{Int}(undef, 0, 0) &&
-                pc4.W == Matrix{Float64}(undef, 0, 0) &&
-                pc4.Y == [1 0 1; 0 1 0] &&
-                pc4.p == (
+                c4.r == Int[] &&
+                c4.c == Int[] &&
+                c4.C == Matrix{Int}(undef, 0, 0) &&
+                c4.W == Matrix{Float64}(undef, 0, 0) &&
+                c4.Y == [1 0 1; 0 1 0] &&
+                c4.p == (
                     centers=p.μ,
                     costs=[0.5, 0.25, 0.125],
                     counts=[2, 1],
@@ -36,17 +36,17 @@
                     converged=true,
                 )
             )
-            pc4 = PartitionalClustering(
+            c4 = Clustering(
                 KmedoidsResult([11, 23], [1, 2, 1], [0.5, 0.25, 0.125], [2, 1], 0.875, 100, true)
             )
-            @test isa(pc4, PartitionalClustering)
+            @test isa(c4, Clustering)
             @test (
-                pc4.r == Int[] &&
-                pc4.c == Int[] &&
-                pc4.C == Matrix{Int}(undef, 0, 0) &&
-                pc4.W == Matrix{Float64}(undef, 0, 0) &&
-                pc4.Y == [1 0 1; 0 1 0] &&
-                pc4.p == (
+                c4.r == Int[] &&
+                c4.c == Int[] &&
+                c4.C == Matrix{Int}(undef, 0, 0) &&
+                c4.W == Matrix{Float64}(undef, 0, 0) &&
+                c4.Y == [1 0 1; 0 1 0] &&
+                c4.p == (
                     medoids=[11, 23],
                     costs=[0.5, 0.25, 0.125],
                     counts=[2, 1],
@@ -55,37 +55,37 @@
                     converged=true,
                 )
             )
-            pc4 = PartitionalClustering(FuzzyCMeansResult(p.μ, [1 0; 0.5 0.5; 1 0], 100, true))
-            @test isa(pc4, PartitionalClustering)
+            c4 = Clustering(FuzzyCMeansResult(p.μ, [1 0; 0.5 0.5; 1 0], 100, true))
+            @test isa(c4, Clustering)
             @test (
-                pc4.r == Int[] &&
-                pc4.c == Int[] &&
-                pc4.C == Matrix{Int}(undef, 0, 0) &&
-                pc4.W == Matrix{Float64}(undef, 0, 0) &&
-                pc4.Y == [1 0.5 1; 0 0.5 0] &&
-                pc4.p == (centers=p.μ, iterations=100, converged=true)
+                c4.r == Int[] &&
+                c4.c == Int[] &&
+                c4.C == Matrix{Int}(undef, 0, 0) &&
+                c4.W == Matrix{Float64}(undef, 0, 0) &&
+                c4.Y == [1 0.5 1; 0 0.5 0] &&
+                c4.p == (centers=p.μ, iterations=100, converged=true)
             )
         end
 
         @testset "equality operator" begin
-            @test pc == pc
-            @test pc == pc2 && pc2 == pc
-            @test pc == pc2 && pc2 == pc3 && pc == pc3
+            @test c1 == c1
+            @test c1 == c2 && c2 == c1
+            @test c1 == c2 && c2 == c3 && c1 == c3
         end
 
         @testset "hash" begin
-            @test hash(pc) == hash(pc)
-            @test pc == pc2 && hash(pc) == hash(pc2)
+            @test hash(c1) == hash(c1)
+            @test c1 == c2 && hash(c1) == hash(c2)
         end
 
         @testset "accessors" begin
-            @test axes(pc) == (r, c)
-            @test features(pc) == axes(pc, 1) == r
-            @test instances(pc) == axes(pc, 2) == c
-            @test constraints(pc) == C
-            @test weights(pc) == W
-            @test parameters(pc) == p
-            @test assignments(pc) == Y
+            @test axes(c1) == (r, c)
+            @test features(c1) == axes(c1, 1) == r
+            @test instances(c1) == axes(c1, 2) == c
+            @test constraints(c1) == C
+            @test weights(c1) == W
+            @test parameters(c1) == p
+            @test assignments(c1) == Y
         end
     end
 

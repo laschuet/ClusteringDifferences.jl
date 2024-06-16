@@ -1,8 +1,8 @@
 @testset "difference" begin
-    pc = PartitionalClustering(
+    c1 = Clustering(
         [1, 2], [1, 2, 3], [0 0 0; 0 0 0; 0 0 0], [0 0 0; 0 0 0; 0 0 0], [1 0 0.5; 0 1 0.5], (μ=[0 1; 1 0],)
     )
-    pc2 = PartitionalClustering(
+    c2 = Clustering(
         [1, 2],
         [1, 2, 3],
         [0 0 -1; 0 0 -1; -1 -1 0],
@@ -10,19 +10,19 @@
         [1 0 0; 0 1 0; 0 0 1],
         (μ=[0 1 1; 1 0 1],),
     )
-    # pc - pc2
-    r = SetDifference(Set([1, 2]), Set(), Set())
-    c = SetDifference(Set([1, 2, 3]), Set(), Set())
-    C = MatrixDifference(sparse([0, 0, 1, 0, 0, 1, 1, 1, 0]), [], [])
-    W = MatrixDifference(sparse([0, 0, -1, 0, 0, -1, -1, -1, 0]), [], [])
-    Y = MatrixDifference(sparse([0, 0, 0, 0, 0.5, 0.5]), [0, 0, 1], [])
-    p = NamedTupleDifference(
+    # c1 - c2
+    r1 = SetDifference(Set([1, 2]), Set(), Set())
+    c1 = SetDifference(Set([1, 2, 3]), Set(), Set())
+    C1 = MatrixDifference(sparse([0, 0, 1, 0, 0, 1, 1, 1, 0]), [], [])
+    W1 = MatrixDifference(sparse([0, 0, -1, 0, 0, -1, -1, -1, 0]), [], [])
+    Y1 = MatrixDifference(sparse([0, 0, 0, 0, 0.5, 0.5]), [0, 0, 1], [])
+    p1 = NamedTupleDifference(
         (μ=MatrixDifference(sparse([0, 0, 0, 0]), [1, 1], []),), NamedTuple(), NamedTuple()
     )
-    cd = PartitionalClusteringDifference(r, c, C, W, Y, p)
-    cd2 = PartitionalClusteringDifference(r, c, C, W, Y, p)
-    cd3 = PartitionalClusteringDifference(r, c, C, W, Y, p)
-    # pc2 - pc
+    d1 = ClusteringDifference(r, c, C, W, Y, p)
+    d2 = ClusteringDifference(r, c, C, W, Y, p)
+    d3 = ClusteringDifference(r, c, C, W, Y, p)
+    # c2 - c1
     r2 = SetDifference(Set([1, 2]), Set(), Set())
     c2 = SetDifference(Set([1, 2, 3]), Set(), Set())
     C2 = MatrixDifference(sparse([0, 0, -1, 0, 0, -1, -1, -1, 0]), [], [])
@@ -33,33 +33,33 @@
     )
 
     @testset "constructors" begin
-        @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.r == r && cd.c == c && cd.C == C && cd.W == W && cd.Y == Y && cd.p == p)
+        @test isa(d1, ClusteringDifference)
+        @test (d1.r == r && d1.c == c && d1.C == C && d1.W == W && d1.Y == Y && d1.p == p)
     end
 
     @testset "equality operator" begin
-        @test cd == cd
-        @test cd == cd2 && cd2 == cd
-        @test cd == cd2 && cd2 == cd3 && cd == cd3
+        @test d1 == d1
+        @test d1 == d2 && d2 == d1
+        @test d1 == d2 && d2 == d3 && d1 == d3
     end
 
     @testset "hash" begin
-        @test hash(cd) == hash(cd)
-        @test cd == cd2 && hash(cd) == hash(cd2)
+        @test hash(d1) == hash(d1)
+        @test d1 == d2 && hash(d1) == hash(d2)
     end
 
     @testset "accessors" begin
-        @test axes(cd) == (r, c)
-        @test features(cd) == axes(cd, 1) == r
-        @test instances(cd) == axes(cd, 2) == c
-        @test constraints(cd) == C
-        @test weights(cd) == W
-        @test assignments(cd) == Y
-        @test parameters(cd) == p
+        @test axes(d1) == (r, c)
+        @test features(d1) == axes(cd, 1) == r
+        @test instances(d1) == axes(cd, 2) == c
+        @test constraints(d1) == C
+        @test weights(d1) == W
+        @test assignments(d1) == Y
+        @test parameters(d1) == p
     end
 
     @testset "subtraction operator" begin
-        pc = PartitionalClustering(
+        c = Clustering(
             [1, 2],
             [1, 2, 3],
             [0 0 0; 0 0 0; 0 0 0],
@@ -68,35 +68,35 @@
             (μ=[0 1; 1 0],),
         )
 
-        cd = pc - pc
-        @test isa(cd, PartitionalClusteringDifference)
+        d = c - c
+        @test isa(d, ClusteringDifference)
         @test (
-            cd.r == SetDifference(Set([1, 2]), Set(), Set()) &&
-            cd.c == SetDifference(Set([1, 2, 3]), Set(), Set()) &&
-            cd.C == MatrixDifference(sparse([0, 0, 0, 0, 0, 0, 0, 0, 0]), [], []) &&
-            cd.W == MatrixDifference(sparse([0, 0, 0, 0, 0, 0, 0, 0, 0]), [], []) &&
-            cd.Y == MatrixDifference(sparse([0, 0, 0, 0, 0, 0]), [], []) &&
-            cd.p == NamedTupleDifference(
+            d.r == SetDifference(Set([1, 2]), Set(), Set()) &&
+            d.c == SetDifference(Set([1, 2, 3]), Set(), Set()) &&
+            d.C == MatrixDifference(sparse([0, 0, 0, 0, 0, 0, 0, 0, 0]), [], []) &&
+            d.W == MatrixDifference(sparse([0, 0, 0, 0, 0, 0, 0, 0, 0]), [], []) &&
+            d.Y == MatrixDifference(sparse([0, 0, 0, 0, 0, 0]), [], []) &&
+            d.p == NamedTupleDifference(
                 (μ=MatrixDifference(sparse([0, 0, 0, 0]), [], []),), NamedTuple(), NamedTuple()
             )
         )
-        cd = pc - pc2
-        @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.r == r && cd.c == c && cd.C == C && cd.W == W && cd.Y == Y && cd.p == p)
-        cd = pc2 - pc
-        @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.r == r2 && cd.c == c2 && cd.C == C2 && cd.W == W2 && cd.Y == Y2 && cd.p == p2)
+        d = c - c2
+        @test isa(d, ClusteringDifference)
+        @test (d.r == r && d.c == c && d.C == C && d.W == W && d.Y == Y && d.p == p)
+        d = c2 - c
+        @test isa(d, ClusteringDifference)
+        @test (d.r == r2 && d.c == c2 && d.C == C2 && d.W == W2 && d.Y == Y2 && d.p == p2)
     end
 
     @testset "forward difference" begin
-        cd = forwarddiff([pc, pc2], 1)
-        @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.r == r2 && cd.c == c2 && cd.C == C2 && cd.W == W2 && cd.Y == Y2 && cd.p == p2)
+        d = forwarddiff([c1, c2], 1)
+        @test isa(d, ClusteringDifference)
+        @test (d.r == r2 && d.c == c2 && d.C == C2 && d.W == W2 && d.Y == Y2 && d.p == p2)
     end
 
     @testset "backward difference" begin
-        cd = backwarddiff([pc, pc2], 2)
-        @test isa(cd, PartitionalClusteringDifference)
-        @test (cd.r == r2 && cd.c == c2 && cd.C == C2 && cd.W == W2 && cd.Y == Y2 && cd.p == p2)
+        d = backwarddiff([c1, c2], 2)
+        @test isa(d, ClusteringDifference)
+        @test (d.r == r2 && d.c == c2 && d.C == C2 && d.W == W2 && d.Y == Y2 && d.p == p2)
     end
 end

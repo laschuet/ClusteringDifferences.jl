@@ -6,11 +6,11 @@ Supertype for clustering differences.
 abstract type AbstractClusteringDifference end
 
 """
-    PartitionalClusteringDifference <: AbstractClusteringDifference
+    ClusteringDifference <: AbstractClusteringDifference
 
-Difference between two partitional clusterings.
+Difference between two clusterings.
 """
-struct PartitionalClusteringDifference <: AbstractClusteringDifference
+struct ClusteringDifference <: AbstractClusteringDifference
     r::SetDifference{Int}
     c::SetDifference{Int}
     C::MatrixDifference
@@ -18,7 +18,7 @@ struct PartitionalClusteringDifference <: AbstractClusteringDifference
     Y::MatrixDifference
     p::NamedTupleDifference
 
-    function PartitionalClusteringDifference(
+    function ClusteringDifference(
         r::SetDifference{Int},
         c::SetDifference{Int},
         C::MatrixDifference,
@@ -30,15 +30,15 @@ struct PartitionalClusteringDifference <: AbstractClusteringDifference
     end
 end
 
-# Partitional clustering difference equality operator
-function Base.:(==)(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference)
+# Clustering difference equality operator
+function Base.:(==)(a::ClusteringDifference, b::ClusteringDifference)
     (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y && a.p == b.p)
 end
 
 # Compute hash code
-function Base.hash(a::PartitionalClusteringDifference, h::UInt)
+function Base.hash(a::ClusteringDifference, h::UInt)
     hash(
-        a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p, hash(:PartitionalClusteringDifference, h))))))
+        a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p, hash(:ClusteringDifference, h))))))
     )
 end
 
@@ -87,14 +87,14 @@ Access the parameters difference.
 parameters(a::AbstractClusteringDifference) = a.p
 
 """
-    assignments(a::PartitionalClusteringDifference)
+    assignments(a::ClusteringDifference)
 
 Access the assignments difference.
 """
-assignments(a::PartitionalClusteringDifference) = a.Y
+assignments(a::ClusteringDifference) = a.Y
 
-# Partitional clustering subtraction operator
-function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
+# Clustering subtraction operator
+function Base.:-(a::Clustering, b::Clustering)
     r = diff(Set(a.r), Set(b.r))
     c = diff(Set(a.c), Set(b.c))
     C = diff(a.C, b.C, a.c, a.c, b.c, b.c)
@@ -103,7 +103,7 @@ function Base.:-(a::PartitionalClustering, b::PartitionalClustering)
     byr = collect(1:size(b.Y, 1))
     Y = diff(a.Y, b.Y, ayr, a.c, byr, b.c)
     p = diff(a.p, b.p)
-    return PartitionalClusteringDifference(r, c, C, W, Y, p)
+    return ClusteringDifference(r, c, C, W, Y, p)
 end
 
 """

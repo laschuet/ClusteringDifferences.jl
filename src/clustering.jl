@@ -6,11 +6,11 @@ Supertype for clusterings.
 abstract type AbstractClustering end
 
 """
-    PartitionalClustering{Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
+    Clustering{Tc<:Integer,Tw<:Real,Ty<:Real,Tm<:Real} <: AbstractClustering
 
-Partitional clustering.
+Clustering.
 """
-struct PartitionalClustering{Tc<:Integer,Tw<:Real,Ty<:Real} <: AbstractClustering
+struct Clustering{Tc<:Integer,Tw<:Real,Ty<:Real} <: AbstractClustering
     r::Vector{Int}
     c::Vector{Int}
     C::Matrix{Tc}
@@ -18,7 +18,7 @@ struct PartitionalClustering{Tc<:Integer,Tw<:Real,Ty<:Real} <: AbstractClusterin
     Y::Matrix{Ty}
     p::NamedTuple
 
-    function PartitionalClustering{Tc,Tw,Ty}(
+    function Clustering{Tc,Tw,Ty}(
         r::Vector{Int}, c::Vector{Int}, C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty}, p::NamedTuple
     ) where {Tc<:Integer,Tw<:Real,Ty<:Real}
         size(C, 2) == size(W, 2) ||
@@ -26,13 +26,13 @@ struct PartitionalClustering{Tc<:Integer,Tw<:Real,Ty<:Real} <: AbstractClusterin
         return new(r, c, C, W, Y, p)
     end
 end
-function PartitionalClustering(
+function Clustering(
     r::Vector{Int}, c::Vector{Int}, C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty}, p::NamedTuple
 ) where {Tc,Tw,Ty}
-    PartitionalClustering{Tc,Tw,Ty}(r, c, C, W, Y, p)
+    Clustering{Tc,Tw,Ty}(r, c, C, W, Y, p)
 end
 
-function PartitionalClustering(clust::KmeansResult)
+function Clustering(clust::KmeansResult)
     r = Int[]
     c = Int[]
     C = Matrix{Int}(undef, 0, 0)
@@ -52,9 +52,9 @@ function PartitionalClustering(clust::KmeansResult)
         iterations=clust.iterations,
         converged=clust.converged,
     )
-    return PartitionalClustering(r, c, C, W, Y, p)
+    return Clustering(r, c, C, W, Y, p)
 end
-function PartitionalClustering(clust::KmedoidsResult)
+function Clustering(clust::KmedoidsResult)
     r = Int[]
     c = Int[]
     C = Matrix{Int}(undef, 0, 0)
@@ -73,26 +73,26 @@ function PartitionalClustering(clust::KmedoidsResult)
         iterations=clust.iterations,
         converged=clust.converged,
     )
-    return PartitionalClustering(r, c, C, W, Y, p)
+    return Clustering(r, c, C, W, Y, p)
 end
-function PartitionalClustering(clust::FuzzyCMeansResult)
+function Clustering(clust::FuzzyCMeansResult)
     r = Int[]
     c = Int[]
     C = Matrix{Int}(undef, 0, 0)
     W = Matrix{Float64}(undef, 0, 0)
     Y = permutedims(clust.weights)
     p = (centers=clust.centers, iterations=clust.iterations, converged=clust.converged)
-    return PartitionalClustering(r, c, C, W, Y, p)
+    return Clustering(r, c, C, W, Y, p)
 end
 
-# Partitional clustering equality operator
-function Base.:(==)(a::PartitionalClustering, b::PartitionalClustering)
+# Clustering equality operator
+function Base.:(==)(a::Clustering, b::Clustering)
     (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y && a.p == b.p)
 end
 
 # Compute hash code
-function Base.hash(a::PartitionalClustering, h::UInt)
-    hash(a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p, hash(:PartitionalClustering, h)))))))
+function Base.hash(a::Clustering, h::UInt)
+    hash(a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p, hash(:Clustering, h)))))))
 end
 
 """
@@ -166,8 +166,8 @@ Access the parameters.
 parameters(a::AbstractClustering) = a.p
 
 """
-    assignments(a::PartitionalClustering)
+    assignments(a::Clustering)
 
 Access the assignments.
 """
-assignments(a::PartitionalClustering) = a.Y
+assignments(a::Clustering) = a.Y

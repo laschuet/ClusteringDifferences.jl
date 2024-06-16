@@ -30,7 +30,7 @@ function kmeans(
     Y = zeros(Float64, k, n)
     μ2 = convert(Matrix{Float64}, μ)
 
-    pcs = Vector{PartitionalClustering}(undef, 0)
+    cs = Vector{Clustering}(undef, 0)
 
     distances = pairwise(dist, μ2, X; dims=2)
     pre_objcosts = 0
@@ -53,8 +53,8 @@ function kmeans(
 
         pairwise!(dist, distances, dist, μ2, X; dims=2)
 
-        pc = PartitionalClustering(copy(r), copy(c), copy(C), copy(W), copy(Y), (μ=copy(μ2),))
-        push!(pcs, pc)
+        c = Clustering(copy(r), copy(c), copy(C), copy(W), copy(Y), (μ=copy(μ2),))
+        push!(cs, c)
 
         # Check for convergence
         isapprox(objcosts, pre_objcosts; atol=ϵ) && break
@@ -66,7 +66,7 @@ function kmeans(
         objcosts = 0
     end
 
-    return pcs
+    return cs
 end
 
 """

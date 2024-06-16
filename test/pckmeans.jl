@@ -6,16 +6,16 @@
     mx, nx = size(X)
     mm, km = size(M)
 
-    pcs = pckmeans(X, C, W, M)
-    pc = pcs[end]
+    cs = pckmeans(X, C, W, M)
+    c = cs[end]
 
-    @test isa(pcs, Vector{PartitionalClustering})
-    @test pc.X == X
-    @test size(pc.C) == (nx, nx)
-    @test eltype(pc.C) == Int
-    @test size(pc.W) == (nx, nx)
-    @test eltype(pc.W) == Float64
-    @test size(pc.Y) == (km, nx)
-    @test all(y -> 0 <= y <= 1, pc.Y)
-    @test size(pc.M) == (mm, km)
+    @test isa(cs, Vector{Clustering})
+    @test c.X == X
+    @test size(c.C) == (nx, nx)
+    @test eltype(c.C) == Int
+    @test size(c.W) == (nx, nx)
+    @test eltype(c.W) == Float64
+    @test size(c.Y) == (km, nx)
+    @test all(y -> 0 <= y <= 1, c.Y)
+    @test size(c.M) == (mm, km)
 end

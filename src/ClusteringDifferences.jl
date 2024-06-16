@@ -9,7 +9,7 @@ export
     # clustering.jl
     AbstractClustering,
     HierarchicalClustering,
-    PartitionalClustering,
+    Clustering,
     assignments,
     constraints,
     features,
@@ -17,7 +17,7 @@ export
     weights,
     # difference.jl
     AbstractClusteringDifference,
-    PartitionalClusteringDifference,
+    ClusteringDifference,
     backwarddiff,
     forwarddiff,
     # kmeans.jl
