@@ -159,7 +159,7 @@ Access the weights.
 weights(a::AbstractClustering) = a.W
 
 """
-    parameters(c::PartitionalClustering)
+    parameters(c::AbstractClustering)
 
 Access the parameters.
 """
