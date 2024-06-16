@@ -53,8 +53,8 @@ function kmeans(
 
         pairwise!(dist, distances, μ2, X; dims=2)
 
-        c = Clustering(copy(r), copy(c), copy(C), copy(W), copy(Y), (μ=copy(μ2),))
-        push!(cs, c)
+        a = Clustering(copy(r), copy(c), copy(C), copy(W), copy(Y), (μ=copy(μ2),))
+        push!(cs, a)
 
         # Check for convergence
         isapprox(objcosts, pre_objcosts; atol=ϵ) && break
