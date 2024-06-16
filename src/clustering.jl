@@ -166,8 +166,8 @@ Access the parameters.
 parameters(a::AbstractClustering) = a.p
 
 """
-    assignments(a::Clustering)
+    assignments(a::AbstractClustering)
 
 Access the assignments.
 """
-assignments(a::Clustering) = a.Y
+assignments(a::AbstractClustering) = a.Y
