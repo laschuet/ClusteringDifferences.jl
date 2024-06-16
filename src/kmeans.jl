@@ -9,10 +9,15 @@ Cluster the data `X` with the ``k``-means algorithm.
 - `dist::SemiMetric=SqEuclidean()`: the distance function.
 - `ϵ::AbstractFloat=1.0e-6`: the absolute tolerance for convergence.
 """
-function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
-                c::AbstractVector{Int}, μ::AbstractMatrix{<:Real};
-                maxiter::Int=256, dist::SemiMetric=SqEuclidean(),
-                ϵ::AbstractFloat=1.0e-6)
+function kmeans(
+    X::AbstractMatrix{<:Real},
+    r::AbstractVector{Int},
+    c::AbstractVector{Int},
+    μ::AbstractMatrix{<:Real};
+    maxiter::Int=256,
+    dist::SemiMetric=SqEuclidean(),
+    ϵ::AbstractFloat=1.0e-6,
+)
     mx, n = size(X)
     mμ, k = size(μ)
 
@@ -27,13 +32,13 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
 
     pcs = Vector{PartitionalClustering}(undef, 0)
 
-    distances = pairwise(dist, μ2, X, dims=2)
+    distances = pairwise(dist, μ2, X; dims=2)
     pre_objcosts = 0
     objcosts = 0
-    for i = 1:maxiter
+    for i in 1:maxiter
         # Update cluster assignments, objective function costs, and cluster
         # centers (part 1/2)
-        @inbounds for j = 1:n
+        @inbounds for j in 1:n
             cost, y = findmin(view(distances, :, j))
             Y[y, j] = 1
             objcosts += cost
@@ -41,19 +46,18 @@ function kmeans(X::AbstractMatrix{<:Real}, r::AbstractVector{Int},
         end
 
         # Update cluster centers (part 2/2)
-        @inbounds for j = 1:k
+        @inbounds for j in 1:k
             sz = sum(Y[j, :])
             μ2[:, j] = iszero(sz) ? μ[:, j] : μ2[:, j] / sz
         end
 
-        pairwise!(distances, dist, μ2, X, dims=2)
+        pairwise!(distances, dist, μ2, X; dims=2)
 
-        pc = PartitionalClustering(copy(r), copy(c), copy(C), copy(W), copy(Y),
-                (μ=copy(μ2),))
+        pc = PartitionalClustering(copy(r), copy(c), copy(C), copy(W), copy(Y), (μ=copy(μ2),))
         push!(pcs, pc)
 
         # Check for convergence
-        isapprox(objcosts, pre_objcosts, atol=ϵ) && break
+        isapprox(objcosts, pre_objcosts; atol=ϵ) && break
 
         fill!(Y, zero(eltype(Y)))
         fill!(μ2, zero(eltype(μ2)))
@@ -71,10 +75,14 @@ end
 Like [`kmeans`](@ref), but automatically generate `r` and `c` according to the
 size of `X`.
 """
-function kmeans(X::AbstractMatrix{<:Real}, μ::AbstractMatrix{<:Real};
-                maxiter::Int=256, dist::SemiMetric=SqEuclidean(),
-                ϵ::AbstractFloat=1.0e-6)
+function kmeans(
+    X::AbstractMatrix{<:Real},
+    μ::AbstractMatrix{<:Real};
+    maxiter::Int=256,
+    dist::SemiMetric=SqEuclidean(),
+    ϵ::AbstractFloat=1.0e-6,
+)
     r = collect(1:size(X, 1))
     c = collect(1:size(X, 2))
-    return kmeans(X, r, c, μ, maxiter=maxiter, dist=dist, ϵ=ϵ)
+    return kmeans(X, r, c, μ; maxiter=maxiter, dist=dist, ϵ=ϵ)
 end

@@ -18,16 +18,19 @@ struct PartitionalClustering{Tc<:Integer,Tw<:Real,Ty<:Real} <: AbstractClusterin
     Y::Matrix{Ty}
     p::NamedTuple
 
-    function PartitionalClustering{Tc,Tw,Ty}(r::Vector{Int}, c::Vector{Int},
-                                            C::Matrix{Tc}, W::Matrix{Tw},
-                                            Y::Matrix{Ty}, p::NamedTuple) where {Tc<:Integer,Tw<:Real,Ty<:Real}
-        size(C, 2) == size(W, 2) || throw(DimensionMismatch("dimensions of constraints and weights must match"))
+    function PartitionalClustering{Tc,Tw,Ty}(
+        r::Vector{Int}, c::Vector{Int}, C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty}, p::NamedTuple
+    ) where {Tc<:Integer,Tw<:Real,Ty<:Real}
+        size(C, 2) == size(W, 2) ||
+            throw(DimensionMismatch("dimensions of constraints and weights must match"))
         return new(r, c, C, W, Y, p)
     end
 end
-PartitionalClustering(r::Vector{Int}, c::Vector{Int}, C::Matrix{Tc},
-                    W::Matrix{Tw}, Y::Matrix{Ty}, p::NamedTuple) where {Tc,Tw,Ty} =
+function PartitionalClustering(
+    r::Vector{Int}, c::Vector{Int}, C::Matrix{Tc}, W::Matrix{Tw}, Y::Matrix{Ty}, p::NamedTuple
+) where {Tc,Tw,Ty}
     PartitionalClustering{Tc,Tw,Ty}(r, c, C, W, Y, p)
+end
 
 function PartitionalClustering(clust::KmeansResult)
     r = Int[]
@@ -37,12 +40,18 @@ function PartitionalClustering(clust::KmeansResult)
     k = size(clust.centers, 2)
     n = length(clust.assignments)
     Y = zeros(Int, k, n)
-    for i = 1:n
+    for i in 1:n
         Y[clust.assignments[i], i] = 1
     end
-    p = (centers=clust.centers, costs=clust.costs, counts=clust.counts,
-            wcounts=clust.wcounts, totalcost=clust.totalcost,
-            iterations=clust.iterations, converged=clust.converged)
+    p = (
+        centers=clust.centers,
+        costs=clust.costs,
+        counts=clust.counts,
+        wcounts=clust.wcounts,
+        totalcost=clust.totalcost,
+        iterations=clust.iterations,
+        converged=clust.converged,
+    )
     return PartitionalClustering(r, c, C, W, Y, p)
 end
 function PartitionalClustering(clust::KmedoidsResult)
@@ -53,12 +62,17 @@ function PartitionalClustering(clust::KmedoidsResult)
     k = length(clust.medoids)
     n = length(clust.assignments)
     Y = zeros(Int, k, n)
-    for i = 1:n
+    for i in 1:n
         Y[clust.assignments[i], i] = 1
     end
-    p = (medoids=clust.medoids, costs=clust.costs, counts=clust.counts,
-            totalcost=clust.totalcost, iterations=clust.iterations,
-            converged=clust.converged)
+    p = (
+        medoids=clust.medoids,
+        costs=clust.costs,
+        counts=clust.counts,
+        totalcost=clust.totalcost,
+        iterations=clust.iterations,
+        converged=clust.converged,
+    )
     return PartitionalClustering(r, c, C, W, Y, p)
 end
 function PartitionalClustering(clust::FuzzyCMeansResult)
@@ -67,20 +81,19 @@ function PartitionalClustering(clust::FuzzyCMeansResult)
     C = Matrix{Int}(undef, 0, 0)
     W = Matrix{Float64}(undef, 0, 0)
     Y = permutedims(clust.weights)
-    p = (centers=clust.centers, iterations=clust.iterations,
-            converged=clust.converged)
+    p = (centers=clust.centers, iterations=clust.iterations, converged=clust.converged)
     return PartitionalClustering(r, c, C, W, Y, p)
 end
 
 # Partitional clustering equality operator
-Base.:(==)(a::PartitionalClustering, b::PartitionalClustering) =
-    (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y
-            && a.p == b.p)
+function Base.:(==)(a::PartitionalClustering, b::PartitionalClustering)
+    (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y && a.p == b.p)
+end
 
 # Compute hash code
-Base.hash(a::PartitionalClustering, h::UInt) =
-    hash(a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p,
-        hash(:PartitionalClustering, h)))))))
+function Base.hash(a::PartitionalClustering, h::UInt)
+    hash(a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p, hash(:PartitionalClustering, h)))))))
+end
 
 """
     HierarchicalClustering{Tc<:Integer,Tw<:Real} <: AbstractClustering
@@ -94,16 +107,19 @@ struct HierarchicalClustering{Tc<:Integer,Tw<:Real} <: AbstractClustering
     W::Array{Tw,3}
     p::NamedTuple
 
-    function HierarchicalClustering{Tc,Tw}(r::Vector{Int}, c::Vector{Int},
-                                        C::Array{Tc,3}, W::Array{Tw,3},
-                                        p::NamedTuple) where {Tc<:Integer,Tw<:Real}
-        size(C, 2) == size(W, 2) || throw(DimensionMismatch("dimensions of constraints and weights must match"))
+    function HierarchicalClustering{Tc,Tw}(
+        r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3}, W::Array{Tw,3}, p::NamedTuple
+    ) where {Tc<:Integer,Tw<:Real}
+        size(C, 2) == size(W, 2) ||
+            throw(DimensionMismatch("dimensions of constraints and weights must match"))
         return new(r, c, C, W, p)
     end
 end
-HierarchicalClustering(r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3},
-                    W::Array{Tw,3}, p::NamedTuple) where {Tc,Tw} =
+function HierarchicalClustering(
+    r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3}, W::Array{Tw,3}, p::NamedTuple
+) where {Tc,Tw}
     HierarchicalClustering{Tc,Tw}(r, c, C, W, p)
+end
 
 """
     axes(a::AbstractClustering[, d])

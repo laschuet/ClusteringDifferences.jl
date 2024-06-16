@@ -18,25 +18,29 @@ struct PartitionalClusteringDifference <: AbstractClusteringDifference
     Y::MatrixDifference
     p::NamedTupleDifference
 
-    function PartitionalClusteringDifference(r::SetDifference{Int},
-                                            c::SetDifference{Int},
-                                            C::MatrixDifference,
-                                            W::MatrixDifference,
-                                            Y::MatrixDifference,
-                                            p::NamedTupleDifference)
+    function PartitionalClusteringDifference(
+        r::SetDifference{Int},
+        c::SetDifference{Int},
+        C::MatrixDifference,
+        W::MatrixDifference,
+        Y::MatrixDifference,
+        p::NamedTupleDifference,
+    )
         return new(r, c, C, W, Y, p)
     end
 end
 
 # Partitional clustering difference equality operator
-Base.:(==)(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference) =
-    (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y
-            && a.p == b.p)
+function Base.:(==)(a::PartitionalClusteringDifference, b::PartitionalClusteringDifference)
+    (a.r == b.r && a.c == b.c && a.C == b.C && a.W == b.W && a.Y == b.Y && a.p == b.p)
+end
 
 # Compute hash code
-Base.hash(a::PartitionalClusteringDifference, h::UInt) =
-    hash(a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p,
-        hash(:PartitionalClusteringDifference, h)))))))
+function Base.hash(a::PartitionalClusteringDifference, h::UInt)
+    hash(
+        a.r, hash(a.c, hash(a.C, hash(a.W, hash(a.Y, hash(a.p, hash(:PartitionalClusteringDifference, h))))))
+    )
+end
 
 """
     axes(a::AbstractClusteringDifference[, d])
@@ -108,8 +112,7 @@ end
 Compute the forward difference of the clustering at index `i` with step
 size `h`.
 """
-forwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1) =
-    a[i + h] - a[i]
+forwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1) = a[i + h] - a[i]
 
 """
     backwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int[, h::Int=1])
@@ -117,5 +120,4 @@ forwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1) =
 Compute the backward difference of the clustering at index `i` with step
 size `h`.
 """
-backwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1) =
-    a[i] - a[i - h]
+backwarddiff(a::AbstractVector{<:AbstractClustering}, i::Int, h::Int=1) = a[i] - a[i - h]
