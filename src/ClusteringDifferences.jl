@@ -8,7 +8,6 @@ import Clustering: FuzzyCMeansResult, KmeansResult, KmedoidsResult
 export
     # clustering.jl
     AbstractClustering,
-    HierarchicalClustering,
     Clustering,
     assignments,
     constraints,

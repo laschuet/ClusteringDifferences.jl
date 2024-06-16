@@ -87,11 +87,11 @@ Access the parameters difference.
 parameters(a::AbstractClusteringDifference) = a.p
 
 """
-    assignments(a::ClusteringDifference)
+    assignments(a::AbstractClusteringDifference)
 
 Access the assignments difference.
 """
-assignments(a::ClusteringDifference) = a.Y
+assignments(a::AbstractClusteringDifference) = a.Y
 
 # Clustering subtraction operator
 function Base.:-(a::Clustering, b::Clustering)

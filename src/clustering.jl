@@ -96,32 +96,6 @@ function Base.hash(a::Clustering, h::UInt)
 end
 
 """
-    HierarchicalClustering{Tc<:Integer,Tw<:Real} <: AbstractClustering
-
-Hierarchical clustering.
-"""
-struct HierarchicalClustering{Tc<:Integer,Tw<:Real} <: AbstractClustering
-    r::Vector{Int}
-    c::Vector{Int}
-    C::Array{Tc,3}
-    W::Array{Tw,3}
-    p::NamedTuple
-
-    function HierarchicalClustering{Tc,Tw}(
-        r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3}, W::Array{Tw,3}, p::NamedTuple
-    ) where {Tc<:Integer,Tw<:Real}
-        size(C, 2) == size(W, 2) ||
-            throw(DimensionMismatch("dimensions of constraints and weights must match"))
-        return new(r, c, C, W, p)
-    end
-end
-function HierarchicalClustering(
-    r::Vector{Int}, c::Vector{Int}, C::Array{Tc,3}, W::Array{Tw,3}, p::NamedTuple
-) where {Tc,Tw}
-    HierarchicalClustering{Tc,Tw}(r, c, C, W, p)
-end
-
-"""
     axes(a::AbstractClustering[, d])
 
 Access the feature and instance identifiers. Optionally, specify dimension `d`
