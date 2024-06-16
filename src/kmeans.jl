@@ -51,7 +51,7 @@ function kmeans(
             μ2[:, j] = iszero(sz) ? μ[:, j] : μ2[:, j] / sz
         end
 
-        pairwise!(distances, dist, μ2, X; dims=2)
+        pairwise!(dist, distances, dist, μ2, X; dims=2)
 
         pc = PartitionalClustering(copy(r), copy(c), copy(C), copy(W), copy(Y), (μ=copy(μ2),))
         push!(pcs, pc)
