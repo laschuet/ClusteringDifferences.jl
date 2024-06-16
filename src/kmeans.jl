@@ -51,7 +51,7 @@ function kmeans(
             μ2[:, j] = iszero(sz) ? μ[:, j] : μ2[:, j] / sz
         end
 
-        pairwise!(dist, distances, dist, μ2, X; dims=2)
+        pairwise!(dist, distances, μ2, X; dims=2)
 
         c = Clustering(copy(r), copy(c), copy(C), copy(W), copy(Y), (μ=copy(μ2),))
         push!(cs, c)
