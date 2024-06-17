@@ -31,7 +31,6 @@ function kmeans(
     μ2 = convert(Matrix{Float64}, μ)
 
     cs = Vector{Clustering}(undef, 0)
-
     distances = pairwise(dist, μ2, X; dims=2)
     pre_objcosts = 0
     objcosts = 0
@@ -51,13 +50,13 @@ function kmeans(
             μ2[:, j] = iszero(sz) ? μ[:, j] : μ2[:, j] / sz
         end
 
-        pairwise!(dist, distances, μ2, X; dims=2)
+        # Check for convergence
+        isapprox(objcosts, pre_objcosts; atol=ϵ) && break
 
         a = Clustering(copy(r), copy(c), copy(C), copy(W), copy(Y), (μ=copy(μ2),))
         push!(cs, a)
 
-        # Check for convergence
-        isapprox(objcosts, pre_objcosts; atol=ϵ) && break
+        pairwise!(dist, distances, μ2, X; dims=2)
 
         fill!(Y, zero(eltype(Y)))
         fill!(μ2, zero(eltype(μ2)))
@@ -65,7 +64,6 @@ function kmeans(
         pre_objcosts = objcosts
         objcosts = 0
     end
-
     return cs
 end
 
